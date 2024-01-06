@@ -12,6 +12,8 @@ import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.WoodBlockKind;
 import forestry.arboriculture.IWoodTyped;
 
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class BlockForestryPlank extends Block implements IWoodTyped {
 
 	public static Properties createWoodProperties(IWoodType woodType) {

@@ -34,6 +34,8 @@ import forestry.core.tiles.IFilterSlotDelegate;
 import forestry.core.utils.InventoryUtil;
 
 //TODO: large type hierarchy here. If no other modules use other than apiculture then compress this.
+import net.minecraft.world.entity.Entity.RemovalReason;
+
 public abstract class MinecartEntityContainerForestry extends MinecartEntityForestry implements WorldlyContainer, IFilterSlotDelegate, MenuProvider {
 	/**
 	 * When set to true, the minecart will drop all items when setDead() is called. When false (such as when travelling

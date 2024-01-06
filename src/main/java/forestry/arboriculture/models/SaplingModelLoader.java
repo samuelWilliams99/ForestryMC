@@ -5,10 +5,10 @@ import com.google.gson.JsonObject;
 
 import net.minecraft.server.packs.resources.ResourceManager;
 
-import net.minecraftforge.client.model.IModelLoader;
-import net.minecraftforge.client.model.geometry.IModelGeometry;
+import net.minecraftforge.client.model.geometry.IGeometryLoader;
+import net.minecraftforge.client.model.geometry.IUnbakedGeometry;
 
-public enum SaplingModelLoader implements IModelLoader {
+public enum SaplingModelLoader implements IGeometryLoader {
 	INSTANCE;
 
 
@@ -18,7 +18,7 @@ public enum SaplingModelLoader implements IModelLoader {
 	}
 
 	@Override
-	public IModelGeometry read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
+	public IUnbakedGeometry read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
 		return new ModelSapling();
 	}
 }

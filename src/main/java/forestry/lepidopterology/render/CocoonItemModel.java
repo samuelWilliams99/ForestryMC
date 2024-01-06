@@ -23,9 +23,9 @@ import net.minecraft.util.Mth;
 
 import com.mojang.datafixers.util.Pair;
 
-import net.minecraftforge.client.model.IModelConfiguration;
-import net.minecraftforge.client.model.IModelLoader;
-import net.minecraftforge.client.model.geometry.IModelGeometry;
+import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
+import net.minecraftforge.client.model.geometry.IGeometryLoader;
+import net.minecraftforge.client.model.geometry.IUnbakedGeometry;
 
 import genetics.api.GeneticHelper;
 import genetics.api.organism.IOrganism;
@@ -53,10 +53,10 @@ public class CocoonItemModel extends AbstractItemModel {
 		return bakedModel.getOrDefault(alleleCocoon.getCocoonName(), ImmutableList.of()).get(age);
 	}
 
-	private static class Geometry implements IModelGeometry<CocoonItemModel.Geometry> {
+	private static class Geometry implements IUnbakedGeometry<CocoonItemModel.Geometry> {
 
 		@Override
-		public BakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides, ResourceLocation modelLocation) {
+		public BakedModel bake(IGeometryBakingContext owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides, ResourceLocation modelLocation) {
 			ImmutableMap.Builder<String, ImmutableList<BakedModel>> bakedModels = new ImmutableMap.Builder<>();
 			AlleleUtils.forEach(ButterflyChromosomes.COCOON, (allele) -> {
 				ImmutableList.Builder<BakedModel> models = new ImmutableList.Builder<>();
@@ -69,12 +69,12 @@ public class CocoonItemModel extends AbstractItemModel {
 		}
 
 		@Override
-		public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
+		public Collection<Material> getMaterials(IGeometryBakingContext owner, Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
 			return ImmutableList.of();
 		}
 	}
 
-	public static class Loader implements IModelLoader<Geometry> {
+	public static class Loader implements IGeometryLoader<Geometry> {
 		@Override
 		public void onResourceManagerReload(ResourceManager resourceManager) {
 		}

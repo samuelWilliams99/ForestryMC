@@ -18,7 +18,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.event.ModelEvent.RegisterGeometryLoaders;
 import net.minecraftforge.client.model.ForgeModelBakery;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 
@@ -55,7 +55,7 @@ public class ProxyLepidopterologyClient extends ProxyLepidopterology implements 
 	}
 
 	@Override
-	public void registerModels(ModelRegistryEvent event) {
+	public void registerModels(RegisterGeometryLoaders event) {
 		ModelLoaderRegistry.registerLoader(new ResourceLocation(Constants.MOD_ID, "butterfly_ge"), new ButterflyItemModel.Loader());
 		ModelLoaderRegistry.registerLoader(new ResourceLocation(Constants.MOD_ID, "butterfly_cocoon"), new CocoonItemModel.Loader());
 	}

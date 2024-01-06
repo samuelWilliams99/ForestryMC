@@ -41,7 +41,7 @@ public class RegisterVillager {
 	@Mod.EventBusSubscriber(modid = Constants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 	public static class Registers {
 		public static final DeferredRegister<PoiType> POINTS_OF_INTEREST = DeferredRegister.create(ForgeRegistries.POI_TYPES, Constants.MOD_ID);
-		public static final DeferredRegister<VillagerProfession> PROFESSIONS = DeferredRegister.create(ForgeRegistries.PROFESSIONS, Constants.MOD_ID);
+		public static final DeferredRegister<VillagerProfession> PROFESSIONS = DeferredRegister.create(ForgeRegistries.VILLAGER_PROFESSIONS, Constants.MOD_ID);
 
 		// public static final RegistryObject<PointOfInterestType> POI_APIARY = POINTS_OF_INTEREST.register("apiary", () -> RegisterVillagerPointOfInterest.create("apiary", RegisterVillagerPointOfInterest.assembleStates(ApicultureBlocks.BASE.get(BlockTypeApiculture.APIARY).getBlock())));
 		// public static final RegistryObject<VillagerProfession> PROF_BEEKEEPER = PROFESSIONS.register(BEEKEEPER.getPath(), () -> RegisterVillagerProfession.create(BEEKEEPER, POI_APIARY.get(), SoundEvents.VILLAGER_WORK_FISHERMAN));

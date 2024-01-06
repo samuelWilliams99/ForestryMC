@@ -47,6 +47,8 @@ import forestry.apiculture.features.ApicultureTiles;
 import forestry.apiculture.tiles.TileHive;
 import forestry.core.tiles.TileUtil;
 
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class BlockBeeHive extends BaseEntityBlock {
 
 	private final HiveType type;

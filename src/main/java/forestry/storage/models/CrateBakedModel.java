@@ -17,7 +17,7 @@ import com.mojang.math.Vector3f;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
-import net.minecraftforge.common.model.TransformationHelper;
+import net.minecraftforge.common.util.TransformationHelper;
 
 import forestry.core.models.AbstractBakedModel;
 import forestry.core.models.TRSRBakedModel;

@@ -8,7 +8,7 @@ import net.minecraft.world.level.material.Fluids;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.EntityViewRenderEvent;
+import net.minecraftforge.client.event.ViewportEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -22,7 +22,7 @@ import forestry.core.fluids.ForestryFluids;
 public class FluidFogEventHandler {
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
-	public static void onFogColorRender(EntityViewRenderEvent.FogColors event) {
+	public static void onFogColorRender(ViewportEvent.ComputeFogColor event) {
 		// if (event.getCamera().getFluidInCamera().getType() != Fluids.EMPTY) {
 		// 	if (isForestryFluid(event.getCamera().getFluidInCamera())) {
 		// 		Color color = getForestryFluid(event.getCamera().getFluidInCamera()).getParticleColor();
@@ -34,7 +34,7 @@ public class FluidFogEventHandler {
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
-	public static void onFogDenseRender(EntityViewRenderEvent.RenderFogEvent event) {
+	public static void onFogDenseRender(ViewportEvent.RenderFog event) {
 		// if (event.getCamera().getFluidInCamera().getType() != Fluids.EMPTY) {
 		// 	if (isForestryFluid(event.getCamera().getFluidInCamera())) {
 		// 		event.setDensity(80);

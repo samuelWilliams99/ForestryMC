@@ -38,10 +38,10 @@ import com.mojang.math.Vector4f;
 
 import net.minecraftforge.client.model.BakedModelWrapper;
 import net.minecraftforge.client.model.data.EmptyModelData;
-import net.minecraftforge.client.model.data.IModelData;
-import net.minecraftforge.client.model.pipeline.BakedQuadBuilder;
+import net.minecraftforge.client.model.data.ModelData;
+import net.minecraftforge.client.model.pipeline.QuadBakingVertexConsumer;
 import net.minecraftforge.client.model.pipeline.VertexTransformer;
-import net.minecraftforge.common.model.TransformationHelper;
+import net.minecraftforge.common.util.TransformationHelper;
 
 // for those wondering TRSR stands for Translation Rotation Scale Rotation
 public class TRSRBakedModel extends BakedModelWrapper<BakedModel> {
@@ -87,7 +87,7 @@ public class TRSRBakedModel extends BakedModelWrapper<BakedModel> {
 
 	@Nonnull
 	@Override
-	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand, IModelData data) {
+	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand, ModelData data) {
 		// transform quads obtained from parent
 		ImmutableList.Builder<BakedQuad> builder = ImmutableList.builder();
 		if (!this.originalModel.isCustomRenderer()) {
@@ -144,7 +144,7 @@ public class TRSRBakedModel extends BakedModelWrapper<BakedModel> {
 		protected Matrix3f normalTransformation;
 
 		public Transformer(Transformation transformation, TextureAtlasSprite textureAtlasSprite) {
-			super(new BakedQuadBuilder(textureAtlasSprite));
+			super(new QuadBakingVertexConsumer(textureAtlasSprite));
 			// position transform
 			this.transformation = transformation.getMatrix();
 			// normal transform
@@ -179,7 +179,7 @@ public class TRSRBakedModel extends BakedModelWrapper<BakedModel> {
 		}
 
 		public BakedQuad build() {
-			return ((BakedQuadBuilder) this.parent).build();
+			return ((QuadBakingVertexConsumer) this.parent).build();
 		}
 	}
 }

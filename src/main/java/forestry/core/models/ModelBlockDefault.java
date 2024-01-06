@@ -34,7 +34,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.data.EmptyModelData;
-import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.ModelData;
 
 import forestry.core.models.baker.ModelBaker;
 import forestry.core.models.baker.ModelBakerModel;
@@ -56,7 +56,7 @@ public abstract class ModelBlockDefault<B extends Block, K> implements BakedMode
 		this.blockClass = blockClass;
 	}
 
-	protected BakedModel bakeModel(BlockState state, K key, B block, IModelData extraData) {
+	protected BakedModel bakeModel(BlockState state, K key, B block, ModelData extraData) {
 		ModelBaker baker = new ModelBaker();
 
 		bakeBlock(block, extraData, key, baker, false);
@@ -66,7 +66,7 @@ public abstract class ModelBlockDefault<B extends Block, K> implements BakedMode
 		return blockModel;
 	}
 
-	protected BakedModel getModel(BlockState state, IModelData extraData) {
+	protected BakedModel getModel(BlockState state, ModelData extraData) {
 		Preconditions.checkArgument(blockClass.isInstance(state.getBlock()));
 
 		K worldKey = getWorldKey(state, extraData);
@@ -90,7 +90,7 @@ public abstract class ModelBlockDefault<B extends Block, K> implements BakedMode
 
 	@Nonnull
 	@Override
-	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
+	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull ModelData extraData) {
 		Preconditions.checkNotNull(state);
 		BakedModel model = getModel(state, extraData);
 		return model.getQuads(state, side, rand, extraData);
@@ -157,9 +157,9 @@ public abstract class ModelBlockDefault<B extends Block, K> implements BakedMode
 
 	protected abstract K getInventoryKey(ItemStack stack);
 
-	protected abstract K getWorldKey(BlockState state, IModelData extraData);
+	protected abstract K getWorldKey(BlockState state, ModelData extraData);
 
-	protected abstract void bakeBlock(B block, IModelData extraData, K key, ModelBaker baker, boolean inventory);
+	protected abstract void bakeBlock(B block, ModelData extraData, K key, ModelBaker baker, boolean inventory);
 
 	private class DefaultItemOverrideList extends ItemOverrides {
 		public DefaultItemOverrideList() {

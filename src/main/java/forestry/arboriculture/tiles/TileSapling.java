@@ -25,7 +25,7 @@ import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfigur
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 import net.minecraftforge.client.model.data.EmptyModelData;
-import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.client.model.data.ModelProperty;
 
@@ -129,7 +129,7 @@ public class TileSapling extends TileTreeContainer {
 
 	@Nonnull
 	@Override
-	public IModelData getModelData() {
+	public ModelData getModelData() {
 		ITree tree = getTree();
 		if (tree == null) {
 			return EmptyModelData.INSTANCE;

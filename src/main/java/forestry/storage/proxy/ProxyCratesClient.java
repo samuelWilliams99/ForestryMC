@@ -4,7 +4,7 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.event.ModelEvent.RegisterGeometryLoaders;
 import net.minecraftforge.client.model.ForgeModelBakery;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 
@@ -38,7 +38,7 @@ public class ProxyCratesClient extends ProxyCrates implements IClientModuleHandl
 	}
 
 	@Override
-	public void registerModels(ModelRegistryEvent event) {
+	public void registerModels(RegisterGeometryLoaders event) {
 		ModelLoaderRegistry.registerLoader(CrateModel.Loader.LOCATION, new CrateModel.Loader());
 		ModelLoaderRegistry.registerLoader(BackpackItemModel.Loader.LOCATION, new BackpackItemModel.Loader());
 	}

@@ -29,7 +29,7 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -41,7 +41,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import net.minecraftforge.fml.DistExecutor;
@@ -240,7 +240,7 @@ public class Forestry {
 	private record Client(IEventBus modEventBus, NetworkHandler networkHandler) implements Runnable {
 		@Override
 		public void run() {
-			modEventBus.addListener(EventPriority.NORMAL, false, ColorHandlerEvent.Block.class, x -> {
+			modEventBus.addListener(EventPriority.NORMAL, false, RegisterColorHandlersEvent.Block.class, x -> {
 				Minecraft minecraft = Minecraft.getInstance();
 				ForestrySpriteUploader spriteUploader = new ForestrySpriteUploader(minecraft.textureManager, TextureManagerForestry.LOCATION_FORESTRY_TEXTURE, "gui");
 				TextureManagerForestry.getInstance().init(spriteUploader);

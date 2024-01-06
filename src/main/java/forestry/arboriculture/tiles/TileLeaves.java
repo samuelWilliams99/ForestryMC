@@ -27,7 +27,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.common.PlantType;
@@ -284,14 +284,14 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public static ResourceLocation getLeaveSprite(IModelData data, boolean fancy) {
+	public static ResourceLocation getLeaveSprite(ModelData data, boolean fancy) {
 		final ILeafSpriteProvider leafSpriteProvider = getLeafSpriteProvider(data);
 		final Boolean pollinated = data.getData(POLLINATED);
 		return leafSpriteProvider.getSprite(pollinated != null && pollinated, fancy);
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	private static ILeafSpriteProvider getLeafSpriteProvider(IModelData data) {
+	private static ILeafSpriteProvider getLeafSpriteProvider(ModelData data) {
 		final ILeafSpriteProvider leafSpriteProvider = data.getData(SPRITE_PROVIDER);
 		if (leafSpriteProvider != null) {
 			return leafSpriteProvider;
@@ -302,12 +302,12 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	@Nullable
-	public static ResourceLocation getFruitSprite(IModelData data) {
+	public static ResourceLocation getFruitSprite(ModelData data) {
 		return data.getData(FRUIT_TEXTURE);
 	}
 
 	@Override
-	public IModelData getModelData() {
+	public ModelData getModelData() {
 		ModelDataMap.Builder builder = new ModelDataMap.Builder();
 		builder.withInitial(SPRITE_PROVIDER, getLeafSpriteProvider());
 		builder.withInitial(POLLINATED, isPollinatedState);

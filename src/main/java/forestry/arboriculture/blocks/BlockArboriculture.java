@@ -14,6 +14,8 @@ import net.minecraft.world.level.material.Material;
 
 import forestry.core.blocks.BlockBase;
 
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class BlockArboriculture extends BlockBase<BlockTypeArboricultureTesr> {
 	public BlockArboriculture(BlockTypeArboricultureTesr type) {
 		super(type, Properties.of(Material.WOOD));

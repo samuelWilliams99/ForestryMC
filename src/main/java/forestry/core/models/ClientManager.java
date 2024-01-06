@@ -38,7 +38,7 @@ import net.minecraft.world.level.BlockAndTintGetter;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.event.ModelEvent.BakingCompleted;
 
 import forestry.core.blocks.IColoredBlock;
 import forestry.core.items.definitions.IColoredItem;
@@ -142,7 +142,7 @@ public class ClientManager {
 		customModels.add(new ModelEntry(new ModelResourceLocation(item.getRegistryName(), "inventory"), model));
 	}
 
-	public void onBakeModels(ModelBakeEvent event) {
+	public void onBakeModels(BakingCompleted event) {
 		//register custom models
 		Map<ResourceLocation, BakedModel> registry = event.getModelRegistry();
 		for (final BlockModelEntry entry : customBlockModels) {

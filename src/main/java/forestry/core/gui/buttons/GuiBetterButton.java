@@ -28,6 +28,8 @@ import forestry.api.core.tooltips.ToolTip;
 import forestry.core.config.Constants;
 import forestry.core.render.ForestryResource;
 
+import net.minecraft.client.gui.components.Button.OnPress;
+
 @OnlyIn(Dist.CLIENT)
 public class GuiBetterButton extends Button implements IToolTipProvider {
 
