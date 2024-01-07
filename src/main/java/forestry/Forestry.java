@@ -123,6 +123,7 @@ import forestry.modules.features.ModFeatureRegistry;
 
 import genetics.api.alleles.IAllele;
 import genetics.utils.AlleleUtils;
+import net.minecraftforge.registries.RegisterEvent;
 
 /**
  * Forestry Minecraft Mod
@@ -218,21 +219,21 @@ public class Forestry {
 		if (event.includeServer()) {
 			ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 			ForestryBlockTagsProvider blockTagsProvider = new ForestryBlockTagsProvider(generator, existingFileHelper);
-			generator.addProvider(blockTagsProvider);
-			generator.addProvider(new ForestryAdvancementProvider(generator));
-			generator.addProvider(new ForestryItemTagsProvider(generator, blockTagsProvider, existingFileHelper));
-			generator.addProvider(new ForestryBackpackTagProvider(generator, blockTagsProvider, existingFileHelper));
-			generator.addProvider(new ForestryFluidTagsProvider(generator, existingFileHelper));
-			generator.addProvider(new ForestryLootTableProvider(generator));
-			generator.addProvider(new WoodBlockStateProvider(generator));
-			generator.addProvider(new WoodBlockModelProvider(generator));
-			generator.addProvider(new WoodItemModelProvider(generator));
-			generator.addProvider(new ForestryBlockStateProvider(generator));
-			generator.addProvider(new ForestryBlockModelProvider(generator));
-			generator.addProvider(new ForestryItemModelProvider(generator));
-			generator.addProvider(new ForestryRecipeProvider(generator));
-			generator.addProvider(new ForestryMachineRecipeProvider(generator));
-			generator.addProvider(new ForestryLootModifierProvider(generator));
+			generator.addProvider(true, blockTagsProvider);
+			generator.addProvider(true, new ForestryAdvancementProvider(generator));
+			generator.addProvider(true, new ForestryItemTagsProvider(generator, blockTagsProvider, existingFileHelper));
+			generator.addProvider(true, new ForestryBackpackTagProvider(generator, blockTagsProvider, existingFileHelper));
+			generator.addProvider(true, new ForestryFluidTagsProvider(generator, existingFileHelper));
+			generator.addProvider(true, new ForestryLootTableProvider(generator));
+			generator.addProvider(true, new WoodBlockStateProvider(generator));
+			generator.addProvider(true, new WoodBlockModelProvider(generator));
+			generator.addProvider(true, new WoodItemModelProvider(generator));
+			generator.addProvider(true, new ForestryBlockStateProvider(generator));
+			generator.addProvider(true, new ForestryBlockModelProvider(generator));
+			generator.addProvider(true, new ForestryItemModelProvider(generator));
+			generator.addProvider(true, new ForestryRecipeProvider(generator));
+			generator.addProvider(true, new ForestryMachineRecipeProvider(generator));
+			generator.addProvider(true, new ForestryLootModifierProvider(generator));
 		}
 	}
 

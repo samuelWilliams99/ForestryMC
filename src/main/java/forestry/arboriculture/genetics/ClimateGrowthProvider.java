@@ -3,6 +3,7 @@ package forestry.arboriculture.genetics;
 import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 
@@ -45,9 +46,9 @@ public class ClimateGrowthProvider implements IGrowthProvider {
 	}
 
 	@Override
-	public boolean isBiomeValid(ITree tree, Biome biome) {
+	public boolean isBiomeValid(ITree tree, Holder<Biome> biome) {
 		EnumTemperature biomeTemperature = EnumTemperature.getFromBiome(biome);
-		EnumHumidity biomeHumidity = EnumHumidity.getFromValue(biome.getDownfall());
+		EnumHumidity biomeHumidity = EnumHumidity.getFromValue(biome.value().getDownfall());
 		IGenome genome = tree.getGenome();
 		if (temperature == null) {
 			temperature = genome.getActiveAllele(TreeChromosomes.SPECIES).getTemperature();

@@ -17,7 +17,6 @@ import net.minecraft.commands.CommandRuntimeException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -105,7 +104,7 @@ public class CommandModules {
 				if (found != null) {
 					return found;
 				} else {
-					throw new SimpleCommandExceptionType(new TranslatableComponent("for.chat.modules.error", pluginUid)).createWithContext(reader);
+					throw new SimpleCommandExceptionType(Component.translatable("for.chat.modules.error", pluginUid)).createWithContext(reader);
 				}
 
 			}

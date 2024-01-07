@@ -8,7 +8,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.material.Fluid;
@@ -56,8 +55,8 @@ public class FluidComponent implements ICustomComponent {
 
 		if (context.isAreaHovered(mouseX, mouseY, x, y, w, h)) {
 			List<Component> toolTips = new ArrayList<>();
-			toolTips.add(new TranslatableComponent(fluidAttributes.getTranslationKey(fluidStack)));
-			TranslatableComponent liquidAmount = new TranslatableComponent("for.gui.tooltip.liquid.amount", level, maxLevel);
+			toolTips.add(Component.translatable(fluidAttributes.getTranslationKey(fluidStack)));
+			Component liquidAmount = Component.translatable("for.gui.tooltip.liquid.amount", level, maxLevel);
 			toolTips.add(liquidAmount);
 
 			context.setHoverTooltipComponents(toolTips);

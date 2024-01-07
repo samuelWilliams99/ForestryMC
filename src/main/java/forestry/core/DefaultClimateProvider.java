@@ -11,6 +11,7 @@
 package forestry.core;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 
@@ -28,8 +29,8 @@ public class DefaultClimateProvider implements IClimateProvider {
 	}
 
 	@Override
-	public Biome getBiome() {
-		return world.getBiome(pos).value();
+	public Holder<Biome> getBiome() {
+		return world.getBiome(pos);
 	}
 
 	@Override

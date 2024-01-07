@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
@@ -191,8 +192,8 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 
 	// / IBEEHOUSING
 	@Override
-	public Biome getBiome() {
-		return level.getBiome(getBlockPos()).value();
+	public Holder<Biome> getBiome() {
+		return level.getBiome(getBlockPos());
 	}
 
 	//TODO check this call

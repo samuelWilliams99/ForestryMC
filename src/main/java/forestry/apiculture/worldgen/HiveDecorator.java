@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.BlockPos;
@@ -39,8 +40,8 @@ public class HiveDecorator extends Feature<NoneFeatureConfiguration> {
 		int posX = pos.getX() + rand.nextInt(16);
 		int posZ = pos.getZ() + rand.nextInt(16);
 
-		Biome biome = world.getBiome(new BlockPos(posX, 0, posZ)).value();
-		EnumHumidity humidity = EnumHumidity.getFromValue(biome.getDownfall());
+		Holder<Biome> biome = world.getBiome(new BlockPos(posX, 0, posZ));
+		EnumHumidity humidity = EnumHumidity.getFromValue(biome.value().getDownfall());
 
 		for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {
@@ -126,8 +127,8 @@ public class HiveDecorator extends Feature<NoneFeatureConfiguration> {
 		Collections.shuffle(hives, rand);
 
 		for (int tries = 0; tries < hives.size() / 2; tries++) {
-			Biome biome = level.getBiome(pos).value();
-			EnumHumidity humidity = EnumHumidity.getFromValue(biome.getDownfall());
+			Holder<Biome> biome = level.getBiome(pos);
+			EnumHumidity humidity = EnumHumidity.getFromValue(biome.value().getDownfall());
 
 			for (Hive hive : hives) {
 				if (hive.genChance() * Config.generateBeehivesAmount * hives.size() / 8 >= rand.nextFloat() * 100.0f) {

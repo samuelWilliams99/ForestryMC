@@ -11,7 +11,6 @@
 package genetics.commands;
 
 import net.minecraft.commands.CommandRuntimeException;
-import net.minecraft.network.chat.TranslatableComponent;
 
 import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 
@@ -20,7 +19,7 @@ public class TemplateNotFoundException extends CommandRuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	public TemplateNotFoundException(IAlleleForestrySpecies species) {
-		super(new TranslatableComponent("Could not find template for species %s with UID %s", species.getDisplayName().getString(), species.getRegistryName().toString()));
+		super(Component.translatable("Could not find template for species %s with UID %s", species.getDisplayName().getString(), species.getRegistryName().toString()));
 	}
 
 }

@@ -18,7 +18,9 @@ import java.util.function.Consumer;
 
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
@@ -502,8 +504,8 @@ public class ModuleApiculture extends BlankForestryModule {
 	private static class EndFlowerAcceptableRule implements IFlowerAcceptableRule {
 		@Override
 		public boolean isAcceptableFlower(BlockState blockState, Level world, BlockPos pos, String flowerType) {
-			Biome biomeGenForCoords = world.getBiome(pos).value();
-			return Biome.BiomeCategory.THEEND == biomeGenForCoords.getBiomeCategory();
+			Holder<Biome> biomeGenForCoords = world.getBiome(pos);
+			return biomeGenForCoords.is(BiomeTags.IS_END);
 		}
 	}
 }

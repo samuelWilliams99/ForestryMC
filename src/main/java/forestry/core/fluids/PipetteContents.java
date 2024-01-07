@@ -15,8 +15,6 @@ import java.util.List;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.BaseComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
@@ -48,7 +46,7 @@ public class PipetteContents {
 	}
 
 	public void addTooltip(List<Component> list) {
-		BaseComponent descr = new TranslatableComponent(contents.getFluid().getAttributes().getTranslationKey(contents));
+		Component descr = Component.translatable(contents.getFluid().getAttributes().getTranslationKey(contents));
 		descr.append(" (" + contents.getAmount() + " mb)");
 
 		list.add(descr);

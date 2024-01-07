@@ -179,7 +179,7 @@ public class TileCocoon extends BlockEntity implements IStreamable, IOwnedTile, 
 				BlockState blockState = level.getBlockState(worldPosition);
 				level.sendBlockUpdated(worldPosition, blockState, blockState, 0);
 			} else if (caterpillar.canTakeFlight(level, getBlockPos().getX(), getBlockPos().getY(), getBlockPos().getZ())) {
-				NonNullList<ItemStack> cocoonDrops = caterpillar.getCocoonDrop(this);
+				NonNullList<ItemStack> cocoonDrops = caterpillar.getCocoonDrop(this, level);
 				for (ItemStack drop : cocoonDrops) {
 					ItemStackUtil.dropItemStackAsEntity(drop, level, worldPosition);
 				}
@@ -237,7 +237,7 @@ public class TileCocoon extends BlockEntity implements IStreamable, IOwnedTile, 
 	}
 
 	public NonNullList<ItemStack> getCocoonDrops() {
-		return caterpillar.getCocoonDrop(this);
+		return caterpillar.getCocoonDrop(this, level);
 	}
 
 	@Override

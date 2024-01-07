@@ -15,7 +15,6 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
-import net.minecraft.network.chat.TranslatableComponent;
 
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -45,7 +44,7 @@ public class CommandButterfly {
 				butterfly.remove(Entity.RemovalReason.KILLED);
 				killCount++;
 			}
-			context.getSource().sendSuccess(new TranslatableComponent("for.chat.command.forestry.butterfly.kill.response", killCount), true);
+			context.getSource().sendSuccess(Component.translatable("for.chat.command.forestry.butterfly.kill.response", killCount), true);
 
 			return killCount;
 		}

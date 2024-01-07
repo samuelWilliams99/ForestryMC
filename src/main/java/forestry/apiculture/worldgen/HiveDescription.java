@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
@@ -62,8 +64,8 @@ public enum HiveDescription implements IHiveDescription {
 	JUNGLE(IHiveRegistry.HiveType.JUNGLE, 6.0f, BeeDefinition.TROPICAL, HiveManager.genHelper.tree()),
 	END(IHiveRegistry.HiveType.END, 2.0f, BeeDefinition.ENDED, HiveManager.genHelper.ground(Blocks.END_STONE, Blocks.END_STONE_BRICKS)) {
 		@Override
-		public boolean isGoodBiome(Biome biome) {
-			return biome.getBiomeCategory() == Biome.BiomeCategory.THEEND;
+		public boolean isGoodBiome(Holder<Biome> biome) {
+			return biome.is(BiomeTags.IS_END);
 		}
 	},
 	SNOW(IHiveRegistry.HiveType.SNOW, 2.0f, BeeDefinition.WINTRY, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.SNOW, Blocks.GRASS_BLOCK)) {
@@ -123,8 +125,8 @@ public enum HiveDescription implements IHiveDescription {
 	}
 
 	@Override
-	public boolean isGoodBiome(Biome biome) {
-		return biome.getBiomeCategory() != Biome.BiomeCategory.NETHER;
+	public boolean isGoodBiome(Holder<Biome> biome) {
+		return !biome.is(BiomeTags.IS_NETHER);
 	}
 
 	@Override

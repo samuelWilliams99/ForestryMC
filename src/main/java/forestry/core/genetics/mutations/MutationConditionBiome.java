@@ -15,8 +15,9 @@ import java.util.Locale;
 import java.util.Set;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 
@@ -28,17 +29,17 @@ import genetics.api.individual.IGenome;
 
 public class MutationConditionBiome implements IMutationCondition {
 
-	private final Set<Biome.BiomeCategory> validBiomeTypes;
+	private final TagKey<Biome> validBiomeTag;
 
-	public MutationConditionBiome(Biome.BiomeCategory... types) {
-		this.validBiomeTypes = Set.of(types);
+	public MutationConditionBiome(TagKey<Biome> type) {
+		this.validBiomeTag = type;
 	}
 
 	@Override
 	public float getChance(Level world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
-		Biome biome = climate.getBiome();
-		Biome.BiomeCategory biomeCategory = biome.getBiomeCategory();
-		if (validBiomeTypes.contains(biomeCategory)) {
+		Holder<Biome> biome = climate.getBiome();
+
+		if (biome.is(validBiomeTag)) {
 			return 1;
 		}
 
@@ -47,13 +48,7 @@ public class MutationConditionBiome implements IMutationCondition {
 
 	@Override
 	public Component getDescription() {
-		if (validBiomeTypes.size() > 1) {
-			String biomeTypes = Arrays.toString(validBiomeTypes.toArray()).toLowerCase(Locale.ENGLISH);
-			return new TranslatableComponent("for.mutation.condition.biome.multiple", biomeTypes);
-		} else {
-			Biome.BiomeCategory firstCategory = validBiomeTypes.iterator().next();
-			String biomeType = firstCategory.toString().toLowerCase(Locale.ENGLISH);
-			return new TranslatableComponent("for.mutation.condition.biome.single", biomeType);
-		}
+		String biomeType = validBiomeTag.toString().toLowerCase(Locale.ENGLISH);
+		return Component.translatable("for.mutation.condition.biome.single", biomeType);
 	}
 }

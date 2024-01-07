@@ -47,6 +47,7 @@ import forestry.api.storage.IBackpackDefinition;
 import forestry.core.config.Constants;
 import forestry.modules.ForestryModuleUids;
 import forestry.storage.ModuleBackpacks;
+import net.minecraftforge.registries.RegisterEvent;
 
 //TODO: Sort Registries and Features
 public class ModFeatureRegistry {
@@ -129,7 +130,7 @@ public class ModFeatureRegistry {
 	private static class ModuleFeatures implements IFeatureRegistry {
 		private final HashMap<String, IModFeature> featureById = new LinkedHashMap<>();
 		private final Multimap<FeatureType, IModFeature> featureByType = LinkedListMultimap.create();
-		private final Multimap<FeatureType, Consumer<RegistryEvent>> registryListeners = LinkedListMultimap.create();
+		private final Multimap<FeatureType, Consumer<RegisterEvent>> registryListeners = LinkedListMultimap.create();
 		private final String moduleID;
 
 		public ModuleFeatures(String moduleID) {
@@ -207,7 +208,7 @@ public class ModFeatureRegistry {
 		}
 
 		@Override
-		public void addRegistryListener(FeatureType type, Consumer<RegistryEvent> listener) {
+		public void addRegistryListener(FeatureType type, Consumer<RegisterEvent> listener) {
 			registryListeners.put(type, listener);
 		}
 

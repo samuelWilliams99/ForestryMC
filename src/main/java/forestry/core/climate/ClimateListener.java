@@ -3,7 +3,9 @@ package forestry.core.climate;
 import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
@@ -118,14 +120,14 @@ public class ClimateListener implements IClimateListener {
 	}
 
 	@Override
-	public Biome getBiome() {
+	public Holder<Biome> getBiome() {
 		IClimateProvider provider = getDefaultProvider();
 		return provider.getBiome();
 	}
 
 	@Override
 	public EnumTemperature getTemperature() {
-		if (getBiome().getBiomeCategory() == Biome.BiomeCategory.NETHER) {
+		if (getBiome().is(BiomeTags.IS_NETHER)) {
 			return EnumTemperature.HELLISH;
 		}
 
@@ -143,7 +145,7 @@ public class ClimateListener implements IClimateListener {
 		if (climateState.isPresent()) {
 			return climateState.getTemperature();
 		} else {
-			return getBiome().getBaseTemperature();
+			return getBiome().value().getBaseTemperature();
 		}
 	}
 
@@ -154,7 +156,7 @@ public class ClimateListener implements IClimateListener {
 		if (climateState.isPresent()) {
 			humidity = climateState.getHumidity();
 		} else {
-			Biome biome = getBiome();
+			Biome biome = getBiome().value();
 			humidity = biome.getDownfall();
 		}
 		return humidity;

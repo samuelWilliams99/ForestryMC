@@ -23,7 +23,6 @@ import net.minecraft.data.HashCache;
 import net.minecraft.data.DataProvider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.chat.TranslatableComponent;
 
 import forestry.apiculture.features.ApicultureItems;
 import forestry.apiculture.genetics.BeeDefinition;
@@ -67,7 +66,7 @@ public class ForestryAdvancementProvider implements DataProvider {
 		GeneticHelper.setIndividual(icon, BeeDefinition.INDUSTRIOUS.createIndividual());
 
 		Advancement.Builder.advancement()
-				.display(icon, new TranslatableComponent("advancements.forestry.root.title"), new TranslatableComponent("advancements.forestry.root.description"), new ResourceLocation("textures/block/honeycomb_block.png"), FrameType.TASK, false, false, false)
+				.display(icon, Component.translatable("advancements.forestry.root.title"), Component.translatable("advancements.forestry.root.description"), new ResourceLocation("textures/block/honeycomb_block.png"), FrameType.TASK, false, false, false)
 				.addCriterion("tick", new TickTrigger.TriggerInstance(EntityPredicate.Composite.ANY))
 				.rewards(new AdvancementRewards(0, new ResourceLocation[]{
 						new ResourceLocation(Constants.MOD_ID, "grant_guide")

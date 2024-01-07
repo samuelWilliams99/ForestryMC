@@ -22,7 +22,6 @@ import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
@@ -122,14 +121,14 @@ public class FarmingInfoRecipeCategory extends ForestryRecipeCategory<FarmingInf
 		float textX = (float) (recipeWidth - fontRenderer.width(circuit.getDisplayName().getString())) / 2;
 		fontRenderer.draw(stack, circuit.getDisplayName(), textX, 3, Color.darkGray.getRGB());
 
-		Component soilName = new TranslatableComponent("for.jei.farming.soil");
+		Component soilName = Component.translatable("for.jei.farming.soil");
 		fontRenderer.draw(stack, soilName, 18 - (float) (fontRenderer.width(soilName.getString())) / 2, 45, Color.darkGray.getRGB());
 
-		Component germlingsName = new TranslatableComponent("for.jei.farming.germlings");
+		Component germlingsName = Component.translatable("for.jei.farming.germlings");
 		fontRenderer.draw(stack, germlingsName, (float) (recipeWidth - fontRenderer.width(germlingsName.getString())) / 2, 45, Color.darkGray.getRGB());
 
 		//TODO: draw
-		Component productsName = new TranslatableComponent("for.jei.farming.products");
+		Component productsName = Component.translatable("for.jei.farming.products");
 		fontRenderer.draw(stack, productsName, 126 - (float) (fontRenderer.width(productsName.getString())) / 2, 45, Color.darkGray.getRGB());
 	}
 

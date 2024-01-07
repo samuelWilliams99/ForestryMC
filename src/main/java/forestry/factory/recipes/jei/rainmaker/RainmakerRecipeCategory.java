@@ -16,7 +16,6 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
@@ -64,24 +63,24 @@ public class RainmakerRecipeCategory extends ForestryRecipeCategory<RainSubstrat
 
 	@Override
 	public void draw(RainSubstrate recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
-		TranslatableComponent effect = getEffectString(recipe);
-		TranslatableComponent speed = new TranslatableComponent("for.jei.rainmaker.speed", recipe.getSpeed());
+		Component effect = getEffectString(recipe);
+		Component speed = Component.translatable("for.jei.rainmaker.speed", recipe.getSpeed());
 
 		Minecraft minecraft = Minecraft.getInstance();
 		Font fontRenderer = minecraft.font;
 		fontRenderer.draw(stack, effect, 24, 0, Color.darkGray.getRGB());
 		fontRenderer.draw(stack, speed, 24, 10, Color.gray.getRGB());
 		if (!recipe.isReverse()) {
-			TranslatableComponent duration = new TranslatableComponent("for.jei.rainmaker.duration", recipe.getDuration());
+			Component duration = Component.translatable("for.jei.rainmaker.duration", recipe.getDuration());
 			fontRenderer.draw(stack, duration, 24, 20, Color.gray.getRGB());
 		}
 	}
 
-	private static TranslatableComponent getEffectString(RainSubstrate recipe) {
+	private static Component getEffectString(RainSubstrate recipe) {
 		if (recipe.isReverse()) {
-			return new TranslatableComponent("for.jei.rainmaker.stops.rain");
+			return Component.translatable("for.jei.rainmaker.stops.rain");
 		} else {
-			return new TranslatableComponent("for.jei.rainmaker.causes.rain");
+			return Component.translatable("for.jei.rainmaker.causes.rain");
 		}
 	}
 }

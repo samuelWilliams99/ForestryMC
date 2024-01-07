@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
@@ -93,8 +94,8 @@ public class FakeAlvearyController extends FakeMultiblockController implements I
 	}
 
 	@Override
-	public Biome getBiome() {
-		return ForgeRegistries.BIOMES.getValue(Biomes.PLAINS.getRegistryName());
+	public Holder<Biome> getBiome() {
+		return ForgeRegistries.BIOMES.getHolder(Biomes.PLAINS).get();
 	}
 
 	@Override

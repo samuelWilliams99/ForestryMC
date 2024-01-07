@@ -85,7 +85,7 @@ public interface IButterfly extends IIndividualLiving {
 	/**
 	 * @return itemstacks to drop on breaking of the cocoon.
 	 */
-	NonNullList<ItemStack> getCocoonDrop(IButterflyCocoon cocoon);
+	NonNullList<ItemStack> getCocoonDrop(IButterflyCocoon cocoon, Level world);
 
 	/**
 	 * Create an exact copy of this butterfly.

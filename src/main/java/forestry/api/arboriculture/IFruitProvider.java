@@ -12,11 +12,10 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.BaseComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.Level;
@@ -111,7 +110,7 @@ public interface IFruitProvider extends ISetupListener {
 	/**
 	 * @return Short, human-readable identifier used in the treealyzer.
 	 */
-	BaseComponent getDescription();
+	Component getDescription();
 
 	/**
 	 * @return The location of the pod model in the "modid:pods/" folder.

@@ -15,6 +15,7 @@ import java.util.Objects;
 import java.util.Random;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -560,9 +561,9 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	@Override
-	public Biome getBiome() {
+	public Holder<Biome> getBiome() {
 		Level level = Objects.requireNonNull(this.level);
-		return level.getBiome(worldPosition).value();
+		return level.getBiome(worldPosition);
 	}
 
 	@Override

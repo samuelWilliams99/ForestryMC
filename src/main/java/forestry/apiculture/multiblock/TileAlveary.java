@@ -13,6 +13,7 @@ package forestry.apiculture.multiblock;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
+import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
@@ -22,7 +23,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.biome.Biome;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -121,7 +121,7 @@ public class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlv
 
 	/* IHousing */
 	@Override
-	public Biome getBiome() {
+	public Holder<Biome> getBiome() {
 		return getMultiblockLogic().getController().getBiome();
 	}
 
@@ -227,6 +227,6 @@ public class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlv
 
 	@Override
 	public Component getDisplayName() {
-		return new TranslatableComponent(this.getUnlocalizedTitle());
+		return Component.translatable(this.getUnlocalizedTitle());
 	}
 }

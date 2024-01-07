@@ -15,6 +15,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.minecraft.core.Holder;
+import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.level.ServerPlayer;
@@ -23,31 +25,17 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 
-import net.minecraftforge.event.world.BiomeLoadingEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import forestry.api.apiculture.genetics.IBee;
 import forestry.apiculture.network.packets.PacketHabitatBiomePointer;
 import forestry.core.utils.NetworkUtil;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class HabitatLocatorLogic {
 	private static final int maxChecksPerTick = 100;
 	private static final int maxSearchRadiusIterations = 500;
 	private static final int spacing = 20;
 	private static final int minBiomeRadius = 8;
-
-	private static final Set<ResourceLocation> waterBiomes = new HashSet<>();
-	private static final Set<ResourceLocation> netherBiomes = new HashSet<>();
-	private static final Set<ResourceLocation> endBiomes = new HashSet<>();
-
-	@SubscribeEvent
-	static void onBiomeLoaded(BiomeLoadingEvent event) {
-		switch (event.getCategory()) {
-			case BEACH, RIVER, OCEAN -> waterBiomes.add(event.getName());
-			case NETHER -> netherBiomes.add(event.getName());
-			case THEEND -> endBiomes.add(event.getName());
-		}
-	}
 
 	private Set<ResourceLocation> targetBiomes = new HashSet<>();
 	private boolean biomeFound = false;
@@ -71,7 +59,7 @@ public class HabitatLocatorLogic {
 		this.biomeFound = false;
 		this.searchCenter = player.blockPosition();
 
-		Biome currentBiome = player.level.getBiome(searchCenter).value();
+		Holder<Biome> currentBiome = player.level.getBiome(searchCenter);
 		removeInvalidBiomes(currentBiome, targetBiomes);
 
 		// reset the locator coordinates
@@ -161,49 +149,45 @@ public class HabitatLocatorLogic {
 
 	@Nullable
 	private static BlockPos getChunkCoordinates(BlockPos pos, Level world, Collection<ResourceLocation> biomesToSearch) {
-		Biome biome;
+		Holder<Biome> biome;
 
-		biome = world.getBiome(pos).value();
-		if (!biomesToSearch.contains(biome.getRegistryName())) {
+		biome = world.getBiome(pos);
+		if (biomesToSearch.stream().noneMatch(biome::is)) {
 			return null;
 		}
 
-		biome = world.getBiome(pos.offset(-minBiomeRadius, 0, 0)).value();
-		if (!biomesToSearch.contains(biome.getRegistryName())) {
+		biome = world.getBiome(pos.offset(-minBiomeRadius, 0, 0));
+		if (biomesToSearch.stream().noneMatch(biome::is)) {
 			return null;
 		}
 
-		biome = world.getBiome(pos.offset(minBiomeRadius, 0, 0)).value();
-		if (!biomesToSearch.contains(biome.getRegistryName())) {
+		biome = world.getBiome(pos.offset(minBiomeRadius, 0, 0));
+		if (biomesToSearch.stream().noneMatch(biome::is)) {
 			return null;
 		}
 
-		biome = world.getBiome(pos.offset(0, 0, -minBiomeRadius)).value();
-		if (!biomesToSearch.contains(biome.getRegistryName())) {
+		biome = world.getBiome(pos.offset(0, 0, -minBiomeRadius));
+		if (biomesToSearch.stream().noneMatch(biome::is)) {
 			return null;
 		}
 
-		biome = world.getBiome(pos.offset(0, 0, minBiomeRadius)).value();
-		if (!biomesToSearch.contains(biome.getRegistryName())) {
+		biome = world.getBiome(pos.offset(0, 0, minBiomeRadius));
+		if (biomesToSearch.stream().noneMatch(biome::is)) {
 			return null;
 		}
 
 		return pos;
 	}
 
-	private static void removeInvalidBiomes(Biome currentBiome, Set<ResourceLocation> biomesToSearch) {
-		biomesToSearch.removeAll(waterBiomes);
-
-		if (currentBiome.getBiomeCategory() == Biome.BiomeCategory.NETHER) {
-			biomesToSearch.retainAll(netherBiomes);
-		} else {
-			biomesToSearch.removeAll(netherBiomes);
-		}
-
-		if (currentBiome.getBiomeCategory() == Biome.BiomeCategory.THEEND) {
-			biomesToSearch.retainAll(endBiomes);
-		} else {
-			biomesToSearch.removeAll(endBiomes);
-		}
+	private static void removeInvalidBiomes(Holder<Biome> currentBiome, Set<ResourceLocation> biomesToSearch) {
+		boolean selfIsNether = currentBiome.is(BiomeTags.IS_NETHER);
+		boolean selfIsEnd = currentBiome.is(BiomeTags.IS_END);
+		biomesToSearch.removeIf(biomeKey -> {
+			Holder<Biome> biomeHolder = ForgeRegistries.BIOMES.getHolder(biomeKey).get();
+			boolean isWater = biomeHolder.is(BiomeTags.IS_OCEAN) || biomeHolder.is(BiomeTags.IS_RIVER) || biomeHolder.is(BiomeTags.IS_BEACH);
+			boolean isNether = biomeHolder.is(BiomeTags.IS_NETHER);
+			boolean isEnd = biomeHolder.is(BiomeTags.IS_END);
+			return isWater || isNether != selfIsNether || isEnd != selfIsEnd;
+		});
 	}
 }

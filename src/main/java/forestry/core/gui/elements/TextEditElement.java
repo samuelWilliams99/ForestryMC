@@ -6,7 +6,6 @@ import java.util.function.Predicate;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.network.chat.TextComponent;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
@@ -57,7 +56,7 @@ public class TextEditElement extends GuiElement implements IValueElement<String>
 	@Override
 	public void setAssignedBounds(Rectangle bounds) {
 		super.setAssignedBounds(bounds);
-		field = new EditBox(Minecraft.getInstance().font, 0, 0, bounds.width, bounds.height, TextComponent.EMPTY);
+		field = new EditBox(Minecraft.getInstance().font, 0, 0, bounds.width, bounds.height, Component.empty());
 		field.setBordered(false);
 		if (maxLength > 0) {
 			field.setMaxLength(maxLength);
