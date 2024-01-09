@@ -13,14 +13,16 @@ package forestry.core.fluids;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.Rarity;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 import forestry.api.core.tooltips.ToolTip;
@@ -75,7 +77,7 @@ public class StandardTank extends FluidTank implements IStreamable {
 		if (f == null) {
 			return DEFAULT_COLOR;
 		}
-		return f.getAttributes().getColor(getFluid());
+		return IClientFluidTypeExtensions.of(f).getTintColor(getFluid());
 	}
 
 	public boolean isEmpty() {
@@ -197,13 +199,12 @@ public class StandardTank extends FluidTank implements IStreamable {
 		int amount = 0;
 		FluidStack fluidStack = getFluid();
 		if (!fluidStack.isEmpty()) {
-			Fluid fluidType = fluidStack.getFluid();
-			FluidAttributes attributes = fluidType.getAttributes();
-			Rarity rarity = attributes.getRarity();
+			FluidType fluidType = fluidStack.getFluid().getFluidType();
+			Rarity rarity = fluidType.getRarity();
 			if (rarity == null) {
 				rarity = Rarity.COMMON;
 			}
-			toolTip.add(Component.translatable(attributes.getTranslationKey(fluidStack)), rarity.color);
+			toolTip.add(Component.translatable(fluidStack.getTranslationKey()), rarity.color);
 			amount = getFluid().getAmount();
 		}
 		Component liquidAmount = Component.translatable("for.gui.tooltip.liquid.amount", amount, getCapacity());

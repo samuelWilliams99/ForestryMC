@@ -28,8 +28,8 @@ import net.minecraft.ChatFormatting;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import forestry.api.core.tooltips.ToolTip;
@@ -87,8 +87,8 @@ public class FilteredTank extends StandardTank {
 		if (Screen.hasShiftDown() || filters.size() < 5) {
 			for (ResourceLocation filterName : filters) {
 				Fluid fluidFilter = ForgeRegistries.FLUIDS.getValue(filterName);
-				FluidAttributes attributes = fluidFilter.getAttributes();
-				Rarity rarity = attributes.getRarity();
+				FluidType fluidType = fluidFilter.getFluidType();
+				Rarity rarity = fluidType.getRarity();
 				if (rarity == null) {
 					rarity = Rarity.COMMON;
 				}

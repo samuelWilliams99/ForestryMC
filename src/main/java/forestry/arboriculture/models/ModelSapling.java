@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -24,6 +25,7 @@ import net.minecraft.client.resources.model.ModelState;
 import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
@@ -31,7 +33,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import com.mojang.datafixers.util.Pair;
 
 import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
-import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.geometry.IUnbakedGeometry;
 
@@ -99,8 +100,8 @@ public class ModelSapling implements IUnbakedGeometry<ModelSapling> {
 		}
 
 		@Override
-		public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand, ModelData extraData) {
-			IAlleleTreeSpecies species = extraData.getData(TileSapling.TREE_SPECIES);
+		public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand, ModelData extraData, @org.jetbrains.annotations.Nullable RenderType renderType) {
+			IAlleleTreeSpecies species = extraData.get(TileSapling.TREE_SPECIES);
 			if (species == null) {
 				species = TreeDefinition.Oak.getSpecies();
 			}
@@ -108,8 +109,8 @@ public class ModelSapling implements IUnbakedGeometry<ModelSapling> {
 		}
 
 		@Override
-		public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
-			return getQuads(state, side, rand, EmptyModelData.INSTANCE);
+		public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand) {
+			return getQuads(state, side, rand, ModelData.EMPTY, null);
 		}
 
 		@Override

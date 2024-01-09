@@ -33,6 +33,7 @@ import com.mojang.math.Matrix4f;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 
@@ -92,7 +93,9 @@ public class TankWidget extends Widget {
 			Fluid fluid = contents.getFluid();
 
 			if (fluid != null) {
-				ResourceLocation fluidStill = fluid.getAttributes().getStillTexture(contents);
+				IClientFluidTypeExtensions renderProperties = IClientFluidTypeExtensions.of(fluid);
+
+				ResourceLocation fluidStill = renderProperties.getStillTexture(contents);
 				TextureAtlasSprite fluidStillSprite = null;
 				if (fluidStill != null) {
 					fluidStillSprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(fluidStill);
@@ -101,7 +104,7 @@ public class TankWidget extends Widget {
 					fluidStillSprite = ResourceUtil.getMissingTexture();
 				}
 
-				int fluidColor = fluid.getAttributes().getColor(contents);
+				int fluidColor = renderProperties.getTintColor(contents);
 
 				int scaledAmount = contents.getAmount() * height / tank.getCapacity();
 				if (contents.getAmount() > 0 && scaledAmount < 1) {

@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Random;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
@@ -91,7 +92,7 @@ public class FruitProviderNone implements IFruitProvider {
 	}
 
 	@Override
-	public boolean trySpawnFruitBlock(IGenome genome, LevelAccessor world, Random rand, BlockPos pos) {
+	public boolean trySpawnFruitBlock(IGenome genome, LevelAccessor world, RandomSource rand, BlockPos pos) {
 		return false;
 	}
 

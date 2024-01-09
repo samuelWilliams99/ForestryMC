@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.ItemStack;
@@ -178,7 +179,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 	}
 
 	@Override
-	public boolean setLeaves(LevelAccessor world, @Nullable GameProfile owner, BlockPos pos, Random rand) {
+	public boolean setLeaves(LevelAccessor world, @Nullable GameProfile owner, BlockPos pos, RandomSource rand) {
 		return genome.getActiveAllele(TreeChromosomes.SPECIES).getGenerator().setLeaves(genome, world, owner, pos, rand);
 	}
 
@@ -199,7 +200,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 	}
 
 	@Override
-	public boolean trySpawnFruitBlock(LevelAccessor world, Random rand, BlockPos pos) {
+	public boolean trySpawnFruitBlock(LevelAccessor world, RandomSource rand, BlockPos pos) {
 		IFruitProvider provider = getGenome().getActiveAllele(TreeChromosomes.FRUITS).getProvider();
 		Collection<IFruitFamily> suitable = genome.getActiveAllele(TreeChromosomes.SPECIES).getSuitableFruit();
 		return suitable.contains(provider.getFamily()) &&

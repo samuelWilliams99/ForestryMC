@@ -23,10 +23,12 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 
+import net.minecraftforge.common.SoundAction;
+import net.minecraftforge.common.SoundActions;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidActionResult;
-import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
@@ -153,14 +155,14 @@ public final class FluidHelper {
 			return false;
 		}
 
-		FluidActionResult fluidActionSimulated = tryEmptyContainer(input, fluidHandler, FluidAttributes.BUCKET_VOLUME, null, false);
+		FluidActionResult fluidActionSimulated = tryEmptyContainer(input, fluidHandler, FluidType.BUCKET_VOLUME, null, false);
 		if (!fluidActionSimulated.isSuccess()) {
 			return false;
 		}
 
 		ItemStack drainedItemSimulated = fluidActionSimulated.getResult();
 		if (input.getCount() == 1 || drainedItemSimulated.isEmpty()) {
-			FluidActionResult fluidActionResult = tryEmptyContainer(input, fluidHandler, FluidAttributes.BUCKET_VOLUME, null, true);
+			FluidActionResult fluidActionResult = tryEmptyContainer(input, fluidHandler, FluidType.BUCKET_VOLUME, null, true);
 			if (fluidActionResult.isSuccess()) {
 				ItemStack drainedItem = fluidActionResult.getResult();
 				if (!drainedItem.isEmpty()) {
@@ -184,7 +186,7 @@ public final class FluidHelper {
 
 		//Only needed so we can test if the container can be filled
 		FluidStack content = FluidUtil.getFluidContained(input).orElse(FluidStack.EMPTY);
-		FluidActionResult drainedResultSimulated = tryEmptyContainer(input, fluidHandler, FluidAttributes.BUCKET_VOLUME, null, false);
+		FluidActionResult drainedResultSimulated = tryEmptyContainer(input, fluidHandler, FluidType.BUCKET_VOLUME, null, false);
 		if (!drainedResultSimulated.isSuccess()) {
 			return FillStatus.INVALID_INPUT;
 		}
@@ -193,7 +195,7 @@ public final class FluidHelper {
 
 		if (outputStack.isEmpty() || drainedItemSimulated.isEmpty() || ItemStackUtil.isIdenticalItem(outputStack, drainedItemSimulated) && outputStack.getCount() + drainedItemSimulated.getCount() < outputStack.getMaxStackSize()) {
 			if (doDrain) {
-				FluidActionResult drainedResult = tryEmptyContainer(input, fluidHandler, FluidAttributes.BUCKET_VOLUME, null, true);
+				FluidActionResult drainedResult = tryEmptyContainer(input, fluidHandler, FluidType.BUCKET_VOLUME, null, true);
 				if (drainedResult.isSuccess()) {
 					ItemStack drainedItem = drainedResult.getResult();
 					if (!drainedItem.isEmpty()) {
@@ -230,7 +232,7 @@ public final class FluidHelper {
 					FluidStack transfer = FluidUtil.tryFluidTransfer(fluidDestination, containerFluidHandler, maxAmount, true);
 					if (!transfer.isEmpty()) {
 						if (player != null) {
-							SoundEvent soundevent = transfer.getFluid().getAttributes().getEmptySound(transfer);
+							SoundEvent soundevent = transfer.getFluid().getFluidType().getSound(transfer, SoundActions.BUCKET_EMPTY);
 							player.level.playSound(null, player.getX(), player.getY() + 0.5, player.getZ(), soundevent, SoundSource.BLOCKS, 1.0F, 1.0F);
 						}
 						ItemStack resultContainer = containerFluidHandler.getContainer();

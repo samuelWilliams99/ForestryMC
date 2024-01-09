@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
@@ -39,7 +40,7 @@ public class CrateBakedModel extends AbstractBakedModel {
 	}
 
 	@Override
-	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
+	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand) {
 		if (side != null) {
 			return ImmutableList.of();
 		}
@@ -83,20 +84,20 @@ public class CrateBakedModel extends AbstractBakedModel {
 			if (bakedModel != null) {
 				BakedModel guiModel = bakedModel.handlePerspective(ItemTransforms.TransformType.GUI, new PoseStack());
 				//TODO: Currently very hacky, find a better way to differentiate between item and block
-				List<BakedQuad> general = guiModel.getQuads(null, null, new Random(0L));
+				List<BakedQuad> general = guiModel.getQuads(null, null, RandomSource.create(0L));
 				if (!general.isEmpty()) {
 					Transformation frontTransform = new Transformation(new Vector3f(-CONTENT_RENDER_OFFSET_X, 0, CONTENT_RENDER_OFFSET_Z),
 						null,
 						new Vector3f(0.5F, 0.5F, 1F),
 						null);
 					TRSRBakedModel frontModel = new TRSRBakedModel(guiModel, frontTransform);
-					quads.addAll(frontModel.getQuads(null, null, new Random(0L)));
+					quads.addAll(frontModel.getQuads(null, null, RandomSource.create(0L)));
 					Transformation backTransform = new Transformation(new Vector3f(-CONTENT_RENDER_OFFSET_X, 0, -CONTENT_RENDER_OFFSET_Z),
 						null,
 						new Vector3f(0.5F, 0.5F, 1f),
 						TransformationHelper.quatFromXYZ(new Vector3f(0, (float) Math.PI, 0), false));
 					TRSRBakedModel backModel = new TRSRBakedModel(guiModel, backTransform);
-					quads.addAll(backModel.getQuads(null, null, new Random(0L)));
+					quads.addAll(backModel.getQuads(null, null, RandomSource.create(0L)));
 				} else {
 					Transformation frontTransform = new Transformation(
 						new Vector3f(-CONTENT_RENDER_OFFSET_X, 0, 0),
@@ -105,7 +106,7 @@ public class CrateBakedModel extends AbstractBakedModel {
 						null);
 					TRSRBakedModel frontModel = new TRSRBakedModel(guiModel, frontTransform);
 					for (Direction direction : Direction.VALUES) {
-						quads.addAll(frontModel.getQuads(null, direction, new Random(0L)));
+						quads.addAll(frontModel.getQuads(null, direction, RandomSource.create(0L)));
 					}
 				}
 			}

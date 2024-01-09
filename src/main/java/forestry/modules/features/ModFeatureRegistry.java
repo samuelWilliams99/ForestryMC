@@ -35,9 +35,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.network.IContainerFactory;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import forestry.api.core.IBlockSubtype;
 import forestry.api.core.IItemSubtype;
@@ -114,7 +112,7 @@ public class ModFeatureRegistry {
 				.collect(Collectors.toSet());
 	}
 
-	public <T extends IForgeRegistryEntry<T>> void onRegister(RegistryEvent.Register<T> event) {
+	public void onRegister(RegisterEvent event) {
 		for (ModuleFeatures features : modules.values()) {
 			features.onRegister(event);
 		}
@@ -267,12 +265,12 @@ public class ModFeatureRegistry {
 			feature.create();
 		}
 
-		public <T extends IForgeRegistryEntry<T>> void onRegister(RegistryEvent.Register<T> event) {
+		public void onRegister(RegisterEvent event) {
 			for (FeatureType type : FeatureType.values()) {
 				for (IModFeature feature : featureByType.get(type)) {
 					feature.register(event);
 				}
-				if (type.superType.isAssignableFrom(event.getRegistry().getRegistrySuperType())) {
+				if (event.getRegistryKey().equals(type.superType)) {
 					registryListeners.get(type).forEach(listener -> listener.accept(event));
 				}
 			}

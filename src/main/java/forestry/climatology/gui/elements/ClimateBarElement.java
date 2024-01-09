@@ -11,6 +11,7 @@
 package forestry.climatology.gui.elements;
 
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 
 import com.mojang.blaze3d.systems.RenderSystem;

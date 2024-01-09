@@ -13,6 +13,7 @@ package forestry.core.fluids;
 import java.awt.Color;
 import java.util.Random;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
@@ -42,9 +43,9 @@ public class BlockForestryFluid extends LiquidBlock {
 	private final Color color;
 
 	public BlockForestryFluid(FeatureFluid feature) {
-		super(feature::fluid, Block.Properties.of(feature.fluid().getAttributes().getTemperature() > 505 ? Material.LAVA : Material.WATER)
+		super(feature::fluid, Block.Properties.of(feature.fluid().getFluidType().getTemperature() > 505 ? Material.LAVA : Material.WATER)
 				.noCollission()
-				.strength(100.0F).noDrops());
+				.strength(100.0F).noLootTable());
 		this.feature = feature;
 		FluidProperties properties = feature.properties();
 		this.flammability = properties.flammability;
@@ -54,7 +55,7 @@ public class BlockForestryFluid extends LiquidBlock {
 	}
 
 	@Override
-	public void randomTick(BlockState blockState, ServerLevel world, BlockPos pos, Random rand) {
+	public void randomTick(BlockState blockState, ServerLevel world, BlockPos pos, RandomSource rand) {
 		double x = pos.getX();
 		double y = pos.getY();
 		double z = pos.getZ();
@@ -63,7 +64,7 @@ public class BlockForestryFluid extends LiquidBlock {
 			int i = blockState.getValue(LEVEL);
 
 			if (i > 0 && i < 8) {
-				if (getFluid().getAttributes().getViscosity(world, pos) < 5000 && rand.nextInt(64) == 0) {
+				if (getFluid().getFluidType().getViscosity(getFluidState(blockState), world, pos) < 5000 && rand.nextInt(64) == 0) {
 					world.playLocalSound(x + 0.5D, y + 0.5D, z + 0.5D, SoundEvents.WATER_AMBIENT, SoundSource.BLOCKS, rand.nextFloat() * 0.25F + 0.75F, rand.nextFloat() + 0.5F, false);
 				}
 			} else if (rand.nextInt(10) == 0) {
@@ -130,7 +131,7 @@ public class BlockForestryFluid extends LiquidBlock {
 	}
 
 	@Override
-	public void tick(BlockState state, ServerLevel world, BlockPos pos, Random rand) {
+	public void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource rand) {
 		super.tick(state, world, pos, rand);
 
 		int x = pos.getX();

@@ -46,18 +46,6 @@ public class FarmingInfoRecipeCategory extends ForestryRecipeCategory<FarmingInf
 		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, intricateCircuitboard);
 	}
 
-	@SuppressWarnings("removal")
-	@Override
-	public ResourceLocation getUid() {
-		return TYPE.getUid();
-	}
-
-	@SuppressWarnings("removal")
-	@Override
-	public Class<? extends FarmingInfoRecipe> getRecipeClass() {
-		return FarmingInfoRecipe.class;
-	}
-
 	@Override
 	public RecipeType<FarmingInfoRecipe> getRecipeType() {
 		return TYPE;

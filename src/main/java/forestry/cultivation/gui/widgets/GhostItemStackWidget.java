@@ -54,7 +54,7 @@ public class GhostItemStackWidget extends ItemStackWidget {
 	private Component getDirectionString() {
 		if (slot.getSlotIndex() >= InventoryPlanter.CONFIG.productionStart
 				|| slot.getSlotIndex() < InventoryPlanter.CONFIG.productionStart + InventoryPlanter.CONFIG.productionCount) {
-			return Component.empty;
+			return Component.empty();
 		}
 		int index = slot.getSlotIndex() % 4;
 		FarmDirection direction = FarmDirection.values()[index];

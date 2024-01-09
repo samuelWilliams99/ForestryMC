@@ -17,6 +17,7 @@ import java.util.function.Supplier;
 
 import net.minecraft.nbt.TagType;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.tags.BlockTags;
@@ -84,7 +85,7 @@ public class FruitProviderPod extends FruitProviderNone {
 	}
 
 	@Override
-	public boolean trySpawnFruitBlock(IGenome genome, LevelAccessor world, Random rand, BlockPos pos) {
+	public boolean trySpawnFruitBlock(IGenome genome, LevelAccessor world, RandomSource rand, BlockPos pos) {
 		if (rand.nextFloat() > getFruitChance(genome, world, pos)) {
 			return false;
 		}

@@ -63,6 +63,8 @@ java {
 
 tasks.withType(JavaCompile) {
 	options.encoding = "UTF-8"
+	options.compilerArgs << "-Xmaxerrs" << "1000"
+	options.compilerArgs << "-Xlint:none"
 }
 
 sourceSets {

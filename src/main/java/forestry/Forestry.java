@@ -15,6 +15,7 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 
+import com.mojang.serialization.Codec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
@@ -35,13 +36,13 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
+import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.data.event.GatherDataEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import net.minecraftforge.fml.DistExecutor;
@@ -266,25 +267,29 @@ public class Forestry {
 		}
 
 		@SubscribeEvent(priority = EventPriority.HIGH)
-		public static void createFeatures(RegistryEvent.Register<Block> event) {
-			ModuleManager.getModuleHandler().createFeatures();
+		public static void createFeatures(final RegisterEvent event) {
+			if (event.getRegistryKey().equals(ForgeRegistries.Keys.BLOCKS))
+				ModuleManager.getModuleHandler().createFeatures();
 		}
 
 		@SubscribeEvent(priority = EventPriority.LOW)
-		public static void createObjects(RegistryEvent.Register<Block> event) {
-			ModuleManager.getModuleHandler().createObjects((type, moduleID) -> !moduleID.equals(ForestryModuleUids.CRATE));
-			ModuleManager.getModuleHandler().runRegisterBackpacksAndCrates();
-			ModuleManager.getModuleHandler().createObjects((type, moduleID) -> moduleID.equals(ForestryModuleUids.CRATE));
+		public static void createObjects(final RegisterEvent event) {
+			if (event.getRegistryKey().equals(ForgeRegistries.Keys.BLOCKS)) {
+				ModuleManager.getModuleHandler().createObjects((type, moduleID) -> !moduleID.equals(ForestryModuleUids.CRATE));
+				ModuleManager.getModuleHandler().runRegisterBackpacksAndCrates();
+				ModuleManager.getModuleHandler().createObjects((type, moduleID) -> moduleID.equals(ForestryModuleUids.CRATE));
+			}
 		}
 
 		@SubscribeEvent(priority = EventPriority.LOWEST)
-		public static void registerObjects(RegistryEvent.Register<?> event) {
+		public static void registerObjects(RegisterEvent event) {
 			ModuleManager.getModuleHandler().registerObjects(event);
 		}
 
 		@SubscribeEvent
-		public static void registerRecipeSerialziers(RegistryEvent.Register<RecipeSerializer<?>> event) {
-			IForgeRegistry<RecipeSerializer<?>> registry = event.getRegistry();
+		public static void registerRecipeSerialziers(RegisterEvent event) {
+			if (!event.getRegistryKey().equals(ForgeRegistries.Keys.RECIPE_SERIALIZERS)) return;
+			IForgeRegistry<RecipeSerializer<?>> registry = event.getForgeRegistry();
 
 			register(registry, ICarpenterRecipe.TYPE, new CarpenterRecipe.Serializer());
 			register(registry, ICentrifugeRecipe.TYPE, new CentrifugeRecipe.Serializer());
@@ -301,14 +306,15 @@ public class Forestry {
 
 		private static void register(IForgeRegistry<RecipeSerializer<?>> registry, RecipeType<?> type, RecipeSerializer<?> serializer) {
 			Registry.register(Registry.RECIPE_TYPE, type.toString(), type);
-			registry.register(serializer.setRegistryName(new ResourceLocation(type.toString())));
+			registry.register(new ResourceLocation(type.toString()), serializer);
 		}
 
 		@SubscribeEvent
-		public static void registerLootModifiers(RegistryEvent.Register<GlobalLootModifierSerializer<?>> event) {
-			IForgeRegistry<GlobalLootModifierSerializer<?>> registry = event.getRegistry();
-			registry.register(ConditionLootModifier.SERIALIZER);
-			registry.register(GrafterLootModifier.SERIALIZER);
+		public static void registerLootModifiers(RegisterEvent event) {
+			if (!event.getRegistryKey().equals(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS)) return;
+			IForgeRegistry<Codec<? extends IGlobalLootModifier>> registry = event.getForgeRegistry();
+			registry.register(new ResourceLocation(Constants.MOD_ID, "condition_modifier"), ConditionLootModifier.CODEC);
+			registry.register(new ResourceLocation(Constants.MOD_ID, "grafter_modifier"), GrafterLootModifier.CODEC);
 
 			OrganismFunction.type = Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(Constants.MOD_ID, "set_species_nbt"), new LootItemFunctionType(new OrganismFunction.Serializer()));
 			CountBlockFunction.type = Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(Constants.MOD_ID, "count_from_block"), new LootItemFunctionType(new CountBlockFunction.Serializer()));

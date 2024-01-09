@@ -16,10 +16,11 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class RainmakerRecipeCategory extends ForestryRecipeCategory<RainSubstrate> {
 	private final IDrawable slot;
@@ -30,18 +31,6 @@ public class RainmakerRecipeCategory extends ForestryRecipeCategory<RainSubstrat
 		this.slot = guiHelper.getSlotDrawable();
 		ItemStack rainmaker = new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.RAINMAKER).block());
 		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, rainmaker);
-	}
-
-	@SuppressWarnings("removal")
-	@Override
-	public ResourceLocation getUid() {
-		return ForestryRecipeType.RAINMAKER.getUid();
-	}
-
-	@SuppressWarnings("removal")
-	@Override
-	public Class<? extends RainSubstrate> getRecipeClass() {
-		return ForestryRecipeType.RAINMAKER.getRecipeClass();
 	}
 
 	@Override

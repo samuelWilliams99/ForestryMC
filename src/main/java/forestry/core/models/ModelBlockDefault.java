@@ -19,12 +19,14 @@ import java.util.Random;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -33,7 +35,6 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.ModelData;
 
 import forestry.core.models.baker.ModelBaker;
@@ -79,7 +80,7 @@ public abstract class ModelBlockDefault<B extends Block, K> implements BakedMode
 		Block block = Block.byItem(stack.getItem());
 		Preconditions.checkArgument(blockClass.isInstance(block));
 		B bBlock = blockClass.cast(block);
-		bakeBlock(bBlock, EmptyModelData.INSTANCE, key, baker, true);
+		bakeBlock(bBlock, ModelData.EMPTY, key, baker, true);
 
 		return itemModel = baker.bake(true);
 	}
@@ -90,15 +91,15 @@ public abstract class ModelBlockDefault<B extends Block, K> implements BakedMode
 
 	@Nonnull
 	@Override
-	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull ModelData extraData) {
+	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull RandomSource rand, @Nonnull ModelData extraData, @Nullable RenderType renderType) {
 		Preconditions.checkNotNull(state);
 		BakedModel model = getModel(state, extraData);
-		return model.getQuads(state, side, rand, extraData);
+		return model.getQuads(state, side, rand, extraData, renderType);
 	}
 
 	@Override
-	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
-		return getQuads(state, side, rand, EmptyModelData.INSTANCE);
+	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand) {
+		return getQuads(state, side, rand, ModelData.EMPTY, null);
 	}
 
 	protected void onCreateModel(ModelBakerModel model) {

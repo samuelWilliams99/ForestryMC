@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.VineBlock;
@@ -132,7 +133,7 @@ public class FeatureHelper {
 	 */
 	public static Set<BlockPos> generateTreeTrunk(
 		LevelAccessor world,
-		Random rand,
+		RandomSource rand,
 		ITreeBlockType wood,
 		BlockPos startPos,
 		int height,
@@ -194,7 +195,7 @@ public class FeatureHelper {
 		return treeTops;
 	}
 
-	protected static void addVines(LevelAccessor world, Random rand, BlockPos pos, float chance) {
+	protected static void addVines(LevelAccessor world, RandomSource rand, BlockPos pos, float chance) {
 		if (chance <= 0) {
 			return;
 		}
@@ -217,7 +218,7 @@ public class FeatureHelper {
 		}
 	}
 
-	public static void generatePods(ITreeGenData tree, LevelAccessor world, Random rand, BlockPos startPos, int height, int minHeight, int girth, EnumReplaceMode replaceMode) {
+	public static void generatePods(ITreeGenData tree, LevelAccessor world, RandomSource rand, BlockPos startPos, int height, int minHeight, int girth, EnumReplaceMode replaceMode) {
 		for (int y = height - 1; y >= minHeight; y--) { // generating top-down is faster for lighting calculations
 			for (int x = 0; x < girth; x++) {
 				for (int z = 0; z < girth; z++) {
@@ -235,7 +236,7 @@ public class FeatureHelper {
 		}
 	}
 
-	private static void trySpawnFruitBlock(ITreeGenData tree, LevelAccessor world, Random rand, BlockPos pos, EnumReplaceMode replaceMode) {
+	private static void trySpawnFruitBlock(ITreeGenData tree, LevelAccessor world, RandomSource rand, BlockPos pos, EnumReplaceMode replaceMode) {
 		BlockState blockState = world.getBlockState(pos);
 		if (replaceMode.canReplace(blockState, world, pos)) {
 			tree.trySpawnFruitBlock(world, rand, pos);

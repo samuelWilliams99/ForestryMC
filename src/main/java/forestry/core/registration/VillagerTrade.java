@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Random;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
@@ -29,7 +30,7 @@ public class VillagerTrade {
 		}
 
 		@Override
-		public MerchantOffer getOffer(Entity trader, Random rand) {
+		public MerchantOffer getOffer(Entity trader, RandomSource rand) {
 			return new MerchantOffer(new ItemStack(Items.EMERALD, this.emeraldAmounts.getPrice(rand)), new ItemStack(this.sellingItem, this.sellingAmounts.getPrice(rand)), maxUses, xp, 0.05f);
 		}
 	}
@@ -50,7 +51,7 @@ public class VillagerTrade {
 		}
 
 		@Override
-		public MerchantOffer getOffer(Entity trader, Random rand) {
+		public MerchantOffer getOffer(Entity trader, RandomSource rand) {
 			return new MerchantOffer(new ItemStack(this.buyingItem, this.buyingAmounts.getPrice(rand)), new ItemStack(Items.EMERALD, this.emeraldAmounts.getPrice(rand)), maxUses, xp, 0.05f);
 		}
 	}
@@ -75,7 +76,7 @@ public class VillagerTrade {
 		}
 
 		@Override
-		public MerchantOffer getOffer(Entity trader, Random rand) {
+		public MerchantOffer getOffer(Entity trader, RandomSource rand) {
 			return new MerchantOffer(new ItemStack(this.buyingItem, this.buyAmounts.getPrice(rand)), new ItemStack(Items.EMERALD, this.emeralsAmounts.getPrice(rand)), new ItemStack(this.sellingItem, this.sellingAmounts.getPrice(rand)), maxUses, xp, 0.05f);
 		}
 	}
@@ -98,7 +99,7 @@ public class VillagerTrade {
 		}
 
 		@Override
-		public MerchantOffer getOffer(Entity trader, Random rand) {
+		public MerchantOffer getOffer(Entity trader, RandomSource rand) {
 			Collection<Item> logsBlock = new HashSet<>();
 			logsBlock.add(Items.ACACIA_LOG);
 			logsBlock.add(Items.BIRCH_LOG);
@@ -133,7 +134,7 @@ public class VillagerTrade {
 		}
 
 		@Override
-		public MerchantOffer getOffer(Entity trader, Random rand) {
+		public MerchantOffer getOffer(Entity trader, RandomSource rand) {
 			return new MerchantOffer(new ItemStack(this.buyingItem, this.buyAmounts.getPrice(rand)), new ItemStack(this.buyingItem2, this.buyAmounts2.getPrice(rand)), new ItemStack(this.sellingItem, this.sellingAmounts.getPrice(rand)), maxUses, xp, 0.05f);
 		}
 	}
@@ -147,7 +148,7 @@ public class VillagerTrade {
 			this.max = max;
 		}
 
-		public int getPrice(Random rand) {
+		public int getPrice(RandomSource rand) {
 			return min >= max ? min : min + rand.nextInt(max - min + 1);
 		}
 	}

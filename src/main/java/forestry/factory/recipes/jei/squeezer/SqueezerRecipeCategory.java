@@ -46,18 +46,6 @@ public class SqueezerRecipeCategory extends ForestryRecipeCategory<ISqueezerReci
 		this.craftingGridHelper = guiHelper.createCraftingGridHelper(0);
 	}
 
-	@SuppressWarnings("removal")
-	@Override
-	public ResourceLocation getUid() {
-		return ForestryRecipeType.SQUEEZER.getUid();
-	}
-
-	@SuppressWarnings("removal")
-	@Override
-	public Class<? extends ISqueezerRecipe> getRecipeClass() {
-		return ISqueezerRecipe.class;
-	}
-
 	@Override
 	public RecipeType<ISqueezerRecipe> getRecipeType() {
 		return ForestryRecipeType.SQUEEZER;

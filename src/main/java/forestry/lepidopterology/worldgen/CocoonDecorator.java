@@ -157,7 +157,7 @@ public class CocoonDecorator extends Feature<NoneFeatureConfiguration> {
 		ArrayList<IButterfly> butterflys = new ArrayList<>(ButterflyManager.butterflyRoot
 				.getIndividualTemplates());
 
-		Collections.shuffle(butterflys, new Random(context.random().nextInt()));
+		Collections.shuffle(butterflys, new Random(context.random().nextLong()));
 
 		for (IButterfly butterfly : butterflys) {
 			if (genCocoon(context.level(), context.random(), context.origin(), butterfly)) {

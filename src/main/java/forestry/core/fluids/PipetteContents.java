@@ -13,11 +13,12 @@ package forestry.core.fluids;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.chat.Component;
 
-import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.FluidUtil;
 
 public class PipetteContents {
@@ -42,11 +43,11 @@ public class PipetteContents {
 	}
 
 	public boolean isFull() {
-		return contents.getAmount() >= FluidAttributes.BUCKET_VOLUME;
+		return contents.getAmount() >= FluidType.BUCKET_VOLUME;
 	}
 
 	public void addTooltip(List<Component> list) {
-		Component descr = Component.translatable(contents.getFluid().getAttributes().getTranslationKey(contents));
+		MutableComponent descr = Component.translatable(contents.getTranslationKey());
 		descr.append(" (" + contents.getAmount() + " mb)");
 
 		list.add(descr);

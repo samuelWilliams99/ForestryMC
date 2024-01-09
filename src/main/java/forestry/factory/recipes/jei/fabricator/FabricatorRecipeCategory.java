@@ -69,18 +69,6 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory<IFabricator
 		return smeltingInputs;
 	}
 
-	@SuppressWarnings("removal")
-	@Override
-	public ResourceLocation getUid() {
-		return ForestryRecipeType.FABRICATOR.getUid();
-	}
-
-	@SuppressWarnings("removal")
-	@Override
-	public Class<? extends IFabricatorRecipe> getRecipeClass() {
-		return ForestryRecipeType.FABRICATOR.getRecipeClass();
-	}
-
 	@Override
 	public RecipeType<IFabricatorRecipe> getRecipeType() {
 		return ForestryRecipeType.FABRICATOR;

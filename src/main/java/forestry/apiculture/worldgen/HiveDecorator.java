@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.core.Holder;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.BlockPos;
@@ -36,7 +37,7 @@ public class HiveDecorator extends Feature<NoneFeatureConfiguration> {
 		super(NoneFeatureConfiguration.CODEC);
 	}
 
-	private static boolean decorateHivesDebug(WorldGenLevel world, Random rand, BlockPos pos, List<Hive> hives) {
+	private static boolean decorateHivesDebug(WorldGenLevel world, RandomSource rand, BlockPos pos, List<Hive> hives) {
 		int posX = pos.getX() + rand.nextInt(16);
 		int posZ = pos.getZ() + rand.nextInt(16);
 
@@ -45,7 +46,7 @@ public class HiveDecorator extends Feature<NoneFeatureConfiguration> {
 
 		for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {
-				Collections.shuffle(hives, rand);
+				Collections.shuffle(hives, new Random(rand.nextLong()));
 				for (Hive hive : hives) {
 					if (!hive.isGoodBiome(biome) || !hive.isGoodHumidity(humidity)) {
 						continue;
@@ -59,7 +60,7 @@ public class HiveDecorator extends Feature<NoneFeatureConfiguration> {
 		return false;
 	}
 
-	public static boolean tryGenHive(WorldGenLevel world, Random rand, int x, int z, Hive hive) {
+	public static boolean tryGenHive(WorldGenLevel world, RandomSource rand, int x, int z, Hive hive) {
 		final BlockPos hivePos = hive.getPosForHive(world, x, z);
 
 		if (hivePos == null) {
@@ -83,7 +84,7 @@ public class HiveDecorator extends Feature<NoneFeatureConfiguration> {
 		return setHive(world, rand, hivePos, hive);
 	}
 
-	private static boolean setHive(WorldGenLevel world, Random rand, BlockPos pos, Hive hive) {
+	private static boolean setHive(WorldGenLevel world, RandomSource rand, BlockPos pos, Hive hive) {
 		BlockState hiveState = hive.getHiveBlockState();
 		Block hiveBlock = hiveState.getBlock();
 		boolean placed = world.setBlock(pos, hiveState, Constants.FLAG_BLOCK_SYNC);
@@ -114,7 +115,7 @@ public class HiveDecorator extends Feature<NoneFeatureConfiguration> {
 	@Override
 	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
 		WorldGenLevel level = context.level();
-		Random rand = context.random();
+		RandomSource rand = context.random();
 		BlockPos pos = context.origin();
 
 		List<Hive> hives = ModuleApiculture.getHiveRegistry().getHives();
@@ -124,7 +125,7 @@ public class HiveDecorator extends Feature<NoneFeatureConfiguration> {
 			return false;
 		}
 
-		Collections.shuffle(hives, rand);
+		Collections.shuffle(hives, new Random(rand.nextLong()));
 
 		for (int tries = 0; tries < hives.size() / 2; tries++) {
 			Holder<Biome> biome = level.getBiome(pos);

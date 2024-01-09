@@ -46,18 +46,6 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory<ICarpenterRe
 		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, carpenter);
 	}
 
-	@SuppressWarnings("removal")
-	@Override
-	public ResourceLocation getUid() {
-		return ForestryRecipeType.CARPENTER.getUid();
-	}
-
-	@SuppressWarnings("removal")
-	@Override
-	public Class<? extends ICarpenterRecipe> getRecipeClass() {
-		return ICarpenterRecipe.class;
-	}
-
 	@Override
 	public RecipeType<ICarpenterRecipe> getRecipeType() {
 		return ForestryRecipeType.CARPENTER;

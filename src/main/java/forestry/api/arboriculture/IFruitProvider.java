@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.tags.BlockTags;
@@ -149,7 +150,7 @@ public interface IFruitProvider extends ISetupListener {
 	 *
 	 * @return true if a fruit block was spawned, false otherwise.
 	 */
-	boolean trySpawnFruitBlock(IGenome genome, LevelAccessor world, Random rand, BlockPos pos);
+	boolean trySpawnFruitBlock(IGenome genome, LevelAccessor world, RandomSource rand, BlockPos pos);
 
 	/**
 	 * Can be used to register the sprite/s that can be returned with

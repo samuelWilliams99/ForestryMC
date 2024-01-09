@@ -11,6 +11,7 @@
 package forestry.energy.gui;
 
 
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 

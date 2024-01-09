@@ -24,6 +24,7 @@ import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
@@ -32,6 +33,7 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.ForgeModelBakery;
+import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
 import net.minecraftforge.client.model.geometry.IGeometryLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
@@ -91,7 +93,7 @@ public class CrateModel implements IUnbakedGeometry<CrateModel> {
 			BakedModel bakedModel = bakery.bake(new ModelResourceLocation(Constants.MOD_ID + ":crate-filled", "inventory"), transform, spriteGetter);
 			if (bakedModel != null) {
 				//Set the crate color index to 100
-				for (BakedQuad quad : bakedModel.getQuads(null, null, new Random(0L), EmptyModelData.INSTANCE)) {
+				for (BakedQuad quad : bakedModel.getQuads(null, null, RandomSource.create(0L), ModelData.EMPTY, null)) {
 					bakedQuads.add(new BakedQuad(quad.getVertices(), 100, quad.getDirection(), quad.getSprite(), quad.isShade()));
 				}
 			}
@@ -102,7 +104,7 @@ public class CrateModel implements IUnbakedGeometry<CrateModel> {
 		if (contentModel == null) {
 			model = new CrateBakedModel(quads, contained);
 		} else {
-			quads.addAll(contentModel.getQuads(null, null, new Random(0), EmptyModelData.INSTANCE));
+			quads.addAll(contentModel.getQuads(null, null, RandomSource.create(0), ModelData.EMPTY, null));
 			model = new CrateBakedModel(quads);
 		}
 		return new PerspectiveMapWrapper(model, ClientManager.getInstance().getDefaultItemState());

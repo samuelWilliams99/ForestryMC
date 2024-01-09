@@ -20,7 +20,7 @@ public interface ICentrifugeRecipe extends IForestryRecipe {
 	RecipeType<ICentrifugeRecipe> TYPE = RecipeManagers.create("forestry:centrifuge");
 
 	class Companion {
-		@ObjectHolder("forestry:centrifuge")
+		@ObjectHolder(registryName = "minecraft:recipe_serializer", value = "forestry:centrifuge")
 		public static final RecipeSerializer<ICentrifugeRecipe> SERIALIZER = null;
 	}
 

@@ -20,11 +20,13 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
@@ -37,7 +39,6 @@ import com.mojang.math.Vector3f;
 import com.mojang.math.Vector4f;
 
 import net.minecraftforge.client.model.BakedModelWrapper;
-import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.pipeline.QuadBakingVertexConsumer;
 import net.minecraftforge.client.model.pipeline.VertexTransformer;
@@ -87,7 +88,7 @@ public class TRSRBakedModel extends BakedModelWrapper<BakedModel> {
 
 	@Nonnull
 	@Override
-	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand, ModelData data) {
+	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand, ModelData data, @Nullable RenderType renderType) {
 		// transform quads obtained from parent
 		ImmutableList.Builder<BakedQuad> builder = ImmutableList.builder();
 		if (!this.originalModel.isCustomRenderer()) {
@@ -96,7 +97,7 @@ public class TRSRBakedModel extends BakedModelWrapper<BakedModel> {
 				if (side != null && side.get2DDataValue() > -1) {
 					side = Direction.from2DDataValue((side.get2DDataValue() + this.faceOffset) % 4);
 				}
-				for (BakedQuad quad : this.originalModel.getQuads(state, side, rand, data)) {
+				for (BakedQuad quad : this.originalModel.getQuads(state, side, rand, data, renderType)) {
 					Transformer transformer = new Transformer(this.transformation, quad.getSprite());
 					quad.pipe(transformer);
 					builder.add(transformer.build());
@@ -109,8 +110,8 @@ public class TRSRBakedModel extends BakedModelWrapper<BakedModel> {
 	}
 
 	@Override
-	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
-		return this.getQuads(state, side, rand, EmptyModelData.INSTANCE);
+	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand) {
+		return this.getQuads(state, side, rand, ModelData.EMPTY, null);
 	}
 
 	@Nonnull

@@ -9,27 +9,24 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.DefaultAttributes;
 import net.minecraft.resources.ResourceLocation;
 
-import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.IForgeRegistryEntry;
+import net.minecraftforge.registries.RegisterEvent;
 
 public interface IEntityTypeFeature<E extends Entity> extends IModFeature {
 
 	@Override
 	default void create() {
 		EntityType<E> entityType = getEntityTypeConstructor().build(getIdentifier());
-		entityType.setRegistryName(new ResourceLocation(getModId(), getIdentifier()));
 		setEntityType(entityType);
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	default <R extends IForgeRegistryEntry<R>> void register(RegistryEvent.Register<R> event) {
-		IForgeRegistry<R> registry = event.getRegistry();
-		Class<R> superType = registry.getRegistrySuperType();
-		if (EntityType.class.isAssignableFrom(superType) && hasEntityType()) {
-			registry.register((R) entityType());
-			// DefaultAttributes.put((EntityType<? extends LivingEntity>) entityType(), createAttributes().build());
+	default void register(RegisterEvent event) {
+		if (event.getRegistryKey().equals(ForgeRegistries.Keys.ENTITY_TYPES) && hasEntityType()) {
+			IForgeRegistry<EntityType<E>> registry = event.getForgeRegistry();
+			registry.register(new ResourceLocation(getModId(), getIdentifier()), entityType());
 		}
 	}
 

@@ -10,7 +10,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.resources.ResourceLocation;
 
-import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 
 import forestry.core.config.Constants;
@@ -33,12 +33,7 @@ public class FeatureFluid implements IFluidFeature {
 		this.identifier = builder.identifier;
 		this.block = builder.registry.block(() -> new BlockForestryFluid(this), "fluid_" + builder.identifier);
 		this.properties = new FluidProperties(builder);
-		ResourceLocation[] resources = properties().resources;
-		FluidAttributes.Builder attributes = FluidAttributes.builder(resources[0], resources[1])
-				.density(properties().density)
-				.viscosity(properties().viscosity)
-				.temperature(properties().temperature);
-		this.internal = new ForgeFlowingFluid.Properties(this::getFluid, this::getFlowing, attributes).block(block::getBlock).bucket(properties().bucket);
+		this.internal = new ForgeFlowingFluid.Properties(this::getFluidType, this::getFluid, this::getFlowing).block(block::getBlock).bucket(properties().bucket);
 	}
 
 	@Override
@@ -85,6 +80,14 @@ public class FeatureFluid implements IFluidFeature {
 	@Override
 	public FluidProperties properties() {
 		return properties;
+	}
+
+	public FluidType getFluidType() {
+		FluidType.Properties fluidProps = FluidType.Properties.create()
+				.density(properties().density)
+				.viscosity(properties().viscosity)
+				.temperature(properties().temperature);
+		return new FluidType(fluidProps);
 	}
 
 	@Override

@@ -6,17 +6,19 @@ import java.util.Collections;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.state.properties.Property;
 
-import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import forestry.api.core.IBlockProvider;
 import forestry.core.proxy.Proxies;
+import net.minecraftforge.registries.RegisterEvent;
 
 public interface IBlockFeature<B extends Block, I extends BlockItem> extends IItemFeature<I>, IBlockProvider<B, I> {
 
@@ -62,26 +64,21 @@ public interface IBlockFeature<B extends Block, I extends BlockItem> extends IIt
 	default void create() {
 		Supplier<B> blockConstructor = getBlockConstructor();
 		B block = blockConstructor.get();
-		block.setRegistryName(getModId(), getIdentifier());
 		setBlock(block);
 		Function<B, I> constructor = getItemBlockConstructor();
 		if (constructor != null) {
 			I item = constructor.apply(block);
-			if (item.getRegistryName() == null && block.getRegistryName() != null) {
-				item.setRegistryName(block.getRegistryName());
-			}
 			setItem(item);
 		}
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	default <T extends IForgeRegistryEntry<T>> void register(RegistryEvent.Register<T> event) {
+	default void register(RegisterEvent event) {
 		IItemFeature.super.register(event);
-		IForgeRegistry<T> registry = event.getRegistry();
-		Class<T> superType = registry.getRegistrySuperType();
-		if (Block.class.isAssignableFrom(superType) && hasBlock()) {
-			registry.register((T) block());
+		if (event.getRegistryKey().equals(ForgeRegistries.Keys.BLOCKS) && hasBlock()) {
+			IForgeRegistry<Block> registry = event.getForgeRegistry();
+			registry.register(new ResourceLocation(getModId(), getIdentifier()), block());
 			Proxies.common.registerBlock(block());
 		}
 	}

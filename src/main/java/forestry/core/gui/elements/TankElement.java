@@ -17,12 +17,13 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 
-import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.core.tooltips.ToolTip;
 import forestry.core.gui.Drawable;
 import forestry.core.utils.ResourceUtil;
+import net.minecraftforge.fluids.FluidType;
 
 public class TankElement extends GuiElement {
 	/* Attributes - Final */
@@ -50,13 +51,12 @@ public class TankElement extends GuiElement {
 		addTooltip(((tooltip, element, mouseX, mouseY) -> {
 			ToolTip toolTip = new ToolTip();
 			int amount = contents.getAmount();
-			Fluid fluidType = contents.getFluid();
-			FluidAttributes attributes = fluidType.getAttributes();
-			Rarity rarity = attributes.getRarity(contents);
+			FluidType fluidType = contents.getFluid().getFluidType();
+			Rarity rarity = fluidType.getRarity(contents);
 			if (rarity == null) {
 				rarity = Rarity.COMMON;
 			}
-			toolTip.translated(attributes.getTranslationKey(contents)).style(rarity.color);
+			toolTip.translated(contents.getTranslationKey()).style(rarity.color);
 			toolTip.translated("for.gui.tooltip.liquid.amount", amount, capacity);
 		}));
 	}
@@ -76,8 +76,10 @@ public class TankElement extends GuiElement {
 
 		if (contents.getAmount() > 0 && contents.getFluid() != null) {
 			Fluid fluid = contents.getFluid();
-			FluidAttributes attributes = fluid.getAttributes();
-			ResourceLocation fluidStill = fluid.getAttributes().getStillTexture(contents);
+
+			IClientFluidTypeExtensions renderProperties = IClientFluidTypeExtensions.of(fluid);
+			ResourceLocation fluidStill = renderProperties.getStillTexture(contents);
+
 			TextureAtlasSprite fluidStillSprite = null;
 			if (fluidStill != null) {
 				fluidStillSprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(fluidStill);
@@ -86,7 +88,7 @@ public class TankElement extends GuiElement {
 				fluidStillSprite = ResourceUtil.getMissingTexture();
 			}
 
-			int fluidColor = attributes.getColor(contents);
+			int fluidColor = renderProperties.getTintColor(contents);
 
 			int scaledAmount = contents.getAmount() * getHeight() / capacity;
 			if (contents.getAmount() > 0 && scaledAmount < 1) {
