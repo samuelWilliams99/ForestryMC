@@ -78,11 +78,11 @@ public class FeatureHelper {
 		}
 	}
 
-	public static void generateCircleFromTreeStartPos(LevelAccessor world, Random rand, BlockPos startPos, int girth, float radius, int width, int height, ITreeBlockType block, float chance, EnumReplaceMode replace, TreeContour contour) {
+	public static void generateCircleFromTreeStartPos(LevelAccessor world, RandomSource rand, BlockPos startPos, int girth, float radius, int width, int height, ITreeBlockType block, float chance, EnumReplaceMode replace, TreeContour contour) {
 		generateCircle(world, rand, startPos.offset(girth / 2, 0, girth / 2), radius, width, height, block, chance, replace, contour);
 	}
 
-	public static void generateCircle(LevelAccessor world, Random rand, BlockPos center, float radius, int width, int height, ITreeBlockType block, float chance, EnumReplaceMode replace, TreeContour contour) {
+	public static void generateCircle(LevelAccessor world, RandomSource rand, BlockPos center, float radius, int width, int height, ITreeBlockType block, float chance, EnumReplaceMode replace, TreeContour contour) {
 		Vec3i start = new Vec3i(center.getX() - radius, center.getY(), center.getZ() - radius);
 		Vec3i area = new Vec3i(radius * 2 + 1, height, radius * 2 + 1);
 
@@ -243,7 +243,7 @@ public class FeatureHelper {
 		}
 	}
 
-	public static void generateSupportStems(ITreeBlockType wood, LevelAccessor world, Random rand, BlockPos startPos, int height, int girth, float chance, float maxHeight) {
+	public static void generateSupportStems(ITreeBlockType wood, LevelAccessor world, RandomSource rand, BlockPos startPos, int height, int girth, float chance, float maxHeight) {
 
 		final int min = -1;
 
@@ -265,7 +265,7 @@ public class FeatureHelper {
 		}
 	}
 
-	public static Set<BlockPos> generateBranches(final LevelAccessor world, final Random rand, final ITreeBlockType wood, final BlockPos startPos, final int girth, final float spreadY, final float spreadXZ, int radius, final int count, final float chance) {
+	public static Set<BlockPos> generateBranches(final LevelAccessor world, final RandomSource rand, final ITreeBlockType wood, final BlockPos startPos, final int girth, final float spreadY, final float spreadXZ, int radius, final int count, final float chance) {
 		Set<BlockPos> branchEnds = new HashSet<>();
 		if (radius < 1) {
 			radius = 1;
@@ -371,11 +371,11 @@ public class FeatureHelper {
 
 		public static final Direction[] VALUES = new Direction[]{Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST};
 
-		public static Direction getRandom(Random random) {
+		public static Direction getRandom(RandomSource random) {
 			return VALUES[random.nextInt(VALUES.length)];
 		}
 
-		public static Direction getRandomOther(Random random, Direction direction) {
+		public static Direction getRandomOther(RandomSource random, Direction direction) {
 			List<Direction> directions = Arrays.asList(VALUES);
 			directions.remove(direction);
 			int size = directions.size();

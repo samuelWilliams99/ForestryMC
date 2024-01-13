@@ -63,13 +63,13 @@ public class FilteredTank extends StandardTank {
 		Set<ResourceLocation> set = new HashSet<>();
 		this.filters = () -> set;
 		for (Fluid fluid : filters) {
-			set.add(fluid.getRegistryName());
+			set.add(ForgeRegistries.FLUIDS.getKey(fluid));
 		}
 		return this;
 	}
 
 	private boolean fluidMatchesFilter(FluidStack resource) {
-		return resource.getFluid() != Fluids.EMPTY && filters.get().contains(resource.getFluid().getRegistryName());
+		return resource.getFluid() != Fluids.EMPTY && filters.get().contains(ForgeRegistries.FLUIDS.getKey(resource.getFluid()));
 	}
 
 	@Override

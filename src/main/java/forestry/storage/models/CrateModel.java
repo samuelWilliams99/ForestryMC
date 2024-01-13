@@ -32,13 +32,11 @@ import com.mojang.datafixers.util.Pair;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.ForgeModelBakery;
+import net.minecraftforge.client.model.BakedModelWrapper;
 import net.minecraftforge.client.model.data.ModelData;
+import net.minecraftforge.client.model.geometry.GeometryLoaderManager;
 import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
 import net.minecraftforge.client.model.geometry.IGeometryLoader;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
-import net.minecraftforge.client.model.PerspectiveMapWrapper;
-import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.geometry.IUnbakedGeometry;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -69,7 +67,7 @@ public class CrateModel implements IUnbakedGeometry<CrateModel> {
 
 	@Nullable
 	private BakedModel getCustomContentModel(ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState transform) {
-		ResourceLocation registryName = crated.getRegistryName();
+		ResourceLocation registryName = ForgeRegistries.ITEMS.getKey(crated);
 		if (registryName == null) {
 			return null;
 		}
@@ -80,7 +78,7 @@ public class CrateModel implements IUnbakedGeometry<CrateModel> {
 			return null;
 		}
 		try {
-			model = ForgeModelBakery.instance().getModel(location);
+			model = bakery.getModel(location);
 		} catch (Exception e) {
 			return null;
 		}
@@ -107,7 +105,7 @@ public class CrateModel implements IUnbakedGeometry<CrateModel> {
 			quads.addAll(contentModel.getQuads(null, null, RandomSource.create(0), ModelData.EMPTY, null));
 			model = new CrateBakedModel(quads);
 		}
-		return new PerspectiveMapWrapper(model, ClientManager.getInstance().getDefaultItemState());
+		return new BakedModelWrapper<>(model) {};
 	}
 
 	@Override
@@ -120,16 +118,13 @@ public class CrateModel implements IUnbakedGeometry<CrateModel> {
 		public static final ResourceLocation LOCATION = new ResourceLocation(Constants.MOD_ID, "crate-filled");
 
 		@Override
-		public void onResourceManagerReload(ResourceManager resourceManager) {
-			clearCachedQuads();
-		}
-
-		@Override
-		public IUnbakedGeometry read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
+		public IUnbakedGeometry read(JsonObject modelContents, JsonDeserializationContext deserializationContext) {
 			ResourceLocation registryName = new ResourceLocation(Constants.MOD_ID, GsonHelper.getAsString(modelContents, "variant"));
 			Item item = ForgeRegistries.ITEMS.getValue(registryName);
 			if (!(item instanceof ItemCrated crated)) {
-				return ModelLoaderRegistry.getModel(new ModelResourceLocation(new ResourceLocation(Constants.MOD_ID, CrateItems.CRATE.getIdentifier()), "inventory"), deserializationContext, modelContents);
+				return GeometryLoaderManager
+						.get(new ResourceLocation(Constants.MOD_ID, CrateItems.CRATE.getIdentifier()))
+						.read(modelContents, deserializationContext);
 			}
 			return new CrateModel(crated);
 		}

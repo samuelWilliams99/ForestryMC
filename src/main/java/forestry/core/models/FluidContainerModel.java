@@ -78,11 +78,7 @@ public class FluidContainerModel extends AbstractItemModel {
 
 	public static class Loader implements IGeometryLoader<Geometry> {
 		@Override
-		public void onResourceManagerReload(ResourceManager resourceManager) {
-		}
-
-		@Override
-		public FluidContainerModel.Geometry read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
+		public FluidContainerModel.Geometry read(JsonObject modelContents, JsonDeserializationContext deserializationContext) {
 			String empty = GsonHelper.getAsString(modelContents, "empty");
 			String filled = GsonHelper.getAsString(modelContents, "filled");
 			String type = GsonHelper.getAsString(modelContents, "type");

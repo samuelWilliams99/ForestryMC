@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -325,15 +326,15 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	public float getExactHumidity() {
-		return getBiome().getDownfall();
+		return getBiome().value().getDownfall();
 	}
 
-	protected Biome getBiome() {
+	protected Holder<Biome> getBiome() {
 		BlockPos coords = getReferenceCoord();
 		if (coords == null) {
-			return Objects.requireNonNull(ForgeRegistries.BIOMES.getValue(Biomes.PLAINS.getRegistryName()));
+			return Objects.requireNonNull(ForgeRegistries.BIOMES.getHolder(Biomes.PLAINS).get());
 		}
-		return world.getBiome(coords).value();
+		return world.getBiome(coords);
 	}
 
 	@Override

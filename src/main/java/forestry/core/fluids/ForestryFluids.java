@@ -36,6 +36,7 @@ import forestry.modules.features.FeatureFluid;
 import forestry.modules.features.FeatureItem;
 import forestry.modules.features.FeatureProvider;
 import forestry.modules.features.ModFeatureRegistry;
+import net.minecraftforge.registries.ForgeRegistries;
 
 @FeatureProvider
 public enum ForestryFluids {
@@ -187,7 +188,7 @@ public enum ForestryFluids {
 
 	@Nullable
 	public static ForestryFluids getFluidDefinition(Fluid fluid) {
-		return tagToFluid.get(fluid.getRegistryName());
+		return tagToFluid.get(ForgeRegistries.FLUIDS.getKey(fluid));
 	}
 
 	@Nullable

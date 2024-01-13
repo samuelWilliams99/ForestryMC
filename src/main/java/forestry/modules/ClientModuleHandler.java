@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.ModelEvent.BakingCompleted;
 import net.minecraftforge.client.event.ModelEvent.RegisterGeometryLoaders;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -45,7 +46,12 @@ public class ClientModuleHandler extends CommonModuleHandler {
 	}
 
 	@SubscribeEvent
-	public void registerModels(RegisterGeometryLoaders event) {
+	public void registerModelLoaders(RegisterGeometryLoaders event) {
+		modules.forEach((module -> actOnHandler(module, (handler) -> handler.registerModelLoaders(event))));
+	}
+
+	@SubscribeEvent
+	public void registerModels(ModelEvent.RegisterAdditional event) {
 		modules.forEach((module -> actOnHandler(module, (handler) -> handler.registerModels(event))));
 	}
 

@@ -78,7 +78,7 @@ public class TreeDatabaseTab implements IDatabaseTab<ITree> {
 		Style fruitStyle = textStyle;
 		String strike = "";
 		if (!species.getSuitableFruit().contains(fruit.getProvider().getFamily()) && fruit != AlleleFruits.fruitNone) {
-			fruitStyle = fruitStyle.setStrikethrough(true);
+			fruitStyle = fruitStyle.withStrikethrough(true);
 		}
 		container.label(fruit.getProvider().getDescription()).setStyle(fruitStyle).setAlign(Alignment.TOP_CENTER);
 

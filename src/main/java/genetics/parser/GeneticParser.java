@@ -51,17 +51,19 @@ public class GeneticParser implements ResourceManagerReloadListener {
 
 		Multimap<ResourceLocation, CompoundTag> alleleData = HashMultimap.create();
 
-		for (ResourceLocation location : manager.listResources("genetics/alleles", filename -> filename.endsWith(".json"))) {
+		for (Map.Entry<ResourceLocation, Resource> entry : manager.listResources("genetics/alleles", rl -> rl.getPath().endsWith(".json")).entrySet()) {
+			ResourceLocation location = entry.getKey();
+			Resource resource = entry.getValue();
 			String path = location.getPath();
 			ResourceLocation readableLocation = new ResourceLocation(location.getNamespace(), path.substring(PATH_PREFIX_LENGTH, path.length() - PATH_SUFFIX_LENGTH));
-			try (Resource resource = manager.getResource(location)) {
+			try {
 				for (ResourceLocation loading : loadingAlleles) {
 					if (location.getClass() == loading.getClass() && location.equals(loading)) {
 						//LOGGER.error("Circular allele dependencies, stack: [" + Joiner.on(", ").join(loadingAlleles) + "]");
 					}
 				}
 				loadingAlleles.addLast(location);
-				JsonObject object = GsonHelper.fromJson(GSON, IOUtils.toString(resource.getInputStream(), StandardCharsets.UTF_8), JsonObject.class);
+				JsonObject object = GsonHelper.fromJson(GSON, IOUtils.toString(resource.open(), StandardCharsets.UTF_8), JsonObject.class);
 				if (object == null) {
 					//LOGGER.error("Couldn't load allele {} as it's null or empty", readableLocation);
 				} else {

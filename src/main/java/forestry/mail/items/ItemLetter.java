@@ -90,7 +90,7 @@ public class ItemLetter extends ItemWithGui {
 		if (heldItem.getCount() == 1) {
 			return super.use(worldIn, playerIn, handIn);
 		} else {
-			playerIn.sendMessage(Component.translatable("for.chat.mail.wrongstacksize"), Util.NIL_UUID);
+			playerIn.displayClientMessage(Component.translatable("for.chat.mail.wrongstacksize"), true);
 			return InteractionResultHolder.fail(heldItem);
 		}
 	}
@@ -114,7 +114,7 @@ public class ItemLetter extends ItemWithGui {
 
 	@Override
 	public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> stacks) {
-		if (allowdedIn(group) && state == State.FRESH && size == Size.EMPTY) {
+		if (allowedIn(group) && state == State.FRESH && size == Size.EMPTY) {
 			stacks.add(new ItemStack(this));
 		}
 	}

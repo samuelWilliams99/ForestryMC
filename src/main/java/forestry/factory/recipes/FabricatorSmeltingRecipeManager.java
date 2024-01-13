@@ -25,6 +25,7 @@ import net.minecraftforge.fluids.FluidStack;
 import forestry.api.recipes.IFabricatorSmeltingManager;
 import forestry.api.recipes.IFabricatorSmeltingRecipe;
 import forestry.api.recipes.IForestryRecipe;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class FabricatorSmeltingRecipeManager extends AbstractCraftingProvider<IFabricatorSmeltingRecipe> implements IFabricatorSmeltingManager {
 
@@ -53,7 +54,7 @@ public class FabricatorSmeltingRecipeManager extends AbstractCraftingProvider<IF
 		return getRecipes(recipeManager)
 				.map(IFabricatorSmeltingRecipe::getProduct)
 				.filter(fluidStack -> !fluidStack.isEmpty())
-				.map(fluidStack -> fluidStack.getFluid().getRegistryName())
+				.map(fluidStack -> ForgeRegistries.FLUIDS.getKey(fluidStack.getFluid()))
 				.collect(Collectors.toSet());
 	}
 }

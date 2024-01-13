@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -36,7 +37,7 @@ import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 
 public class EscritoireGameBoard implements INbtWritable, IStreamable {
-	private static final Random rand = new Random();
+	private static final RandomSource rand = RandomSource.create();
 	private static final int TOKEN_COUNT_MAX = 22;
 	private static final int TOKEN_COUNT_MIN = 6;
 

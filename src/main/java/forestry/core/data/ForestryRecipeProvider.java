@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import forestry.apiculture.items.*;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.util.TriConsumer;
 
 import net.minecraft.data.DataGenerator;
@@ -813,7 +815,7 @@ public class ForestryRecipeProvider extends RecipeProvider {
 			ShapelessRecipeBuilder.shapeless(managed)
 					.requires(manual)
 					.unlockedBy("has_manual", has(manual))
-					.save(helper, new ResourceLocation(Constants.MOD_ID, managed.getRegistryName().getPath() + "_from_manual"));
+					.save(helper, new ResourceLocation(Constants.MOD_ID, ForgeRegistries.BLOCKS.getKey(managed).getPath() + "_from_manual"));
 		}
 	}
 
@@ -1040,7 +1042,7 @@ public class ForestryRecipeProvider extends RecipeProvider {
 	}
 
 	@Override
-	protected void saveAdvancement(HashCache cache, JsonObject advancementJson, Path pathIn) {
+	protected void saveAdvancement(CachedOutput cache, JsonObject advancementJson, Path pathIn) {
 		//NOOP - We dont replace any of the advancement things yet...
 	}
 

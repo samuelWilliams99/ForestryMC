@@ -43,7 +43,7 @@ public class SqueezerRecipeCategory extends ForestryRecipeCategory<ISqueezerReci
 		this.tankOverlay = guiHelper.createDrawable(guiTexture, 176, 0, 16, 58);
 		ItemStack squeezer = new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.SQUEEZER).block());
 		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, squeezer);
-		this.craftingGridHelper = guiHelper.createCraftingGridHelper(0);
+		this.craftingGridHelper = guiHelper.createCraftingGridHelper();
 	}
 
 	@Override

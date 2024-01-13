@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.locale.Language;
+import net.minecraft.network.chat.contents.TranslatableContents;
 
 public class Translator {
 	private Translator() {}
@@ -44,6 +45,10 @@ public class Translator {
 
 	public static boolean canTranslate(Component component) {
 		String translatedText = component.getString();
-		return !translatedText.startsWith(component.getKey());
+		if (component.getContents() instanceof TranslatableContents) {
+			TranslatableContents tContents = (TranslatableContents) component.getContents();
+			return !translatedText.startsWith(tContents.getKey());
+		}
+		return false;
 	}
 }

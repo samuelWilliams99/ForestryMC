@@ -11,6 +11,8 @@
 package genetics.commands;
 
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 
 /**
@@ -23,7 +25,7 @@ public class CommandHelpers {
 	}
 
 	public static void sendLocalizedChatMessage(CommandSourceStack sender, Style chatStyle, String locTag, Object... args) {
-		Component chat = Component.translatable(locTag, args);
+		MutableComponent chat = Component.translatable(locTag, args);
 		chat.setStyle(chatStyle);
 		sender.sendSuccess(chat, false);
 	}

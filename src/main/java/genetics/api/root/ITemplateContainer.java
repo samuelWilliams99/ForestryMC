@@ -10,6 +10,7 @@ import genetics.api.individual.IIndividual;
 import genetics.api.individual.IKaryotype;
 import genetics.api.root.components.ComponentKey;
 import genetics.api.root.components.IRootComponent;
+import net.minecraft.util.RandomSource;
 
 /**
  * The ITemplateContainer contains all templates of the {@link IIndividualRoot} that were added with the
@@ -38,10 +39,10 @@ public interface ITemplateContainer<I extends IIndividual> extends IRootComponen
 	IAllele[] getTemplate(String identifier);
 
 	/**
-	 * @param rand Random to use.
+	 * @param rand RandomSource to use.
 	 * @return A random template from the pool of registered templates.
 	 */
-	IAllele[] getRandomTemplate(Random rand);
+	IAllele[] getRandomTemplate(RandomSource rand);
 
 	/**
 	 * All templates with there associated identifier.

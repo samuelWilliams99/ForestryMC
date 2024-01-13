@@ -27,6 +27,7 @@ import forestry.api.recipes.IFermenterManager;
 import forestry.api.recipes.IFermenterRecipe;
 import forestry.api.recipes.IForestryRecipe;
 import net.minecraftforge.fluids.FluidType;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class FermenterRecipeManager extends AbstractCraftingProvider<IFermenterRecipe> implements IFermenterManager {
 
@@ -87,14 +88,14 @@ public class FermenterRecipeManager extends AbstractCraftingProvider<IFermenterR
 	@Override
 	public Set<ResourceLocation> getRecipeFluidInputs(@Nullable RecipeManager recipeManager) {
 		return getRecipes(recipeManager)
-				.map(recipe -> recipe.getFluidResource().getFluid().getRegistryName())
+				.map(recipe -> ForgeRegistries.FLUIDS.getKey(recipe.getFluidResource().getFluid()))
 				.collect(Collectors.toSet());
 	}
 
 	@Override
 	public Set<ResourceLocation> getRecipeFluidOutputs(@Nullable RecipeManager recipeManager) {
 		return getRecipes(recipeManager)
-				.map(recipe -> recipe.getOutput().getRegistryName())
+				.map(recipe -> ForgeRegistries.FLUIDS.getKey(recipe.getOutput()))
 				.collect(Collectors.toSet());
 	}
 }

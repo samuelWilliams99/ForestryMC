@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.util.RandomSource;
 import org.apache.commons.lang3.StringUtils;
 
 import net.minecraft.world.entity.player.Player;
@@ -30,7 +31,7 @@ import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.InventoryUtil;
 
 public class Letter implements ILetter {
-	private static final Random rand = new Random();
+	private static final RandomSource rand = RandomSource.create();
 	public static final short SLOT_ATTACHMENT_1 = 0;
 	public static final short SLOT_ATTACHMENT_COUNT = 18;
 	public static final short SLOT_POSTAGE_1 = 18;

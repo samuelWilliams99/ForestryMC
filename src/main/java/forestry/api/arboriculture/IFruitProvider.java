@@ -8,6 +8,7 @@ package forestry.api.arboriculture;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
@@ -111,7 +112,7 @@ public interface IFruitProvider extends ISetupListener {
 	/**
 	 * @return Short, human-readable identifier used in the treealyzer.
 	 */
-	Component getDescription();
+	MutableComponent getDescription();
 
 	/**
 	 * @return The location of the pod model in the "modid:pods/" folder.

@@ -18,10 +18,9 @@ import net.minecraft.world.level.FoliageColor;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.ModelEvent.RegisterGeometryLoaders;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.client.model.ForgeModelBakery;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
 
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
@@ -80,7 +79,7 @@ public class ProxyArboricultureClient extends ProxyArboriculture implements ICli
 	}
 
 	@Override
-	public void setupClient(FMLClientSetupEvent event) {
+	public void registerModels(ModelEvent.RegisterAdditional event) {
 		// fruit overlays require CUTOUT_MIPPED, even in Fast graphics
 		ArboricultureBlocks.LEAVES_DEFAULT.getBlocks().forEach((block) -> ItemBlockRenderTypes.setRenderLayer(block, RenderType.cutoutMipped()));
 		ItemBlockRenderTypes.setRenderLayer(ArboricultureBlocks.LEAVES.block(), RenderType.cutoutMipped());
@@ -90,13 +89,13 @@ public class ProxyArboricultureClient extends ProxyArboriculture implements ICli
 		ArboricultureBlocks.DOORS.getBlocks().forEach((block) -> ItemBlockRenderTypes.setRenderLayer(block, RenderType.translucent()));
 
 		AlleleUtils.forEach(TreeChromosomes.SPECIES, (treeSpecies) -> {
-			ForgeModelBakery.addSpecialModel(treeSpecies.getBlockModel());
-			ForgeModelBakery.addSpecialModel(treeSpecies.getItemModel());
+			event.register(treeSpecies.getBlockModel());
+			event.register(treeSpecies.getItemModel());
 		});
 	}
 
 	@Override
-	public void registerModels(RegisterGeometryLoaders event) {
-		ModelLoaderRegistry.registerLoader(new ResourceLocation(Constants.MOD_ID, "sapling_ge"), SaplingModelLoader.INSTANCE);
+	public void registerModelLoaders(RegisterGeometryLoaders event) {
+		event.register("sapling_ge", SaplingModelLoader.INSTANCE);
 	}
 }

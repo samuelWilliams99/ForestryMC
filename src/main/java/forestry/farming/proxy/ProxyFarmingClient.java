@@ -32,7 +32,7 @@ import forestry.modules.IClientModuleHandler;
 public class ProxyFarmingClient extends ProxyFarming implements IClientModuleHandler {
 
 	@Override
-	public void registerModels(RegisterGeometryLoaders event) {
+	public void registerModelLoaders(RegisterGeometryLoaders event) {
 		ClientManager.getInstance().registerModel(new ModelFarmBlock(), FarmingBlocks.FARM);
 	}
 

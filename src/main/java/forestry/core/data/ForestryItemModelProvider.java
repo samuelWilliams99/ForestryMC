@@ -24,6 +24,7 @@ import forestry.modules.features.FeatureItem;
 import forestry.storage.features.CrateItems;
 import forestry.storage.items.ItemCrated;
 import forestry.storage.models.CrateModel;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class ForestryItemModelProvider extends ModelProvider {
 	public ForestryItemModelProvider(DataGenerator generator) {
@@ -65,7 +66,7 @@ public class ForestryItemModelProvider extends ModelProvider {
 			registerModel(item, new ModelBuilder()
 					.loader(new ResourceLocation("forge", "bucket"))
 					.parent("forge:item/bucket_drip")
-					.loaderData("fluid", new JsonPrimitive(fluid.getFluid().getRegistryName().toString()))
+					.loaderData("fluid", new JsonPrimitive(ForgeRegistries.FLUIDS.getKey(fluid.getFluid()).toString()))
 			);
 		}
 

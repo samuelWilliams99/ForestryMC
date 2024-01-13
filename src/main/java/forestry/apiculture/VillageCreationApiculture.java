@@ -34,7 +34,7 @@
 //	}
 ////TODO villages and worldgen
 //	@Override
-//	public VillagePieces.PieceWeight getVillagePieceWeight(Random random, int size) {
+//	public VillagePieces.PieceWeight getVillagePieceWeight(RandomSource random, int size) {
 //		return new VillagePieces.PieceWeight(VillageApiaristHouse.class, 15, MathHelper.getInt(random, size, 1 + size));
 //	}
 //
@@ -45,7 +45,7 @@
 //
 //	@Override
 //	@Nullable
-//	public VillagePieces.Village buildComponent(VillagePieces.PieceWeight villagePiece, VillagePieces.Start startPiece, List<StructurePiece> pieces, Random random, int p1, int p2, int p3, Direction facing, int p5) {
+//	public VillagePieces.Village buildComponent(VillagePieces.PieceWeight villagePiece, VillagePieces.Start startPiece, List<StructurePiece> pieces, RandomSource random, int p1, int p2, int p3, Direction facing, int p5) {
 //		return VillageApiaristHouse.buildComponent(startPiece, pieces, random, p1, p2, p3, facing, p5);
 //	}
 //}

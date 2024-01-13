@@ -87,7 +87,7 @@ public class ItemForestryTool extends DiggerItem {
 			if (facing == Direction.DOWN) {
 				return InteractionResult.PASS;
 			} else {
-				BlockState modifiedState = state.getToolModifiedState(world, pos, player, context.getItemInHand(), ToolActions.SHOVEL_FLATTEN);
+				BlockState modifiedState = state.getToolModifiedState(context, ToolActions.SHOVEL_FLATTEN, false);
 				BlockState usedState = null;
 				if (modifiedState != null && world.isEmptyBlock(pos.above())) {
 					world.playSound(player, pos, SoundEvents.SHOVEL_FLATTEN, SoundSource.BLOCKS, 1.0F, 1.0F);

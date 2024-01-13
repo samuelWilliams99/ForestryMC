@@ -24,6 +24,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.core.particles.ParticleOptions.Deserializer;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class BeeTargetParticleData implements ParticleOptions {
 
@@ -74,6 +75,6 @@ public class BeeTargetParticleData implements ParticleOptions {
 	@Nonnull
 	@Override
 	public String writeToString() {
-		return String.format(Locale.ROOT, "%s %d %d", getType().getRegistryName(), entity, color);
+		return String.format(Locale.ROOT, "%s %d %d", ForgeRegistries.PARTICLE_TYPES.getKey(getType()), entity, color);
 	}
 }

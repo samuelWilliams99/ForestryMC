@@ -38,7 +38,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.PerspectiveMapWrapper;
 
 import forestry.core.utils.ResourceUtil;
 
@@ -48,9 +47,8 @@ public class ModelBakerModel implements BakedModel {
 	private boolean isGui3d;
 	private boolean isAmbientOcclusion;
 	private TextureAtlasSprite particleSprite;
-	@Nullable
-	private ModelState modelState;
-	private ImmutableMap<TransformType, Transformation> transforms = ImmutableMap.of();
+
+	private final ItemTransforms transforms;
 
 	private final Map<Direction, List<BakedQuad>> faceQuads;
 	private final List<BakedQuad> generalQuads;
@@ -61,7 +59,7 @@ public class ModelBakerModel implements BakedModel {
 	private float[] translation = getDefaultTranslation();
 	private float[] scale = getDefaultScale();
 
-	ModelBakerModel(ModelState modelState) {
+	ModelBakerModel(ItemTransforms transforms) {
 		models = new ArrayList<>();
 		modelsPost = new ArrayList<>();
 		faceQuads = new EnumMap<>(Direction.class);
@@ -69,7 +67,7 @@ public class ModelBakerModel implements BakedModel {
 		particleSprite = ResourceUtil.getMissingTexture();
 		isGui3d = true;
 		isAmbientOcclusion = false;
-		setModelState(modelState);
+		this.transforms = transforms;
 
 		for (Direction face : Direction.VALUES) {
 			faceQuads.put(face, new ArrayList<>());
@@ -87,7 +85,7 @@ public class ModelBakerModel implements BakedModel {
 		this.translation = Arrays.copyOf(old.translation, 3);
 		this.scale = Arrays.copyOf(old.scale, 3);
 		this.particleSprite = old.particleSprite;
-		setModelState(old.modelState);
+		this.transforms = new ItemTransforms(old.transforms);
 	}
 
 	@Override
@@ -125,7 +123,7 @@ public class ModelBakerModel implements BakedModel {
 
 	@Override
 	public ItemTransforms getTransforms() {
-		return ItemTransforms.NO_TRANSFORMS;
+		return this.transforms;
 	}
 
 	@Override
@@ -169,11 +167,6 @@ public class ModelBakerModel implements BakedModel {
 		return scale;
 	}
 
-	public void setModelState(ModelState modelState) {
-		this.modelState = modelState;
-		this.transforms = PerspectiveMapWrapper.getTransforms(modelState);
-	}
-
 	public void addQuad(@Nullable Direction facing, BakedQuad quad) {
 		if (facing != null) {
 			faceQuads.get(facing).add(quad);
@@ -206,15 +199,5 @@ public class ModelBakerModel implements BakedModel {
 
 	public ModelBakerModel copy() {
 		return new ModelBakerModel(this);
-	}
-
-	@Override
-	public BakedModel handlePerspective(TransformType cameraTransformType, PoseStack mat) {
-		return PerspectiveMapWrapper.handlePerspective(this, transforms, cameraTransformType, mat);
-	}
-
-	@Override
-	public boolean doesHandlePerspectives() {
-		return true; //TODO: test if this is needed
 	}
 }

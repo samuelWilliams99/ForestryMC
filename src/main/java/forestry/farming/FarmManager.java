@@ -5,16 +5,7 @@ import com.google.common.collect.Table;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.EnumMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.ItemStack;
@@ -137,7 +128,7 @@ public class FarmManager implements INbtReadable, INbtWritable, IStreamable, IEx
 
 		Level world = housing.getWorldObj();
 		List<FarmDirection> farmDirections = Arrays.asList(FarmDirection.values());
-		Collections.shuffle(farmDirections, world.random);
+		Collections.shuffle(farmDirections, new Random(world.random.nextLong()));
 		for (FarmDirection farmSide : farmDirections) {
 			IFarmLogic logic = housing.getFarmLogic(farmSide);
 			List<FarmTarget> farmTargets = targets.get(farmSide);

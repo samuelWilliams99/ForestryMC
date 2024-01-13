@@ -26,6 +26,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import forestry.core.registration.ParticleTypeRegistryObject;
 
 import net.minecraft.core.particles.ParticleOptions.Deserializer;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class BeeParticleData implements ParticleOptions {
 
@@ -74,7 +75,7 @@ public class BeeParticleData implements ParticleOptions {
 
 	@Override
 	public void writeToNetwork(@Nonnull FriendlyByteBuf buffer) {
-		buffer.writeRegistryId(type);
+		buffer.writeRegistryId(ForgeRegistries.PARTICLE_TYPES, type);
 		buffer.writeLong(destination.asLong());
 		buffer.writeInt(color);
 	}
@@ -82,6 +83,6 @@ public class BeeParticleData implements ParticleOptions {
 	@Nonnull
 	@Override
 	public String writeToString() {
-		return String.format(Locale.ROOT, "%s %d %d %d %d", getType().getRegistryName(), destination.getX(), destination.getY(), destination.getZ(), color);
+		return String.format(Locale.ROOT, "%s %d %d %d %d", ForgeRegistries.PARTICLE_TYPES.getKey(getType()), destination.getX(), destination.getY(), destination.getZ(), color);
 	}
 }

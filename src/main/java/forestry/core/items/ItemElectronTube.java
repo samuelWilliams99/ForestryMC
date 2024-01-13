@@ -76,7 +76,7 @@ public class ItemElectronTube extends ItemOverlay {
 
 	@Override
 	public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> subItems) {
-		if (this.allowdedIn(tab)) {
+		if (this.allowedIn(tab)) {
 			if (Config.isDebug || !type.isSecret()) {
 				ItemStack stack = new ItemStack(this);
 				if (!getCircuits(stack).isEmpty()) {

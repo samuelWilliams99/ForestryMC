@@ -12,6 +12,7 @@ package forestry.core.blocks;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.Containers;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -68,14 +69,14 @@ public abstract class BlockStructure extends BlockForestry {
 					if (validationError != null) {
 						long tick = worldIn.getGameTime();
 						if (tick > previousMessageTick + 20) {
-							playerIn.sendMessage(Component.literal(validationError), Util.NIL_UUID);
+							playerIn.displayClientMessage(Component.literal(validationError), true);
 							previousMessageTick = tick;
 						}
 						return InteractionResult.SUCCESS;
 					}
 				}
 			} else {
-				playerIn.sendMessage(Component.translatable("for.multiblock.error.notConnected"), Util.NIL_UUID);
+				playerIn.displayClientMessage(Component.translatable("for.multiblock.error.notConnected"), true);
 				return InteractionResult.SUCCESS;
 			}
 		}

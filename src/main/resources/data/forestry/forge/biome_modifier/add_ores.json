@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#minecraft:is_overworld",
+  "features": ["forestry:apatite_ore", "forestry:deepslate_apatite_ore", "forestry:hive_decorator"],
+  "step": "underground_ores"
+}

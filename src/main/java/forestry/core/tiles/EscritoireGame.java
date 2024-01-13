@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.Random;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
@@ -31,7 +32,7 @@ import genetics.api.individual.IIndividual;
 import genetics.utils.RootUtils;
 
 public class EscritoireGame implements INbtWritable, INbtReadable, IStreamable {
-	private static final Random rand = new Random();
+	private static final RandomSource rand = RandomSource.create();
 	public static final int BOUNTY_MAX = 16;
 
 	public enum Status {

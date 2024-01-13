@@ -67,6 +67,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -279,7 +280,7 @@ public class FactoryJeiPlugin implements IModPlugin {
 		IIngredientSubtypeInterpreter<ItemStack> subtypeInterpreter = (itemStack, context) -> {
 			LazyOptional<IFluidHandlerItem> fluidHandler = itemStack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY);
 			return fluidHandler.map(handler -> handler.getFluidInTank(0))
-					.map(fluid -> fluid.getFluid().getRegistryName())
+					.map(fluid -> ForgeRegistries.FLUIDS.getKey(fluid.getFluid()))
 					.map(ResourceLocation::toString)
 					.orElse(IIngredientSubtypeInterpreter.NONE);
 		};

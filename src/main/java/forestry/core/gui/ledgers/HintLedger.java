@@ -21,6 +21,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.Translator;
+import net.minecraft.util.RandomSource;
 
 public class HintLedger extends Ledger {
 
@@ -29,7 +30,7 @@ public class HintLedger extends Ledger {
 
 	public HintLedger(LedgerManager manager, List<String> hints) {
 		super(manager, "hint");
-		int position = new Random().nextInt(hints.size());
+		int position = RandomSource.create().nextInt(hints.size());
 		String hint = hints.get(position);
 
 		hintString = Component.translatable("for.hints." + hint + ".desc");

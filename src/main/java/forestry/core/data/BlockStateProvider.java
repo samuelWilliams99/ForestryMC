@@ -30,6 +30,8 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
+import net.minecraft.data.CachedOutput;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -53,27 +55,18 @@ public abstract class BlockStateProvider implements DataProvider {
 	}
 
 	@Override
-	public void run(HashCache cache) throws IOException {
+	public void run(CachedOutput cache) throws IOException {
 		this.blockToBuilder.clear();
 		this.registerStates();
 		blockToBuilder.forEach((key, builder) -> {
-			if (key.getRegistryName() == null) {
+			ResourceLocation keyLocation = ForgeRegistries.BLOCKS.getKey(key);
+			if (keyLocation == null) {
 				return;
 			}
 			JsonObject jsonobject = builder.serialize(key);
-			Path path = this.makePath(key.getRegistryName());
+			Path path = this.makePath(keyLocation);
 			try {
-				String s = GSON.toJson(jsonobject);
-				String s1 = SHA1.hashUnencodedChars(s).toString();
-				if (!Objects.equals(cache.getHash(path), s1) || !Files.exists(path)) {
-					Files.createDirectories(path.getParent());
-
-					try (BufferedWriter bufferedwriter = Files.newBufferedWriter(path)) {
-						bufferedwriter.write(s);
-					}
-				}
-
-				cache.putNew(path, s1);
+				DataProvider.saveStable(cache, jsonobject, path);
 			} catch (IOException ioexception) {
 				LOGGER.error("Couldn't save models to {}", path, ioexception);
 			}

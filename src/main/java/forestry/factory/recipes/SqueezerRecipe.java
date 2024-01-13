@@ -23,7 +23,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import forestry.api.recipes.ISqueezerRecipe;
 
@@ -81,7 +80,7 @@ public class SqueezerRecipe implements ISqueezerRecipe {
 		return id;
 	}
 
-	public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<SqueezerRecipe> {
+	public static class Serializer implements RecipeSerializer<SqueezerRecipe> {
 
 		@Override
 		public SqueezerRecipe fromJson(ResourceLocation recipeId, JsonObject json) {

@@ -4,9 +4,8 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.ModelEvent.RegisterGeometryLoaders;
-import net.minecraftforge.client.model.ForgeModelBakery;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
 
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
@@ -27,19 +26,19 @@ public class ProxyCratesClient extends ProxyCrates implements IClientModuleHandl
 	}
 
 	@Override
-	public void setupClient(FMLClientSetupEvent event) {
+	public void registerModels(ModelEvent.RegisterAdditional event) {
 		for (EnumBackpackType backpackType : EnumBackpackType.values()) {
 			for (BackpackMode mode : BackpackMode.values()) {
-				ForgeModelBakery.addSpecialModel(backpackType.getLocation(mode));
+				event.register(backpackType.getLocation(mode));
 			}
 		}
 
-		ForgeModelBakery.addSpecialModel(new ModelResourceLocation(Constants.MOD_ID + ":crate-filled", "inventory"));
+		event.register(new ModelResourceLocation(Constants.MOD_ID + ":crate-filled", "inventory"));
 	}
 
 	@Override
-	public void registerModels(RegisterGeometryLoaders event) {
-		ModelLoaderRegistry.registerLoader(CrateModel.Loader.LOCATION, new CrateModel.Loader());
-		ModelLoaderRegistry.registerLoader(BackpackItemModel.Loader.LOCATION, new BackpackItemModel.Loader());
+	public void registerModelLoaders(RegisterGeometryLoaders event) {
+		event.register(CrateModel.Loader.LOCATION.getPath(), new CrateModel.Loader());
+		event.register(BackpackItemModel.Loader.LOCATION.getPath(), new BackpackItemModel.Loader());
 	}
 }

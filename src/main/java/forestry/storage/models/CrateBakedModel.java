@@ -82,7 +82,7 @@ public class CrateBakedModel extends AbstractBakedModel {
 		public ContentModel bake() {
 			BakedModel bakedModel = ResourceUtil.getModel(content);
 			if (bakedModel != null) {
-				BakedModel guiModel = bakedModel.handlePerspective(ItemTransforms.TransformType.GUI, new PoseStack());
+				BakedModel guiModel = bakedModel.applyTransform(ItemTransforms.TransformType.GUI, new PoseStack(), false);
 				//TODO: Currently very hacky, find a better way to differentiate between item and block
 				List<BakedQuad> general = guiModel.getQuads(null, null, RandomSource.create(0L));
 				if (!general.isEmpty()) {

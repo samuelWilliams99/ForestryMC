@@ -37,7 +37,7 @@
 //		}
 //
 //		@Override
-//		public void addMerchantRecipe(IMerchant p_190888_1_, MerchantRecipeList recipeList, Random random) {
+//		public void addMerchantRecipe(IMerchant p_190888_1_, MerchantRecipeList recipeList, RandomSource random) {
 //			int i = 1;
 //			if (this.sellInfo != null) {
 //				i = this.sellInfo.getPrice(random);
@@ -70,7 +70,7 @@
 //		}
 //
 //		@Override
-//		public void addMerchantRecipe(IMerchant p_190888_1_, MerchantRecipeList recipeList, Random random) {
+//		public void addMerchantRecipe(IMerchant p_190888_1_, MerchantRecipeList recipeList, RandomSource random) {
 //			int i = 1;
 //			if (this.sellInfo != null) {
 //				i = this.sellInfo.getPrice(random);
@@ -109,7 +109,7 @@
 //		}
 //
 //		@Override
-//		public void addMerchantRecipe(IMerchant p_190888_1_, MerchantRecipeList recipeList, Random random) {
+//		public void addMerchantRecipe(IMerchant p_190888_1_, MerchantRecipeList recipeList, RandomSource random) {
 //			int i = 1;
 //			if (this.sellInfo != null) {
 //				i = this.sellInfo.getPrice(random);

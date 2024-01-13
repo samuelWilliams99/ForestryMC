@@ -23,6 +23,7 @@ import net.minecraftforge.fluids.FluidStack;
 import forestry.api.recipes.IForestryRecipe;
 import forestry.api.recipes.IStillManager;
 import forestry.api.recipes.IStillRecipe;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class StillRecipeManager extends AbstractCraftingProvider<IStillRecipe> implements IStillManager {
 
@@ -59,14 +60,14 @@ public class StillRecipeManager extends AbstractCraftingProvider<IStillRecipe> i
 	@Override
 	public Set<ResourceLocation> getRecipeFluidInputs(@Nullable RecipeManager recipeManager) {
 		return getRecipes(recipeManager)
-				.map(recipe -> recipe.getInput().getFluid().getRegistryName())
+				.map(recipe -> ForgeRegistries.FLUIDS.getKey(recipe.getInput().getFluid()))
 				.collect(Collectors.toSet());
 	}
 
 	@Override
 	public Set<ResourceLocation> getRecipeFluidOutputs(@Nullable RecipeManager recipeManager) {
 		return getRecipes(recipeManager)
-				.map(recipe -> recipe.getOutput().getFluid().getRegistryName())
+				.map(recipe -> ForgeRegistries.FLUIDS.getKey(recipe.getOutput().getFluid()))
 				.collect(Collectors.toSet());
 	}
 }

@@ -97,12 +97,8 @@ public class CommonModuleHandler {
 
 	public void registerObjects(RegisterEvent event) {
 		registry.onRegister(event);
-		registerObjects();
-	}
-
-	private void registerObjects() {
 		for (IForestryModule module : modules) {
-			module.registerObjects();
+			module.registerObjects(event);
 		}
 	}
 

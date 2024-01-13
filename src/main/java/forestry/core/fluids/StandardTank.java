@@ -30,6 +30,7 @@ import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
+import net.minecraftforge.registries.ForgeRegistries;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -166,7 +167,7 @@ public class StandardTank extends FluidTank implements IStreamable {
 
 	@Override
 	public String toString() {
-		return String.format("Tank: %s, %d/%d", !fluid.isEmpty() ? fluid.getFluid().getRegistryName() : "Empty", getFluidAmount(), getCapacity());
+		return String.format("Tank: %s, %d/%d", !fluid.isEmpty() ? ForgeRegistries.FLUIDS.getKey(fluid.getFluid()) : "Empty", getFluidAmount(), getCapacity());
 	}
 
 	protected boolean hasFluid() {

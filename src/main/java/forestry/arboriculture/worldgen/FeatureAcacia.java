@@ -16,6 +16,7 @@ import java.util.Set;
 
 import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
 
 import forestry.api.arboriculture.ITreeGenData;
@@ -28,7 +29,7 @@ public class FeatureAcacia extends FeatureTree {
 	}
 
 	@Override
-	public Set<BlockPos> generateTrunk(LevelAccessor world, Random rand, TreeBlockTypeLog wood, BlockPos startPos) {
+	public Set<BlockPos> generateTrunk(LevelAccessor world, RandomSource rand, TreeBlockTypeLog wood, BlockPos startPos) {
 		Direction leanDirection = FeatureHelper.DirectionHelper.getRandom(rand);
 		float leanAmount = height / 4.0f;
 
@@ -61,7 +62,7 @@ public class FeatureAcacia extends FeatureTree {
 	}
 
 	@Override
-	protected void generateLeaves(LevelAccessor world, Random rand, TreeBlockTypeLeaf leaf, TreeContour contour, BlockPos startPos) {
+	protected void generateLeaves(LevelAccessor world, RandomSource rand, TreeBlockTypeLeaf leaf, TreeContour contour, BlockPos startPos) {
 		for (BlockPos branchEnd : contour.getBranchEnds()) {
 			int leafSpawn = branchEnd.getY() - startPos.getY();
 			int canopyThickness = Math.max(1, Math.round(leafSpawn / 10.0f));

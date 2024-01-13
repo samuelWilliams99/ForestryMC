@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Random;
 
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.NonNullList;
@@ -127,7 +128,7 @@ public class FruitProviderNone implements IFruitProvider {
 	}
 
 	@Override
-	public Component getDescription() {
+	public MutableComponent getDescription() {
 		return Component.translatable(unlocalizedDescription);
 	}
 

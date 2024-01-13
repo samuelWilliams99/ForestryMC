@@ -55,6 +55,7 @@ import forestry.core.utils.ForestryModEnvWarningCallable;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ISidedModuleHandler;
+import net.minecraftforge.registries.RegisterEvent;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.CORE, name = "Core", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.core.description", coreModule = true)
 public class ModuleCore extends BlankForestryModule {
@@ -112,7 +113,11 @@ public class ModuleCore extends BlankForestryModule {
 		ForestryModEnvWarningCallable.register();
 
 		Proxies.render.initRendering();
-		CoreFeatures.registerOres();
+	}
+
+	@Override
+	public void registerObjects(RegisterEvent event) {
+		CoreFeatures.registerOres(event);
 	}
 
 	@Override

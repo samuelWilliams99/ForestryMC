@@ -38,7 +38,7 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory<ICarpenterRe
 	public CarpenterRecipeCategory(IGuiHelper guiHelper) {
 		super(guiHelper.createDrawable(guiTexture, 9, 16, 158, 61), "block.forestry.carpenter");
 
-		craftingGridHelper = guiHelper.createCraftingGridHelper(0);
+		craftingGridHelper = guiHelper.createCraftingGridHelper();
 		IDrawableStatic arrowDrawable = guiHelper.createDrawable(guiTexture, 176, 59, 4, 17);
 		this.arrow = guiHelper.createAnimatedDrawable(arrowDrawable, 200, IDrawableAnimated.StartDirection.BOTTOM, false);
 		this.tankOverlay = guiHelper.createDrawable(guiTexture, 176, 0, 16, 58);

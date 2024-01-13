@@ -139,8 +139,7 @@ public class EventHandlerCore {
 	public static void onEntityJoinWorld(EntityJoinLevelEvent event) {
 		Entity entity = event.getEntity();
 		if ((entity instanceof Villager villager)) {
-			VillagerProfession prof = ForgeRegistries.VILLAGER_PROFESSIONS.getValue(EntityType.getKey(villager.getType()));
-			if (prof.getRegistryName().equals(RegisterVillager.BEEKEEPER)) {
+			if (EntityType.getKey(villager.getType()).equals(RegisterVillager.BEEKEEPER)) {
 				villager.goalSelector.addGoal(6, new ApiaristAI(villager, 0.6));
 			}
 		}

@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.entities;
 
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.EntityType;
@@ -89,6 +91,11 @@ public abstract class MinecartEntityForestry extends AbstractMinecart implements
 			Block block = getDisplayBlockState().getBlock();
 			spawnAtLocation(new ItemStack(block), 0.0F);
 		}
+	}
+
+	@Override
+	public Item getDropItem() {
+		return Items.MINECART;
 	}
 
 	@Override

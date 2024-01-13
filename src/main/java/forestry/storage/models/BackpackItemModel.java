@@ -76,13 +76,7 @@ public class BackpackItemModel extends AbstractItemModel {
 		public static final ResourceLocation LOCATION = new ResourceLocation(Constants.MOD_ID, "backpacks");
 
 		@Override
-		public void onResourceManagerReload(ResourceManager resourceManager) {
-			// TODO: Find a way to clear the cache before the models get reloaded an not after
-			//cachedBakedModels = ImmutableMap.of();
-		}
-
-		@Override
-		public BackpackItemModel.Geometry read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
+		public BackpackItemModel.Geometry read(JsonObject modelContents, JsonDeserializationContext deserializationContext) {
 			return new BackpackItemModel.Geometry();
 		}
 	}

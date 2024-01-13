@@ -7,6 +7,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import forestry.core.gui.Drawable;
 
 import net.minecraft.client.gui.components.Button.OnPress;
+import net.minecraft.network.chat.Component;
 
 public class GuiToggleButton extends Button {
 	/* attributes - Final */

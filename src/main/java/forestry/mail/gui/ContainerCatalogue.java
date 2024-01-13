@@ -38,6 +38,7 @@ import forestry.core.gui.IGuiSelectable;
 import forestry.core.utils.NetworkUtil;
 import forestry.mail.features.MailContainers;
 import forestry.mail.network.packets.PacketLetterInfoResponse;
+import net.minecraft.world.item.ItemStack;
 
 public class ContainerCatalogue extends AbstractContainerMenu implements IGuiSelectable, ILetterInfoReceiver {
 
@@ -206,5 +207,10 @@ public class ContainerCatalogue extends AbstractContainerMenu implements IGuiSel
 		}
 
 		needsSync = true;
+	}
+
+	@Override
+	public ItemStack quickMoveStack(Player pPlayer, int pIndex) {
+		return this.slots.get(pIndex).getItem();
 	}
 }

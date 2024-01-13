@@ -2,11 +2,14 @@ package forestry.factory.recipes.jei.fabricator;
 
 import javax.annotation.Nullable;
 
+import forestry.core.config.Constants;
 import forestry.core.utils.JeiUtil;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
+import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -20,6 +23,8 @@ import forestry.factory.network.packets.PacketRecipeTransferRequest;
 import mezz.jei.api.recipe.transfer.IRecipeTransferError;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
 
+import java.util.Optional;
+
 @OnlyIn(Dist.CLIENT)
 public class FabricatorRecipeTransferHandler implements IRecipeTransferHandler<ContainerFabricator, IFabricatorRecipe> {
 
@@ -29,8 +34,13 @@ public class FabricatorRecipeTransferHandler implements IRecipeTransferHandler<C
 	}
 
 	@Override
-	public Class<IFabricatorRecipe> getRecipeClass() {
-		return IFabricatorRecipe.class;
+	public Optional<MenuType<ContainerFabricator>> getMenuType() {
+		return Optional.empty();
+	}
+
+	@Override
+	public RecipeType<IFabricatorRecipe> getRecipeType() {
+		return RecipeType.create(Constants.MOD_ID, "fabricator", IFabricatorRecipe.class);
 	}
 
 	@Nullable

@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#minecraft:is_overworld",
+  "features": ["forestry:cocoon_decorator", "forestry:tree_decorator", "forestry:tin_ore", "forestry:deepslate_tin_ore"],
+  "step": "vegetal_decoration"
+}

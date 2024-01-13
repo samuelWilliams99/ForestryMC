@@ -319,7 +319,7 @@ public class TileHive extends BlockEntity implements IHiveTile, IActivatable, IB
 
 	@Override
 	public EnumHumidity getHumidity() {
-		float humidity = getBiome().getDownfall();
+		float humidity = getBiome().value().getDownfall();
 		return EnumHumidity.getFromValue(humidity);
 	}
 

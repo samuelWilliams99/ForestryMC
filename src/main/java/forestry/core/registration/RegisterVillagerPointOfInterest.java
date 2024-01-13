@@ -15,8 +15,8 @@ import net.minecraftforge.coremod.api.ASMAPI;
 import forestry.core.config.Constants;
 
 public class RegisterVillagerPointOfInterest {
-	public static PoiType create(String name, Collection<BlockState> block) {
-		PoiType type = new PoiType(Constants.MOD_ID + ":" + name, ImmutableSet.copyOf(block), 1, 1);
+	public static PoiType create(Collection<BlockState> block) {
+		PoiType type = new PoiType(ImmutableSet.copyOf(block), 1, 1);
 
 		try {
 			// PointOfInterestType.registerBlockStates(type);

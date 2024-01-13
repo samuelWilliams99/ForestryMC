@@ -27,6 +27,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.ICarpenterManager;
 import forestry.api.recipes.ICarpenterRecipe;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class CarpenterRecipeManager extends AbstractCraftingProvider<ICarpenterRecipe> implements ICarpenterManager {
 
@@ -95,7 +96,7 @@ public class CarpenterRecipeManager extends AbstractCraftingProvider<ICarpenterR
 		return getRecipes(recipeManager)
 				.map(ICarpenterRecipe::getFluidResource)
 				.filter(fluidStack -> !fluidStack.isEmpty())
-				.map(fluidStack -> fluidStack.getFluid().getRegistryName())
+				.map(fluidStack -> ForgeRegistries.FLUIDS.getKey(fluidStack.getFluid()))
 				.collect(Collectors.toSet());
 	}
 }

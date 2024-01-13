@@ -3,6 +3,7 @@ package forestry.core.gui;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.AbstractContainerMenu;

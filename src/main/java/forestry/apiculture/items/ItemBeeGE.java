@@ -87,7 +87,7 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 
 	@Override
 	public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> subItems) {
-		if (this.allowdedIn(tab)) {
+		if (this.allowedIn(tab)) {
 			addCreativeItems(subItems, true);
 		}
 	}

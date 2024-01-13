@@ -15,6 +15,7 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -37,6 +38,7 @@ import forestry.api.genetics.alleles.AlleleManager;
 import forestry.apiculture.gui.ContainerHabitatLocator;
 import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
 import forestry.core.items.ItemWithGui;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 	private static final String iconName = "forestry:items/biomefinder";
@@ -77,14 +79,15 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 
 		if (world != null && minecraft.player != null) {
 			LocalPlayer player = minecraft.player;
-			Biome currentBiome = player.level.getBiome(player.blockPosition()).value();
+			Holder<Biome> currentBiome = player.level.getBiome(player.blockPosition());
 
 			EnumTemperature temperature = EnumTemperature.getFromBiome(currentBiome, player.blockPosition());
-			EnumHumidity humidity = EnumHumidity.getFromValue(currentBiome.getDownfall());
+			EnumHumidity humidity = EnumHumidity.getFromValue(currentBiome.value().getDownfall());
+			String biomeName = ForgeRegistries.BIOMES.getKey(currentBiome.value()).toString();
 
 			list.add(Component.translatable("for.gui.currentBiome")
 					.append(Component.literal(": "))
-					.append(Component.translatable("biome." + currentBiome.getRegistryName().toString().replace(":", "."))));
+					.append(Component.translatable("biome." + biomeName.replace(":", "."))));
 
 			list.add(Component.translatable("for.gui.temperature")
 					.append(Component.literal(": "))

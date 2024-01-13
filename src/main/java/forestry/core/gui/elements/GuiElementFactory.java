@@ -62,7 +62,7 @@ public class GuiElementFactory implements ResourceManagerReloadListener {
 		recessiveStyle = Style.EMPTY.withColor(TextColor.fromRgb(ColourProperties.INSTANCE.get("gui.beealyzer.recessive")));
 		guiStyle = Style.EMPTY.withColor(TextColor.fromRgb(ColourProperties.INSTANCE.get("gui.screen")));
 		guiTitleStyle = Style.EMPTY.withColor(TextColor.fromRgb(ColourProperties.INSTANCE.get("gui.title")));
-		databaseTitle = Style.EMPTY.withColor(TextColor.fromRgb(0xcfb53b)).setUnderlined(true);
+		databaseTitle = Style.EMPTY.withColor(TextColor.fromRgb(0xcfb53b)).withUnderlined(true);
 		binomial = Style.EMPTY.withColor(TextColor.fromRgb(ColourProperties.INSTANCE.get("gui.beealyzer.binomial")));
 	}
 

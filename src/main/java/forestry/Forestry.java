@@ -268,13 +268,17 @@ public class Forestry {
 
 		@SubscribeEvent(priority = EventPriority.HIGH)
 		public static void createFeatures(final RegisterEvent event) {
-			if (event.getRegistryKey().equals(ForgeRegistries.Keys.BLOCKS))
+			System.out.println("Forestry createFeatures" + event.getRegistryKey());
+			if (event.getRegistryKey().equals(ForgeRegistries.Keys.BLOCKS)) {
+				System.out.println("Forestry createFeatures BLOCKS!");
 				ModuleManager.getModuleHandler().createFeatures();
+			}
 		}
 
 		@SubscribeEvent(priority = EventPriority.LOW)
 		public static void createObjects(final RegisterEvent event) {
 			if (event.getRegistryKey().equals(ForgeRegistries.Keys.BLOCKS)) {
+				System.out.println("Started Block registry events");
 				ModuleManager.getModuleHandler().createObjects((type, moduleID) -> !moduleID.equals(ForestryModuleUids.CRATE));
 				ModuleManager.getModuleHandler().runRegisterBackpacksAndCrates();
 				ModuleManager.getModuleHandler().createObjects((type, moduleID) -> moduleID.equals(ForestryModuleUids.CRATE));

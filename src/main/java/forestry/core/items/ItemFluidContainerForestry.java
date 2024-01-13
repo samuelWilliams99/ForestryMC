@@ -67,7 +67,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> subItems) {
-		if (this.allowdedIn(tab)) {
+		if (this.allowedIn(tab)) {
 			// empty
 			subItems.add(new ItemStack(this));
 
@@ -105,7 +105,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 		if (item instanceof ItemFluidContainerForestry) {
 			FluidStack fluid = getContained(stack);
 			if (!fluid.isEmpty()) {
-				String exactTranslationKey = Constants.TRANSLATION_KEY_ITEM + type.getSerializedName() + '.' + fluid.getFluid().getRegistryName();
+				String exactTranslationKey = Constants.TRANSLATION_KEY_ITEM + type.getSerializedName() + '.' + ForgeRegistries.FLUIDS.getKey(fluid.getFluid());
 				return Translator.tryTranslate(exactTranslationKey, () -> {
 							String grammarKey = Constants.TRANSLATION_KEY_ITEM + type.getSerializedName() + ".grammar";
 							return Component.translatable(grammarKey, fluid.getDisplayName());

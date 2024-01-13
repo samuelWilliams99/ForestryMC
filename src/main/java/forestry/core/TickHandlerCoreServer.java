@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
@@ -68,7 +69,7 @@ public class TickHandlerCoreServer {
 					ChunkCoords coords = iterator.next();
 					if (canDecorate(world, coords)) {
 						iterator.remove();
-						Random random = getRetrogenRandom(world, coords);
+						RandomSource random = getRetrogenRandom(world, coords);
 						//						worldGenerator.retroGen(random, coords.x, coords.z, world);
 					}
 				}
@@ -77,9 +78,9 @@ public class TickHandlerCoreServer {
 		}
 	}
 
-	private static Random getRetrogenRandom(Level world, ChunkCoords coords) {
+	private static RandomSource getRetrogenRandom(Level world, ChunkCoords coords) {
 		long worldSeed = WorldUtils.asServer(world).getSeed();
-		Random random = new Random(worldSeed);
+		RandomSource random = RandomSource.create(worldSeed);
 		long xSeed = random.nextLong() >> 2 + 1L;
 		long zSeed = random.nextLong() >> 2 + 1L;
 		random.setSeed(xSeed * coords.x + zSeed * coords.z ^ worldSeed);

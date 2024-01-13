@@ -34,6 +34,7 @@ import forestry.core.utils.Translator;
 import forestry.modules.ModuleManager;
 
 import genetics.commands.CommandHelpers;
+import net.minecraft.network.chat.Component;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>

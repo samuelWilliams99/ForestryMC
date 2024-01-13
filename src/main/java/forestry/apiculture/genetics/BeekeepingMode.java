@@ -17,6 +17,7 @@ import java.util.Locale;
 import java.util.Random;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 
 import forestry.api.apiculture.BeeManager;
@@ -37,14 +38,14 @@ public class BeekeepingMode implements IBeekeepingMode {
 	public static final IBeekeepingMode hardcore = new BeekeepingMode("HARDCORE", 0.5f, 5.0f, 0.8f, true, true);
 	public static final IBeekeepingMode insane = new BeekeepingMode("INSANE", 0.2f, 10.0f, 0.6f, true, true);
 
-	private final Random rand;
+	private final RandomSource rand;
 	private final String name;
 	private final boolean reducesFertility;
 	private final boolean canFatigue;
 	private final IBeeModifier beeModifier;
 
 	public BeekeepingMode(String name, float mutationModifier, float lifespanModifier, float speedModifier, boolean reducesFertility, boolean canFatigue) {
-		this.rand = new Random();
+		this.rand = RandomSource.create();
 		this.name = name;
 		this.reducesFertility = reducesFertility;
 		this.canFatigue = canFatigue;
@@ -73,7 +74,7 @@ public class BeekeepingMode implements IBeekeepingMode {
 		int toCreate = queen.getGenome().getActiveValue(BeeChromosomes.FERTILITY);
 
 		if (reducesFertility) {
-			toCreate = new Random().nextInt(toCreate);
+			toCreate = RandomSource.create().nextInt(toCreate);
 		}
 
 		return toCreate;

@@ -14,6 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
 
 class FakeCraftingInventory {
 
@@ -21,6 +22,11 @@ class FakeCraftingInventory {
 		@Override
 		public boolean stillValid(Player playerIn) {
 			return true;
+		}
+
+		@Override
+		public ItemStack quickMoveStack(Player pPlayer, int pIndex) {
+			return this.slots.get(pIndex).getItem();
 		}
 	};
 

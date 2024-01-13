@@ -76,11 +76,7 @@ public class CocoonItemModel extends AbstractItemModel {
 
 	public static class Loader implements IGeometryLoader<Geometry> {
 		@Override
-		public void onResourceManagerReload(ResourceManager resourceManager) {
-		}
-
-		@Override
-		public CocoonItemModel.Geometry read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
+		public CocoonItemModel.Geometry read(JsonObject modelContents, JsonDeserializationContext deserializationContext) {
 			return new CocoonItemModel.Geometry();
 		}
 	}
