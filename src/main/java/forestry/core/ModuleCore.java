@@ -23,6 +23,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -62,7 +63,9 @@ public class ModuleCore extends BlankForestryModule {
 	public static final LiteralArgumentBuilder<CommandSourceStack> rootCommand = LiteralArgumentBuilder.literal("forestry");
 
 	public ModuleCore() {
-		CoreParticles.PARTICLE_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
+		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+		CoreParticles.PARTICLE_TYPES.register(modEventBus);
+		CommandModules.registerDeferred(modEventBus);
 	}
 
 	@Override

@@ -16,6 +16,7 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 
 import com.mojang.serialization.Codec;
+import genetics.Genetics;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
@@ -135,6 +136,7 @@ import net.minecraftforge.registries.RegisterEvent;
 public class Forestry {
 
 	public Forestry() {
+		new Genetics();
 		ForestryAPI.errorStateRegistry = new ErrorStateRegistry();
 		ClimateManager.climateRoot = ClimateRoot.getInstance();
 		ClimateManager.climateFactory = ClimateFactory.INSTANCE;
@@ -268,9 +270,7 @@ public class Forestry {
 
 		@SubscribeEvent(priority = EventPriority.HIGH)
 		public static void createFeatures(final RegisterEvent event) {
-			System.out.println("Forestry createFeatures" + event.getRegistryKey());
 			if (event.getRegistryKey().equals(ForgeRegistries.Keys.BLOCKS)) {
-				System.out.println("Forestry createFeatures BLOCKS!");
 				ModuleManager.getModuleHandler().createFeatures();
 			}
 		}
@@ -278,7 +278,6 @@ public class Forestry {
 		@SubscribeEvent(priority = EventPriority.LOW)
 		public static void createObjects(final RegisterEvent event) {
 			if (event.getRegistryKey().equals(ForgeRegistries.Keys.BLOCKS)) {
-				System.out.println("Started Block registry events");
 				ModuleManager.getModuleHandler().createObjects((type, moduleID) -> !moduleID.equals(ForestryModuleUids.CRATE));
 				ModuleManager.getModuleHandler().runRegisterBackpacksAndCrates();
 				ModuleManager.getModuleHandler().createObjects((type, moduleID) -> moduleID.equals(ForestryModuleUids.CRATE));
@@ -309,7 +308,6 @@ public class Forestry {
 		}
 
 		private static void register(IForgeRegistry<RecipeSerializer<?>> registry, RecipeType<?> type, RecipeSerializer<?> serializer) {
-			Registry.register(Registry.RECIPE_TYPE, type.toString(), type);
 			registry.register(new ResourceLocation(type.toString()), serializer);
 		}
 

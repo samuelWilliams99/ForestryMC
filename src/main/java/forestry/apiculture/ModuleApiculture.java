@@ -16,6 +16,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
+import forestry.arboriculture.features.ArboricultureFeatures;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -138,7 +139,10 @@ public class ModuleApiculture extends BlankForestryModule {
 			MinecraftForge.EVENT_BUS.register(new RegisterVillager.Events());
 		}
 
-		MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, ApicultureFeatures::registerFeatures);
+		ApicultureFeatures.FEATURES.register(modEventBus);
+		ApicultureFeatures.CONFIGURED_FEATURES.register(modEventBus);
+		ApicultureFeatures.PLACED_FEATURES.register(modEventBus);
+		CommandBee.registerDeferred(modEventBus);
 		// MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, ApicultureFeatures::onBiomeLoad);
 	}
 

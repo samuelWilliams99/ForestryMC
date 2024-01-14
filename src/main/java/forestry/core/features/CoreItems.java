@@ -62,10 +62,10 @@ public class CoreItems {
 	public static final FeatureItem<ItemForestry> CARTON = REGISTRY.item(ItemForestry::new, "carton");
 	public static final FeatureItem<ItemForestry> BROKEN_BRONZE_PICKAXE = REGISTRY.item(ItemForestry::new, "broken_bronze_pickaxe");
 	public static final FeatureItem<ItemForestry> BROKEN_BRONZE_SHOVEL = REGISTRY.item(ItemForestry::new, "broken_bronze_shovel");
-	public static final FeatureItem<ItemForestryTool> BRONZE_PICKAXE = REGISTRY.item(() -> new ItemForestryTool(BROKEN_BRONZE_PICKAXE.stack(), 1f, -2.8f, new Item.Properties().tab(ItemGroupForestry.tabForestry)), "bronze_pickaxe");
-	public static final FeatureItem<ItemForestryTool> BRONZE_SHOVEL = REGISTRY.item(() -> new ItemForestryTool(BROKEN_BRONZE_SHOVEL.stack(), 1.5f, -3.0f, new Item.Properties().tab(ItemGroupForestry.tabForestry)), "bronze_shovel");
-	public static final FeatureItem<ItemAssemblyKit> KIT_SHOVEL = REGISTRY.item(() -> new ItemAssemblyKit(BRONZE_SHOVEL.stack()), "kit_shovel");
-	public static final FeatureItem<ItemAssemblyKit> KIT_PICKAXE = REGISTRY.item(() -> new ItemAssemblyKit(BRONZE_PICKAXE.stack()), "kit_pickaxe");
+	public static final FeatureItem<ItemForestryTool> BRONZE_PICKAXE = REGISTRY.item(() -> new ItemForestryTool(BROKEN_BRONZE_PICKAXE.getItem(), 1f, -2.8f, new Item.Properties().tab(ItemGroupForestry.tabForestry)), "bronze_pickaxe");
+	public static final FeatureItem<ItemForestryTool> BRONZE_SHOVEL = REGISTRY.item(() -> new ItemForestryTool(BROKEN_BRONZE_SHOVEL.getItem(), 1.5f, -3.0f, new Item.Properties().tab(ItemGroupForestry.tabForestry)), "bronze_shovel");
+	public static final FeatureItem<ItemAssemblyKit> KIT_SHOVEL = REGISTRY.item(() -> new ItemAssemblyKit(BRONZE_SHOVEL.getItem()), "kit_shovel");
+	public static final FeatureItem<ItemAssemblyKit> KIT_PICKAXE = REGISTRY.item(() -> new ItemAssemblyKit(BRONZE_PICKAXE.getItem()), "kit_pickaxe");
 
 	/* Machine Parts */
 	public static final FeatureItem<ItemForestry> STURDY_CASING = REGISTRY.item(ItemForestry::new, "sturdy_machine");

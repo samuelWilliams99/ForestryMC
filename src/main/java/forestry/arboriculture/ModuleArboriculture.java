@@ -61,10 +61,14 @@ public class ModuleArboriculture extends BlankForestryModule {
 			MinecraftForge.EVENT_BUS.register(new RegisterVillager.Events());
 		}
 
+		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		if (TreeConfig.getSpawnRarity() > 0.0F) {
-			MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, ArboricultureFeatures::registerFeatures);
-			// MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, ArboricultureFeatures::onBiomeLoad);
+			ArboricultureFeatures.FEATURES.register(modEventBus);
+			ArboricultureFeatures.CONFIGURED_FEATURES.register(modEventBus);
+			ArboricultureFeatures.PLACED_FEATURES.register(modEventBus);
 		}
+
+		CommandTree.registerDeferred(modEventBus);
 	}
 
 	@Override

@@ -13,6 +13,7 @@ package forestry.storage.items;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.InteractionHand;
@@ -27,15 +28,17 @@ import forestry.core.items.ItemForestry;
 import forestry.core.items.definitions.IColoredItem;
 import forestry.core.utils.ItemStackUtil;
 
+import javax.annotation.Nullable;
+
 public class ItemCrated extends ItemForestry implements IColoredItem {
 	private final ItemStack contained;
 
 	/**
 	 * @param contained The item which should be dropped on use, or be uncrated into
 	 */
-	public ItemCrated(ItemStack contained) {
+	public ItemCrated(@Nullable Item contained) {
 		super(ItemGroups.tabStorage);
-		this.contained = contained;
+		this.contained = contained == null ? new ItemStack(contained) : ItemStack.EMPTY;
 	}
 
 	public ItemStack getContained() {

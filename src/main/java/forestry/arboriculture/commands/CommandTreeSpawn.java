@@ -14,9 +14,15 @@ import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
+import forestry.apiculture.commands.CommandBeeGive;
+import forestry.core.config.Constants;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.commands.synchronization.ArgumentTypeInfo;
+import net.minecraft.commands.synchronization.ArgumentTypeInfos;
+import net.minecraft.commands.synchronization.SingletonArgumentInfo;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 
 import com.mojang.brigadier.StringReader;
@@ -35,11 +41,23 @@ import forestry.arboriculture.genetics.TreeDefinition;
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IIndividual;
 import genetics.commands.PermLevel;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 
 public final class CommandTreeSpawn {
+	public static final DeferredRegister<ArgumentTypeInfo<?, ?>> COMMAND_ARGUMENT_TYPES = DeferredRegister.create(
+			Registry.COMMAND_ARGUMENT_TYPE_REGISTRY, Constants.MOD_ID
+	);
+
+	public static final RegistryObject<SingletonArgumentInfo<TreeArgument>> TREE_ARGUMENT = COMMAND_ARGUMENT_TYPES.register(
+			"tree", () -> ArgumentTypeInfos.registerByClass(
+					TreeArgument.class, SingletonArgumentInfo.contextFree(TreeArgument::new)
+			)
+	);
+
 	public static ArgumentBuilder<CommandSourceStack, ?> register(String name, ITreeSpawner treeSpawner) {
 		return Commands.literal(name).requires(PermLevel.ADMIN)
-				.then(Commands.argument("type", TreeArugment.treeArgument())
+				.then(Commands.argument("type", TreeArgument.treeArgument())
 						.executes(a -> run(treeSpawner, a.getSource(), a.getArgument("type", ITree.class))))
 				.executes(a -> run(treeSpawner, a.getSource(), TreeDefinition.Oak.createIndividual()));
 	}
@@ -48,10 +66,9 @@ public final class CommandTreeSpawn {
 		return treeSpawner.spawn(source, tree, source.getPlayerOrException());
 	}
 
-	public static class TreeArugment implements ArgumentType<ITree> {
-
-		public static TreeArugment treeArgument() {
-			return new TreeArugment();
+	public static class TreeArgument implements ArgumentType<ITree> {
+		public static TreeArgument treeArgument() {
+			return new TreeArgument();
 		}
 
 		@Override

@@ -38,11 +38,11 @@ import forestry.core.utils.ItemStackUtil;
 
 public class ItemForestryTool extends DiggerItem {
 
-	private final ItemStack remnants;
+	private final Item remnantItem;
 
-	public ItemForestryTool(ItemStack remnants, float damageBonus, float speedModifier, Item.Properties properties) {
-		super(damageBonus, speedModifier, ToolTier.BRONZE, CoreItems.BROKEN_BRONZE_PICKAXE.itemEqual(remnants.getItem()) ? BlockTags.MINEABLE_WITH_PICKAXE : BlockTags.MINEABLE_WITH_SHOVEL, properties);
-		this.remnants = remnants;
+	public ItemForestryTool(Item remnantItem, float damageBonus, float speedModifier, Item.Properties properties) {
+		super(damageBonus, speedModifier, ToolTier.BRONZE, CoreItems.BROKEN_BRONZE_PICKAXE.itemEqual(remnantItem) ? BlockTags.MINEABLE_WITH_PICKAXE : BlockTags.MINEABLE_WITH_SHOVEL, properties);
+		this.remnantItem = remnantItem;
 	}
 
 	@Override
@@ -125,8 +125,8 @@ public class ItemForestryTool extends DiggerItem {
 
 		player.broadcastBreakEvent(hand);
 
-		if (!world.isClientSide && !remnants.isEmpty()) {
-			ItemStackUtil.dropItemStackAsEntity(remnants.copy(), world, player.getX(), player.getY(), player.getZ());
+		if (!world.isClientSide) {
+			ItemStackUtil.dropItemStackAsEntity(new ItemStack(remnantItem, 1), world, player.getX(), player.getY(), player.getZ());
 		}
 	}
 

@@ -14,10 +14,15 @@ import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
+import forestry.core.config.Constants;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.commands.synchronization.ArgumentTypeInfo;
+import net.minecraft.commands.synchronization.ArgumentTypeInfos;
+import net.minecraft.commands.synchronization.SingletonArgumentInfo;
+import net.minecraft.core.Registry;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
@@ -32,6 +37,8 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.server.command.EnumArgument;
 
 import forestry.api.apiculture.BeeManager;
@@ -46,6 +53,19 @@ import genetics.commands.CommandHelpers;
 import genetics.commands.PermLevel;
 
 public class CommandBeeGive {
+	public static final DeferredRegister<ArgumentTypeInfo<?, ?>> COMMAND_ARGUMENT_TYPES = DeferredRegister.create(
+			Registry.COMMAND_ARGUMENT_TYPE_REGISTRY, Constants.MOD_ID
+	);
+
+	public static final RegistryObject<SingletonArgumentInfo<BeeArgument>> BEE_ARGUMENT = COMMAND_ARGUMENT_TYPES.register(
+			"bee", () -> {
+				System.out.println("FINDME register argument");
+				return ArgumentTypeInfos.registerByClass(
+						BeeArgument.class, SingletonArgumentInfo.contextFree(BeeArgument::new)
+				);
+			}
+	);
+
 	public static LiteralArgumentBuilder<CommandSourceStack> register() {
 		return Commands.literal("give").requires(PermLevel.ADMIN)
 				.then(Commands.argument("bee", BeeArgument.beeArgument())
@@ -71,7 +91,6 @@ public class CommandBeeGive {
 	}
 
 	public static class BeeArgument implements ArgumentType<IBee> {
-
 		public static BeeArgument beeArgument() {
 			return new BeeArgument();
 		}

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.commands;
 
+import forestry.apiculture.commands.CommandBeeGive;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 
@@ -19,9 +20,15 @@ import forestry.core.commands.CommandMode;
 import forestry.core.commands.CommandSaveStats;
 import forestry.core.commands.ICommandModeHelper;
 import forestry.core.commands.IStatsSaveHelper;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 
 public class CommandTree {
+	public static void registerDeferred(IEventBus bus) {
+		CommandTreeSpawn.COMMAND_ARGUMENT_TYPES.register(bus);
+	}
+
 	public static ArgumentBuilder<CommandSourceStack, ?> register() {
 		IStatsSaveHelper saveHelper = new TreeStatsSaveHelper();
 		ICommandModeHelper modeHelper = new TreeModeHelper();

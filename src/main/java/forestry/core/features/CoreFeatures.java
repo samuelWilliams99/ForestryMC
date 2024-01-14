@@ -44,7 +44,6 @@ public class CoreFeatures {
 
 	public static void registerOres(RegisterEvent event) {
 		event.register(Registry.CONFIGURED_FEATURE_REGISTRY, helper -> {
-			System.out.println("Started CONFIGURED_FEATURE_REGISTRY events");
 			OreConfiguration apatiteOre = new OreConfiguration(OreFeatures.STONE_ORE_REPLACEABLES, CoreBlocks.APATITE_ORE.defaultState(), 3);
 			OreConfiguration deepslateApatiteOre = new OreConfiguration(OreFeatures.DEEPSLATE_ORE_REPLACEABLES, CoreBlocks.DEEPSLATE_APATITE_ORE.defaultState(), 3);
 			OreConfiguration tinOre = new OreConfiguration(OreFeatures.STONE_ORE_REPLACEABLES, CoreBlocks.TIN_ORE.defaultState(), 9);
