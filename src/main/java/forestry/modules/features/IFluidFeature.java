@@ -29,13 +29,20 @@ public interface IFluidFeature extends IModFeature {
 
 	void setFlowing(FlowingFluid flowing);
 
+	void setFluidType(FluidType fluidType);
+
 	Supplier<FlowingFluid> getFluidConstructor(boolean flowing);
+
+	FluidType createFluidType();
 
 	@Nullable
 	FlowingFluid getFluid();
 
 	@Nullable
 	FlowingFluid getFlowing();
+
+	@Nullable
+	FluidType getFluidType();
 
 	FluidProperties properties();
 
@@ -59,6 +66,14 @@ public interface IFluidFeature extends IModFeature {
 		return flowing;
 	}
 
+	default FluidType fluidType() {
+		FluidType fluidType = getFluidType();
+		if (fluidType == null) {
+			throw new IllegalStateException("Called feature getter method before content creation.");
+		}
+		return fluidType;
+	}
+
 	default FluidStack fluidStack(int amount) {
 		if (hasFluid()) {
 			return new FluidStack(fluid(), amount);
@@ -74,8 +89,10 @@ public interface IFluidFeature extends IModFeature {
 	default void create() {
 		FlowingFluid fluid = getFluidConstructor(false).get();
 		FlowingFluid flowing = getFluidConstructor(true).get();
+		FluidType fluidType = createFluidType();
 		setFluid(fluid);
 		setFlowing(flowing);
+		setFluidType(fluidType);
 	}
 
 	@Override
@@ -85,6 +102,10 @@ public interface IFluidFeature extends IModFeature {
 			IForgeRegistry<Fluid> registry = event.getForgeRegistry();
 			registry.register(new ResourceLocation(getModId(), getIdentifier()), fluid());
 			registry.register(new ResourceLocation(getModId(), getIdentifier() + "_flowing"), flowing());
+		}
+		if (event.getRegistryKey().equals(ForgeRegistries.Keys.FLUID_TYPES)) {
+			IForgeRegistry<FluidType> registry = event.getForgeRegistry();
+			registry.register(new ResourceLocation(getModId(), getIdentifier()), getFluidType());
 		}
 	}
 }

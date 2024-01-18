@@ -31,32 +31,32 @@ import forestry.core.utils.ItemStackUtil;
 import javax.annotation.Nullable;
 
 public class ItemCrated extends ItemForestry implements IColoredItem {
-	private final ItemStack contained;
+	@Nullable
+	private final Item contained;
 
 	/**
 	 * @param contained The item which should be dropped on use, or be uncrated into
 	 */
 	public ItemCrated(@Nullable Item contained) {
 		super(ItemGroups.tabStorage);
-		this.contained = contained == null ? new ItemStack(contained) : ItemStack.EMPTY;
+		this.contained = contained;
 	}
 
 	public ItemStack getContained() {
-		return contained;
+		return new ItemStack(contained);
 	}
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
 		ItemStack heldItem = playerIn.getItemInHand(handIn);
 		if (!worldIn.isClientSide) {
-			if (contained.isEmpty() || heldItem.isEmpty()) {
+			if (contained == null || heldItem.isEmpty()) {
 				return InteractionResultHolder.pass(heldItem);
 			}
 
 			heldItem.shrink(1);
 
-			ItemStack dropStack = contained.copy();
-			dropStack.setCount(9);
+			ItemStack dropStack = new ItemStack(contained, 9);
 			ItemStackUtil.dropItemStackAsEntity(dropStack, worldIn, playerIn.getX(), playerIn.getY(), playerIn.getZ(), 40);
 		}
 		return InteractionResultHolder.success(heldItem);
@@ -64,10 +64,10 @@ public class ItemCrated extends ItemForestry implements IColoredItem {
 
 	@Override
 	public Component getName(ItemStack itemstack) {
-		if (contained.isEmpty()) {
+		if (contained == null) {
 			return Component.translatable("item.forestry.crate");
 		} else {
-			Component containedName = contained.getHoverName();
+			Component containedName = new ItemStack(contained).getHoverName();
 			return Component.translatable("for.item.crated.grammar", containedName);
 		}
 	}
@@ -93,10 +93,10 @@ public class ItemCrated extends ItemForestry implements IColoredItem {
 	public int getColorFromItemStack(ItemStack stack, int renderPass) {
 		ItemColors colors = Minecraft.getInstance().getItemColors();
 
-		if (contained.isEmpty() || renderPass == 100) {
+		if (contained == null || renderPass == 100) {
 			return -1;
 		}
 
-		return colors.getColor(contained, renderPass);
+		return colors.getColor(new ItemStack(contained), renderPass);
 	}
 }

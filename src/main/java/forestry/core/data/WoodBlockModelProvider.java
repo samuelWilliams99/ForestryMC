@@ -109,24 +109,23 @@ public class WoodBlockModelProvider extends ModelProvider {
 				.texture("texture", texture));
 	}
 
+	private void registerDoorPart(ResourceLocation top, ResourceLocation bottom, IWoodType type, String suffix) {
+		registerModel("arboriculture/doors/" + type.getSerializedName() + "_" + suffix, new ModelBuilder()
+				.parent("block/door_" + suffix)
+				.texture("top", top)
+				.texture("bottom", bottom));
+	}
+
 	private void addDoor(IWoodType type) {
 		ResourceLocation top = new ResourceLocation(Constants.MOD_ID, "block/doors/" + type.getSerializedName() + "_upper");
 		ResourceLocation bottom = new ResourceLocation(Constants.MOD_ID, "block/doors/" + type.getSerializedName() + "_lower");
-		registerModel("arboriculture/doors/" + type.getSerializedName() + "_bottom", new ModelBuilder()
-				.parent("block/door_bottom")
-				.texture("top", top)
-				.texture("bottom", bottom));
-		registerModel("arboriculture/doors/" + type.getSerializedName() + "_bottom_hinge", new ModelBuilder()
-				.parent("block/door_bottom_rh")
-				.texture("top", top)
-				.texture("bottom", bottom));
-		registerModel("arboriculture/doors/" + type.getSerializedName() + "_top", new ModelBuilder()
-				.parent("block/door_top")
-				.texture("top", top)
-				.texture("bottom", bottom));
-		registerModel("arboriculture/doors/" + type.getSerializedName() + "_top_hinge", new ModelBuilder()
-				.parent("block/door_top_rh")
-				.texture("top", top)
-				.texture("bottom", bottom));
+		registerDoorPart(top, bottom, type, "bottom_left");
+		registerDoorPart(top, bottom, type, "bottom_left_open");
+		registerDoorPart(top, bottom, type, "bottom_right");
+		registerDoorPart(top, bottom, type, "bottom_right_open");
+		registerDoorPart(top, bottom, type, "top_left");
+		registerDoorPart(top, bottom, type, "top_left_open");
+		registerDoorPart(top, bottom, type, "top_right");
+		registerDoorPart(top, bottom, type, "top_right_open");
 	}
 }

@@ -47,8 +47,8 @@ import forestry.modules.ForestryModuleUids;
 import forestry.storage.ModuleBackpacks;
 import net.minecraftforge.registries.RegisterEvent;
 
-//TODO: Sort Registries and Features
 public class ModFeatureRegistry {
+//TODO: Sort Registries and Features
 	private static final HashMap<String, ModFeatureRegistry> registries = new LinkedHashMap<>();
 
 	public static ModFeatureRegistry get(String modId) {

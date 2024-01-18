@@ -2,14 +2,17 @@ package forestry.modules.features;
 
 import javax.annotation.Nullable;
 import java.awt.Color;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import net.minecraft.Util;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.resources.ResourceLocation;
 
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 
@@ -27,6 +30,8 @@ public class FeatureFluid implements IFluidFeature {
 	private volatile FlowingFluid fluid;
 	@Nullable
 	private FlowingFluid flowing;
+
+	@Nullable FluidType fluidType;
 
 	public FeatureFluid(Builder builder) {
 		this.moduleID = builder.moduleID;
@@ -52,8 +57,38 @@ public class FeatureFluid implements IFluidFeature {
 	}
 
 	@Override
+	public void setFluidType(@Nullable FluidType fluidType) {
+		this.fluidType = fluidType;
+	}
+
+	@Override
 	public Supplier<FlowingFluid> getFluidConstructor(boolean flowing) {
 		return () -> flowing ? new ForgeFlowingFluid.Flowing(internal) : new ForgeFlowingFluid.Source(internal);
+	}
+
+	@Override
+	public FluidType createFluidType() {
+		FluidType.Properties fluidProps = FluidType.Properties.create()
+				.density(properties().density)
+				.viscosity(properties().viscosity)
+				.temperature(properties().temperature)
+				.descriptionId(Util.makeDescriptionId("fluid", new ResourceLocation(getModId(), getIdentifier())));
+		return new FluidType(fluidProps) {
+			@Override
+			public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
+				consumer.accept(new IClientFluidTypeExtensions() {
+					@Override
+					public ResourceLocation getStillTexture() {
+						return new ResourceLocation(getModId(), "block/liquid/" + getIdentifier() + "_still");
+					}
+
+					@Override
+					public ResourceLocation getFlowingTexture() {
+						return new ResourceLocation(getModId(), "block/liquid/" + getIdentifier() + "_still");
+					}
+				});
+			}
+		};
 	}
 
 	@Nullable
@@ -78,16 +113,14 @@ public class FeatureFluid implements IFluidFeature {
 	}
 
 	@Override
-	public FluidProperties properties() {
-		return properties;
+	@Nullable
+	public FluidType getFluidType() {
+		return fluidType;
 	}
 
-	public FluidType getFluidType() {
-		FluidType.Properties fluidProps = FluidType.Properties.create()
-				.density(properties().density)
-				.viscosity(properties().viscosity)
-				.temperature(properties().temperature);
-		return new FluidType(fluidProps);
+	@Override
+	public FluidProperties properties() {
+		return properties;
 	}
 
 	@Override

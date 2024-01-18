@@ -501,7 +501,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 		ItemStack contained = crated.getContained();
 		ResourceLocation name = ForgeRegistries.ITEMS.getKey(contained.getItem());
 
-		if (name == null) {
+		if (contained.getItem() == Items.AIR) {
 			return;
 		}
 

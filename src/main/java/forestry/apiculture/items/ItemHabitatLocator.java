@@ -16,6 +16,7 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -83,7 +84,8 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 
 			EnumTemperature temperature = EnumTemperature.getFromBiome(currentBiome, player.blockPosition());
 			EnumHumidity humidity = EnumHumidity.getFromValue(currentBiome.value().getDownfall());
-			String biomeName = ForgeRegistries.BIOMES.getKey(currentBiome.value()).toString();
+			Registry<Biome> biomes = player.level.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY);
+			String biomeName = biomes.getKey(currentBiome.value()).toString();
 
 			list.add(Component.translatable("for.gui.currentBiome")
 					.append(Component.literal(": "))

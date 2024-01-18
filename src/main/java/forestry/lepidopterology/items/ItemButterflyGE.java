@@ -156,6 +156,8 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 			return false;
 		}
 
+		System.out.println("FINDME take flight!");
+
 		EntityUtil.spawnEntity(entityItem.level,
 				EntityButterfly.create(LepidopterologyEntities.BUTTERFLY.entityType(), entityItem.level, butterfly, entityItem.blockPosition()), entityItem.getX(), entityItem.getY(), entityItem.getZ());
 		if (!entityItem.getItem().isEmpty()) {

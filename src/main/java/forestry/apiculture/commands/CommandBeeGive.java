@@ -59,7 +59,6 @@ public class CommandBeeGive {
 
 	public static final RegistryObject<SingletonArgumentInfo<BeeArgument>> BEE_ARGUMENT = COMMAND_ARGUMENT_TYPES.register(
 			"bee", () -> {
-				System.out.println("FINDME register argument");
 				return ArgumentTypeInfos.registerByClass(
 						BeeArgument.class, SingletonArgumentInfo.contextFree(BeeArgument::new)
 				);
