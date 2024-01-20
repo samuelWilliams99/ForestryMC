@@ -112,7 +112,7 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator> {
 	private int startY;
 
 	public GuiHabitatLocator(ContainerHabitatLocator container, Inventory playerInv, Component title) {
-		super(Constants.TEXTURE_PATH_GUI + "/biomefinder.png", container, playerInv, title);
+		super(Constants.TEXTURE_PATH_GUI + "/habitat_locator.png", container, playerInv, title);
 
 		this.itemInventory = container.getItemInventory();
 		imageWidth = 176;
@@ -140,7 +140,7 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator> {
 
 	@Override
 	protected void renderBg(PoseStack transform, float partialTicks, int mouseY, int mouseX) {
-		//super.renderBg(transform, partialTicks, mouseY, mouseX);
+		super.renderBg(transform, partialTicks, mouseY, mouseX);
 
 		String str = Translator.translateToLocal("item.forestry.habitat_locator").toUpperCase(Locale.ENGLISH);
 		getFontRenderer().draw(transform, str, startX + 8 + textLayout.getCenteredOffset(str, 138), startY + 16, ColourProperties.INSTANCE.get("gui.screen"));

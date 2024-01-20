@@ -64,7 +64,7 @@ public class HabitatLocatorLogic {
 
 		// reset the locator coordinates
 		if (player.level.isClientSide) {
-			//TextureHabitatLocator.getInstance().setTargetCoordinates(null);//TODO: TextureHabitatLocator
+			ItemHabitatLocator.setTargetPosition(null);
 		}
 	}
 

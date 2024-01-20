@@ -16,6 +16,7 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 
 import com.mojang.serialization.Codec;
+import forestry.apiculture.items.ItemHabitatLocator;
 import genetics.Genetics;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Registry;
@@ -185,6 +186,8 @@ public class Forestry {
 	private void setup(FMLCommonSetupEvent event) {
 		// Forestry's villager houses
 		event.enqueueWork(VillagerJigsaw::init);
+		// Compass renderer properties
+		event.enqueueWork(ItemHabitatLocator::registerItemProperties);
 
 		packetHandler = new PacketHandlerServer();
 

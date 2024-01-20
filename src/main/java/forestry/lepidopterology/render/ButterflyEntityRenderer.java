@@ -22,7 +22,7 @@ import forestry.lepidopterology.entities.EntityButterfly;
 public class ButterflyEntityRenderer extends MobRenderer<EntityButterfly, ButterflyModel> {
 
 	public ButterflyEntityRenderer(EntityRendererProvider.Context context) {
-		super(context, new ButterflyModel(), 0.25f);
+		super(context, new ButterflyModel(context.bakeLayer(ButterflyModel.LAYER)), 0.25f);
 	}
 
 	@Override

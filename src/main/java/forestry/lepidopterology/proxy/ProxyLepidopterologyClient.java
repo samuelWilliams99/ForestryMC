@@ -12,6 +12,7 @@ package forestry.lepidopterology.proxy;
 
 import com.google.common.collect.ImmutableList;
 
+import forestry.lepidopterology.render.ButterflyModel;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.resources.ResourceLocation;
@@ -52,6 +53,11 @@ public class ProxyLepidopterologyClient extends ProxyLepidopterology implements 
 	@Override
 	public void setupRenderers(EntityRenderersEvent.RegisterRenderers event) {
 		event.registerEntityRenderer(LepidopterologyEntities.BUTTERFLY.entityType(), ButterflyEntityRenderer::new);
+	}
+
+	@Override
+	public void setupLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+		event.registerLayerDefinition(ButterflyModel.LAYER, ButterflyModel::createBodyLayer);
 	}
 
 	@Override
