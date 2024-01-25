@@ -43,9 +43,4 @@ public class ArboricultureFeatures {
 					"tree_decorator",
 					() -> new PlacedFeature(CONFIGURED_TREE_DECORATOR.getHolder().get(), List.of())
 			);
-
-//	public static void onBiomeLoad(BiomeLoadingEvent event) {
-//		Holder<PlacedFeature> placed = PlacementUtils.register(TREE_DECORATOR_ID.toString(), TREE_DECORATOR_CONF);
-//		event.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, placed);
-//	}
 }

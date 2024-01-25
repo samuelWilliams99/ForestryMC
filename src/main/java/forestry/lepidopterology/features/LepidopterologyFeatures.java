@@ -43,9 +43,4 @@ public class LepidopterologyFeatures {
 					"cocoon_decorator",
 					() -> new PlacedFeature(CONFIGURED_COCOON_DECORATOR.getHolder().get(), List.of())
 			);
-
-//	public static void onBiomeLoad(BiomeLoadingEvent event) {
-//		Holder<PlacedFeature> placed = PlacementUtils.register(ID.toString(), COCOON_DECORATOR_CONF);
-//		event.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, placed);
-//	}
 }

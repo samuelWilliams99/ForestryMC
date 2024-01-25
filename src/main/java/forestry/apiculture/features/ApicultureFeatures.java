@@ -42,9 +42,4 @@ public class ApicultureFeatures {
 					"hive_decorator",
 					() -> new PlacedFeature(CONFIGURED_HIVE_DECORATOR.getHolder().get(), List.of())
 			);
-
-//	public static void onBiomeLoad(BiomeLoadingEvent event) {
-//		Holder<PlacedFeature> placed = PlacementUtils.register(ID.toString(), HIVE_DECORATOR_CONF);
-//		event.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, placed);
-//	}
 }
