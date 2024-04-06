@@ -59,6 +59,8 @@ import genetics.individual.Genome;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class Butterfly extends IndividualLiving implements IButterfly {
+	private static final RandomSource rand = RandomSource.create();
+
 	/* CONSTRUCTOR */
 	public Butterfly(CompoundTag nbt) {
 		super(nbt);
@@ -246,7 +248,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 
 		for (int i = 0; i < parent1.length; i++) {
 			if (parent1[i] != null && parent2[i] != null) {
-				chromosomes[i] = parent1[i].inheritChromosome(world.random, parent2[i]);
+				chromosomes[i] = parent1[i].inheritChromosome(rand, parent2[i]);
 			}
 		}
 
@@ -264,7 +266,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 		IAllele allele0;
 		IAllele allele1;
 
-		if (world.random.nextBoolean()) {
+		if (rand.nextBoolean()) {
 			allele0 = parent1[ButterflyChromosomes.SPECIES.ordinal()].getActiveAllele();
 			allele1 = parent2[ButterflyChromosomes.SPECIES.ordinal()].getInactiveAllele();
 
@@ -281,7 +283,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 		IMutationContainer<IButterfly, IButterflyMutation> container = ButterflyHelper.getRoot().getComponent(ComponentKeys.MUTATIONS);
 		for (IButterflyMutation mutation : container.getMutations(true)) {
 			float chance = mutation.getChance(world, nursery, allele0, allele1, genome0, genome1);
-			if (chance > world.random.nextFloat() * 100) {
+			if (chance > rand.nextFloat() * 100) {
 				return ButterflyManager.butterflyRoot.getKaryotype().templateAsChromosomes(mutation.getTemplate());
 			}
 		}
@@ -325,7 +327,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 		float metabolism = (float) getGenome().getActiveValue(ButterflyChromosomes.METABOLISM) / 10;
 		IProductList products = getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getCaterpillarLoot();
 		for (Product product : products.getPossibleProducts()) {
-			if (nursery.getWorldObj().random.nextFloat() < product.getChance() * metabolism) {
+			if (rand.nextFloat() < product.getChance() * metabolism) {
 				drop.add(product.copyStack());
 			}
 		}
@@ -334,22 +336,22 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 	}
 
 	@Override
-	public NonNullList<ItemStack> getCocoonDrop(IButterflyCocoon cocoon, Level world) {
+	public NonNullList<ItemStack> getCocoonDrop(IButterflyCocoon cocoon, Level _world) {
 		NonNullList<ItemStack> drop = NonNullList.create();
 		float metabolism = (float) getGenome().getActiveValue(ButterflyChromosomes.METABOLISM) / 10;
 		IProductList products = getGenome().getActiveAllele(ButterflyChromosomes.COCOON).getCocoonLoot();
 
 		for (Product product : products.getPossibleProducts()) {
-			if (world.random.nextFloat() < product.getChance() * metabolism) {
+			if (rand.nextFloat() < product.getChance() * metabolism) {
 				drop.add(product.copyStack());
 			}
 		}
 
 		if (ModuleLepidopterology.getSerumChance() > 0) {
-			if (world.random.nextFloat() < ModuleLepidopterology.getSerumChance() * metabolism) {
+			if (rand.nextFloat() < ModuleLepidopterology.getSerumChance() * metabolism) {
 				ItemStack stack = ButterflyManager.butterflyRoot.getTypes().createStack(this, EnumFlutterType.SERUM);
 				if (ModuleLepidopterology.getSecondSerumChance() > 0) {
-					if (world.random.nextFloat() < ModuleLepidopterology.getSecondSerumChance() * metabolism) {
+					if (rand.nextFloat() < ModuleLepidopterology.getSecondSerumChance() * metabolism) {
 						stack.setCount(2);
 					}
 				}
