@@ -1,15 +1,19 @@
 package forestry.worktable.compat;
 
+import forestry.core.config.Constants;
 import forestry.core.utils.JeiUtil;
 import forestry.core.utils.RecipeUtils;
 import forestry.worktable.gui.ContainerWorktable;
 import forestry.worktable.inventory.CraftingInventoryForestry;
 import forestry.worktable.recipes.MemorizedRecipe;
+import io.netty.util.Constant;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.transfer.IRecipeTransferError;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraftforge.api.distmarker.Dist;
@@ -17,6 +21,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Optional;
 
 @OnlyIn(Dist.CLIENT)
 class WorktableRecipeTransferHandler implements IRecipeTransferHandler<ContainerWorktable, CraftingRecipe> {
@@ -26,8 +31,13 @@ class WorktableRecipeTransferHandler implements IRecipeTransferHandler<Container
 	}
 
 	@Override
-	public Class<CraftingRecipe> getRecipeClass() {
-		return CraftingRecipe.class;
+	public Optional<MenuType<ContainerWorktable>> getMenuType() {
+		return Optional.empty();
+	}
+
+	@Override
+	public RecipeType<CraftingRecipe> getRecipeType() {
+		return RecipeType.create("minecraft", "crafting", CraftingRecipe.class);
 	}
 
 	@Nullable

@@ -232,13 +232,13 @@ public class WoodBlockStateProvider extends BlockStateProvider {
 				.state(defaultState.setValue(DoorBlock.FACING, Direction.NORTH).setValue(DoorBlock.HINGE, DoorHingeSide.RIGHT).setValue(DoorBlock.OPEN, true), (variant) -> variant.rotationY(180))
 				.popIgnore()
 				.push().ignore(DoorBlock.FACING)
-				.state(defaultState.setValue(DoorBlock.HALF, DoubleBlockHalf.LOWER).setValue(DoorBlock.HINGE, DoorHingeSide.LEFT).setValue(DoorBlock.OPEN, false), (variant) -> variant.model(modelLocation + "_bottom"))
-				.state(defaultState.setValue(DoorBlock.HALF, DoubleBlockHalf.LOWER).setValue(DoorBlock.HINGE, DoorHingeSide.RIGHT).setValue(DoorBlock.OPEN, true), (variant) -> variant.model(modelLocation + "_bottom"))
-				.state(defaultState.setValue(DoorBlock.HALF, DoubleBlockHalf.LOWER).setValue(DoorBlock.HINGE, DoorHingeSide.RIGHT).setValue(DoorBlock.OPEN, false), (variant) -> variant.model(modelLocation + "_bottom_hinge"))
-				.state(defaultState.setValue(DoorBlock.HALF, DoubleBlockHalf.LOWER).setValue(DoorBlock.HINGE, DoorHingeSide.LEFT).setValue(DoorBlock.OPEN, true), (variant) -> variant.model(modelLocation + "_bottom_hinge"))
-				.state(defaultState.setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER).setValue(DoorBlock.HINGE, DoorHingeSide.LEFT).setValue(DoorBlock.OPEN, false), (variant) -> variant.model(modelLocation + "_top"))
-				.state(defaultState.setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER).setValue(DoorBlock.HINGE, DoorHingeSide.RIGHT).setValue(DoorBlock.OPEN, true), (variant) -> variant.model(modelLocation + "_top"))
-				.state(defaultState.setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER).setValue(DoorBlock.HINGE, DoorHingeSide.RIGHT).setValue(DoorBlock.OPEN, false), (variant) -> variant.model(modelLocation + "_top_hinge"))
-				.state(defaultState.setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER).setValue(DoorBlock.HINGE, DoorHingeSide.LEFT).setValue(DoorBlock.OPEN, true), (variant) -> variant.model(modelLocation + "_top_hinge")));
+				.state(defaultState.setValue(DoorBlock.HALF, DoubleBlockHalf.LOWER).setValue(DoorBlock.HINGE, DoorHingeSide.LEFT).setValue(DoorBlock.OPEN, false), (variant) -> variant.model(modelLocation + "_bottom_left"))
+				.state(defaultState.setValue(DoorBlock.HALF, DoubleBlockHalf.LOWER).setValue(DoorBlock.HINGE, DoorHingeSide.LEFT).setValue(DoorBlock.OPEN, true), (variant) -> variant.model(modelLocation + "_bottom_left_open"))
+				.state(defaultState.setValue(DoorBlock.HALF, DoubleBlockHalf.LOWER).setValue(DoorBlock.HINGE, DoorHingeSide.RIGHT).setValue(DoorBlock.OPEN, false), (variant) -> variant.model(modelLocation + "_bottom_right"))
+				.state(defaultState.setValue(DoorBlock.HALF, DoubleBlockHalf.LOWER).setValue(DoorBlock.HINGE, DoorHingeSide.RIGHT).setValue(DoorBlock.OPEN, true), (variant) -> variant.model(modelLocation + "_bottom_right_open"))
+				.state(defaultState.setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER).setValue(DoorBlock.HINGE, DoorHingeSide.LEFT).setValue(DoorBlock.OPEN, false), (variant) -> variant.model(modelLocation + "_top_left"))
+				.state(defaultState.setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER).setValue(DoorBlock.HINGE, DoorHingeSide.LEFT).setValue(DoorBlock.OPEN, true), (variant) -> variant.model(modelLocation + "_top_left_open"))
+				.state(defaultState.setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER).setValue(DoorBlock.HINGE, DoorHingeSide.RIGHT).setValue(DoorBlock.OPEN, false), (variant) -> variant.model(modelLocation + "_top_right"))
+				.state(defaultState.setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER).setValue(DoorBlock.HINGE, DoorHingeSide.RIGHT).setValue(DoorBlock.OPEN, true), (variant) -> variant.model(modelLocation + "_top_right_open")));
 	}
 }

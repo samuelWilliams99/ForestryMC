@@ -5,6 +5,8 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
+import net.minecraft.util.RandomSource;
+
 import java.util.Locale;
 import java.util.Random;
 
@@ -18,7 +20,7 @@ public enum EnumVanillaWoodType implements IWoodType {
 
 	public static final EnumVanillaWoodType[] VALUES = values();
 
-	public static EnumVanillaWoodType getRandom(Random random) {
+	public static EnumVanillaWoodType getRandom(RandomSource random) {
 		return VALUES[random.nextInt(VALUES.length)];
 	}
 

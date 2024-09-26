@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
@@ -34,7 +33,6 @@ import net.minecraft.world.item.ItemStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.client.model.SimpleModelState;
 
 /**
@@ -72,33 +70,20 @@ public class ResourceUtil {
 	}
 
 	public static boolean resourceExists(ResourceLocation location) {
-		try {
-			resourceManager().getResource(location);
-			return true;
-		} catch (IOException e) {
-			return false;
-		}
+		return resourceManager().getResource(location).isPresent();
 	}
 
-	public static BufferedReader createReader(Resource resource) {
-		return new BufferedReader(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8));
+	public static BufferedReader createReader(Resource resource) throws IOException {
+		return new BufferedReader(new InputStreamReader(resource.open(), StandardCharsets.UTF_8));
 	}
 
 	@Nullable
 	public static Resource getResource(ResourceLocation location) {
-		try {
-			return resourceManager().getResource(location);
-		} catch (IOException e) {
-			return null;
-		}
+		return resourceManager().getResource(location).orElse(null);
 	}
 
 	public static List<Resource> getResources(ResourceLocation location) {
-		try {
-			return resourceManager().getResources(location);
-		} catch (IOException e) {
-			return Collections.emptyList();
-		}
+		return resourceManager().getResourceStack(location);
 	}
 
 	/**
@@ -113,13 +98,14 @@ public class ResourceUtil {
 		return renderItem.getItemModelShaper().getItemModel(stack);
 	}
 
-	public static SimpleModelState loadTransform(ResourceLocation location) {
-		return new SimpleModelState(PerspectiveMapWrapper.getTransforms(loadTransformFromJson(location)));
+	public static ItemTransforms loadTransforms(ResourceLocation location) {
+		return loadTransformFromJson(location);
 	}
 
-	private static ItemTransforms loadTransformFromJson(ResourceLocation location) {
+	public static ItemTransforms loadTransformFromJson(ResourceLocation location) {
 		try (Reader reader = getReaderForResource(location)) {
-			return BlockModel.fromStream(reader).getTransforms();
+			return BlockModel.fromStream(reader)
+					.getTransforms();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -129,7 +115,7 @@ public class ResourceUtil {
 	private static Reader getReaderForResource(ResourceLocation location) throws IOException {
 		ResourceLocation file = new ResourceLocation(location.getNamespace(),
 				"models/" + location.getPath() + ".json");
-		Resource iresource = resourceManager().getResource(file);
-		return new BufferedReader(new InputStreamReader(iresource.getInputStream(), StandardCharsets.UTF_8));
+		Resource iresource = resourceManager().getResource(file).orElseThrow(IOException::new);
+		return new BufferedReader(new InputStreamReader(iresource.open(), StandardCharsets.UTF_8));
 	}
 }

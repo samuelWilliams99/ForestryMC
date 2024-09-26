@@ -34,7 +34,7 @@ import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import forestry.api.climate.ClimateCapabilities;
@@ -85,7 +85,7 @@ public class PreviewHandlerClient {
 	}
 
 	@SubscribeEvent
-	public void worldUnloaded(WorldEvent.Unload event) {
+	public void worldUnloaded(LevelEvent.Unload event) {
 		renderer.clearPreview();
 	}
 

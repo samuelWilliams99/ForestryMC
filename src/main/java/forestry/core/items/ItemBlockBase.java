@@ -6,7 +6,9 @@ import forestry.core.ItemGroupForestry;
 import forestry.core.blocks.IBlockTypeTesr;
 import forestry.core.render.RenderForestryItemProperties;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.client.IItemRenderProperties;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+
+import net.minecraft.world.item.Item.Properties;
 
 public class ItemBlockBase<B extends Block> extends ItemBlockForestry<B> {
 	public final IBlockTypeTesr blockTypeTesr;
@@ -23,7 +25,7 @@ public class ItemBlockBase<B extends Block> extends ItemBlockForestry<B> {
 
 	// OnlyIn client?
 	@Override
-	public void initializeClient(Consumer<IItemRenderProperties> consumer) {
+	public void initializeClient(Consumer<IClientItemExtensions> consumer) {
 		final var renderItem = new RenderForestryItemProperties(this);
 		consumer.accept(renderItem);
 	}

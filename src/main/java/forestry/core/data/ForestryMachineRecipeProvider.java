@@ -28,7 +28,6 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.arboriculture.EnumForestryWoodType;
@@ -72,6 +71,8 @@ import forestry.modules.features.FeatureItem;
 import forestry.storage.features.BackpackItems;
 import forestry.storage.features.CrateItems;
 import forestry.storage.items.ItemCrated;
+import net.minecraftforge.fluids.FluidType;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class ForestryMachineRecipeProvider extends RecipeProvider {
 
@@ -498,9 +499,9 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 
 	private void crate(Consumer<FinishedRecipe> consumer, ItemCrated crated, Ingredient ingredient) {
 		ItemStack contained = crated.getContained();
-		ResourceLocation name = contained.getItem().getRegistryName();
+		ResourceLocation name = ForgeRegistries.ITEMS.getKey(contained.getItem());
 
-		if (name == null) {
+		if (contained.getItem() == Items.AIR) {
 			return;
 		}
 
@@ -807,8 +808,8 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 	}
 
 	private void registerFabricatorSmelting(Consumer<FinishedRecipe> consumer) {
-		FluidStack liquidGlassBucket = ForestryFluids.GLASS.getFluid(FluidAttributes.BUCKET_VOLUME);
-		FluidStack liquidGlassX4 = ForestryFluids.GLASS.getFluid(FluidAttributes.BUCKET_VOLUME * 4);
+		FluidStack liquidGlassBucket = ForestryFluids.GLASS.getFluid(FluidType.BUCKET_VOLUME);
+		FluidStack liquidGlassX4 = ForestryFluids.GLASS.getFluid(FluidType.BUCKET_VOLUME * 4);
 		FluidStack liquidGlass375 = ForestryFluids.GLASS.getFluid(375);
 
 		new FabricatorSmeltingRecipeBuilder()

@@ -55,7 +55,7 @@ public class TileMailbox extends TileBase {
 		if (PostManager.postRegistry.isLetter(heldItem)) {
 			IPostalState result = this.tryDispatchLetter(heldItem);
 			if (!result.isOk()) {
-				player.sendMessage(result.getDescription(), Util.NIL_UUID);
+				player.displayClientMessage(result.getDescription(), true);
 			} else {
 				heldItem.shrink(1);
 			}

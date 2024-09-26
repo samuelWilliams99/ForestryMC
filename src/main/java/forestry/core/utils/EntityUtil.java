@@ -48,7 +48,7 @@ public abstract class EntityUtil {
 
 	@Nullable
 	private static <T extends Mob> T createEntity(Level world, EntityType<T> type) {
-		ResourceLocation name = ForgeRegistries.ENTITIES.getKey(type);
+		ResourceLocation name = ForgeRegistries.ENTITY_TYPES.getKey(type);
 		if (name == null) {
 			return null;
 		}

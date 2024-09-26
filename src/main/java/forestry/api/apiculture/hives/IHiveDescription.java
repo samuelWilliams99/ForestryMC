@@ -7,6 +7,8 @@ package forestry.api.apiculture.hives;
 
 import java.util.Random;
 
+import net.minecraft.core.Holder;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.WorldGenLevel;
@@ -31,7 +33,7 @@ public interface IHiveDescription {
 	 * returns true if the hive can be generated in these conditions.
 	 * Used as a fast early-elimination check for hives that have no hope of spawning in the area.
 	 */
-	boolean isGoodBiome(Biome biome);
+	boolean isGoodBiome(Holder<Biome> biome);
 
 	boolean isGoodHumidity(EnumHumidity humidity);
 
@@ -48,5 +50,5 @@ public interface IHiveDescription {
 	 * Called after successful hive generation.
 	 * world, x, y, z give the location of the new hive.
 	 **/
-	void postGen(WorldGenLevel world, Random rand, BlockPos pos);
+	void postGen(WorldGenLevel world, RandomSource rand, BlockPos pos);
 }

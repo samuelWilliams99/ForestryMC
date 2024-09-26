@@ -16,6 +16,8 @@ import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
@@ -37,13 +39,14 @@ import forestry.core.utils.Log;
 import forestry.lepidopterology.ModuleLepidopterology;
 import forestry.lepidopterology.features.LepidopterologyBlocks;
 import forestry.lepidopterology.tiles.TileCocoon;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class CocoonDecorator extends Feature<NoneFeatureConfiguration> {
 	public CocoonDecorator() {
 		super(NoneFeatureConfiguration.CODEC);
 	}
 
-	public static boolean genCocoon(WorldGenLevel world, Random rand, BlockPos pos, IButterfly butterfly) {
+	public static boolean genCocoon(WorldGenLevel world, RandomSource rand, BlockPos pos, IButterfly butterfly) {
 		if (butterfly.getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getRarity() * ModuleLepidopterology
 				.getGenerateCocoonsAmount() < rand.nextFloat() * 100.0f) {
 			return false;
@@ -51,12 +54,12 @@ public class CocoonDecorator extends Feature<NoneFeatureConfiguration> {
 
 		Biome biome = world.getBiome(new BlockPos(pos.getX(), 0, pos.getZ())).value();
 
-		Set<Biome.BiomeCategory> speciesCategories = butterfly.getGenome().getActiveAllele(ButterflyChromosomes.SPECIES)
+		Set<ResourceKey<Biome>> speciesBiomes = butterfly.getGenome().getActiveAllele(ButterflyChromosomes.SPECIES)
 				.getSpawnBiomes();
 
 		boolean biomeTypesGood = false;
-		for (Biome.BiomeCategory category : speciesCategories) {
-			if (category == biome.getBiomeCategory()) {
+		for (ResourceKey<Biome> biomeKey : speciesBiomes) {
+			if (ForgeRegistries.BIOMES.getValue(biomeKey.location()) == biome) {
 				biomeTypesGood = true;
 				break;
 			}
@@ -154,7 +157,7 @@ public class CocoonDecorator extends Feature<NoneFeatureConfiguration> {
 		ArrayList<IButterfly> butterflys = new ArrayList<>(ButterflyManager.butterflyRoot
 				.getIndividualTemplates());
 
-		Collections.shuffle(butterflys, context.random());
+		Collections.shuffle(butterflys, new Random(context.random().nextLong()));
 
 		for (IButterfly butterfly : butterflys) {
 			if (genCocoon(context.level(), context.random(), context.origin(), butterfly)) {

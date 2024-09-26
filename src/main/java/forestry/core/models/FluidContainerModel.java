@@ -22,9 +22,9 @@ import net.minecraft.resources.ResourceLocation;
 
 import com.mojang.datafixers.util.Pair;
 
-import net.minecraftforge.client.model.IModelConfiguration;
-import net.minecraftforge.client.model.IModelLoader;
-import net.minecraftforge.client.model.geometry.IModelGeometry;
+import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
+import net.minecraftforge.client.model.geometry.IGeometryLoader;
+import net.minecraftforge.client.model.geometry.IUnbakedGeometry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
@@ -50,7 +50,7 @@ public class FluidContainerModel extends AbstractItemModel {
 		return true;
 	}
 
-	public static class Geometry implements IModelGeometry<FluidContainerModel.Geometry> {
+	public static class Geometry implements IUnbakedGeometry<FluidContainerModel.Geometry> {
 
 		public final String type;
 		public final ResourceLocation empty;
@@ -63,7 +63,7 @@ public class FluidContainerModel extends AbstractItemModel {
 		}
 
 		@Override
-		public BakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides, ResourceLocation modelLocation) {
+		public BakedModel bake(IGeometryBakingContext owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides, ResourceLocation modelLocation) {
 			return new FluidContainerModel(
 				bakery.bake(empty, modelTransform, spriteGetter),
 				bakery.bake(filled, modelTransform, spriteGetter)
@@ -71,18 +71,14 @@ public class FluidContainerModel extends AbstractItemModel {
 		}
 
 		@Override
-		public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
+		public Collection<Material> getMaterials(IGeometryBakingContext owner, Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
 			return ImmutableList.of();
 		}
 	}
 
-	public static class Loader implements IModelLoader<Geometry> {
+	public static class Loader implements IGeometryLoader<Geometry> {
 		@Override
-		public void onResourceManagerReload(ResourceManager resourceManager) {
-		}
-
-		@Override
-		public FluidContainerModel.Geometry read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
+		public FluidContainerModel.Geometry read(JsonObject modelContents, JsonDeserializationContext deserializationContext) {
 			String empty = GsonHelper.getAsString(modelContents, "empty");
 			String filled = GsonHelper.getAsString(modelContents, "filled");
 			String type = GsonHelper.getAsString(modelContents, "type");

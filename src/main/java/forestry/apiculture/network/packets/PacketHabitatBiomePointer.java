@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.network.packets;
 
+import forestry.apiculture.items.ItemHabitatLocator;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.core.BlockPos;
 
@@ -44,7 +45,7 @@ public class PacketHabitatBiomePointer extends ForestryPacket implements IForest
 		@Override
 		public void onPacketData(PacketBufferForestry data, Player player) {
 			BlockPos pos = data.readBlockPos();
-			//TextureHabitatLocator.getInstance().setTargetCoordinates(pos);//TODO: TextureHabitatLocator
+			ItemHabitatLocator.setTargetPosition(pos);
 		}
 	}
 }

@@ -8,7 +8,9 @@ import net.minecraft.core.Registry;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.List;
 import java.util.function.Predicate;
 
 public class BackpackFilter implements Predicate<ItemStack> {
@@ -16,32 +18,31 @@ public class BackpackFilter implements Predicate<ItemStack> {
 	private final TagKey<Item> acceptKey;
 	private final TagKey<Item> rejectKey;
 	@Nullable
-	private HolderSet<Item> cachedAccept;
+	private List<Item> cachedAccept;
 	@Nullable
-	private HolderSet<Item> cachedReject;
+	private List<Item> cachedReject;
 
 	public BackpackFilter(TagKey<Item> acceptKey, TagKey<Item> rejectKey) {
 		this.acceptKey = acceptKey;
 		this.rejectKey = rejectKey;
 	}
 
-	private HolderSet<Item> getAccept() {
+	private List<Item> getAccept() {
 		if (cachedAccept == null) {
 			cachedAccept = getHolderSet(acceptKey);
 		}
 		return cachedAccept;
 	}
 
-	private HolderSet<Item> getReject() {
+	private List<Item> getReject() {
 		if (cachedReject == null) {
 			cachedReject = getHolderSet(rejectKey);
 		}
-		return cachedReject;
+	return cachedReject;
 	}
 
-	private static HolderSet<Item> getHolderSet(TagKey<Item> tagKey) {
-		return Registry.ITEM.getTag(tagKey)
-				.orElseThrow(() -> new IllegalArgumentException("No tag holder set found for tag key: " + tagKey));
+	private static List<Item> getHolderSet(TagKey<Item> tagKey) {
+		return ForgeRegistries.ITEMS.tags().getTag(tagKey).stream().toList();
 	}
 
 	@Override
@@ -49,8 +50,7 @@ public class BackpackFilter implements Predicate<ItemStack> {
 		// The backpack denies anything except what is allowed,
 		// but from what is allowed you can say what will be rejected (like an override)
 		// This allows broad wildcard "accept" types where you can still reject certain ones.
-		return TagUtil.getHolder(itemStack)
-			.map(itemHolder -> getAccept().contains(itemHolder) && !getReject().contains(itemHolder))
-			.orElse(false);
+		Item item = itemStack.getItem();
+		return getAccept().contains(item) && !getReject().contains(item);
 	}
 }

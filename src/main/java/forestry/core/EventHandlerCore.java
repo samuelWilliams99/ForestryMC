@@ -19,10 +19,10 @@ import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.LevelAccessor;
 
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -51,7 +51,7 @@ public class EventHandlerCore {
 		}
 
 		for (IPickupHandler handler : ModuleManager.pickupHandlers) {
-			if (handler.onItemPickup(event.getPlayer(), event.getItem())) {
+			if (handler.onItemPickup(event.getEntity(), event.getItem())) {
 				event.setResult(Event.Result.ALLOW);
 				return;
 			}
@@ -60,13 +60,13 @@ public class EventHandlerCore {
 
 	@SubscribeEvent
 	public static void handlePlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-		Player player = event.getPlayer();
+		Player player = event.getEntity();
 		syncBreedingTrackers(player);
 	}
 
 	@SubscribeEvent
 	public static void handlePlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
-		Player player = event.getPlayer();
+		Player player = event.getEntity();
 		syncBreedingTrackers(player);
 	}
 
@@ -86,8 +86,8 @@ public class EventHandlerCore {
 	}
 
 	@SubscribeEvent
-	public static void handleWorldLoad(WorldEvent.Load event) {
-		LevelAccessor world = event.getWorld();
+	public static void handleWorldLoad(LevelEvent.Load event) {
+		LevelAccessor world = event.getLevel();
 
 		for (ISaveEventHandler handler : ModuleManager.saveEventHandlers) {
 			handler.onWorldLoad(world);
@@ -95,16 +95,16 @@ public class EventHandlerCore {
 	}
 
 	@SubscribeEvent
-	public static void handleWorldSave(WorldEvent.Save event) {
+	public static void handleWorldSave(LevelEvent.Save event) {
 		for (ISaveEventHandler handler : ModuleManager.saveEventHandlers) {
-			handler.onWorldSave(event.getWorld());
+			handler.onWorldSave(event.getLevel());
 		}
 	}
 
 	@SubscribeEvent
-	public static void handleWorldUnload(WorldEvent.Unload event) {
+	public static void handleWorldUnload(LevelEvent.Unload event) {
 		for (ISaveEventHandler handler : ModuleManager.saveEventHandlers) {
-			handler.onWorldUnload(event.getWorld());
+			handler.onWorldUnload(event.getLevel());
 		}
 	}
 
@@ -136,11 +136,10 @@ public class EventHandlerCore {
 	}*/
 
 	@SubscribeEvent
-	public static void onEntityJoinWorld(EntityJoinWorldEvent event) {
+	public static void onEntityJoinWorld(EntityJoinLevelEvent event) {
 		Entity entity = event.getEntity();
 		if ((entity instanceof Villager villager)) {
-			VillagerProfession prof = ForgeRegistries.PROFESSIONS.getValue(EntityType.getKey(villager.getType()));
-			if (prof.getRegistryName().equals(RegisterVillager.BEEKEEPER)) {
+			if (EntityType.getKey(villager.getType()).equals(RegisterVillager.BEEKEEPER)) {
 				villager.goalSelector.addGoal(6, new ApiaristAI(villager, 0.6));
 			}
 		}

@@ -11,6 +11,7 @@
 package forestry.apiculture.genetics;
 
 import javax.annotation.Nullable;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -19,6 +20,8 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 
+import net.minecraft.core.Holder;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
@@ -29,7 +32,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 
@@ -314,9 +316,9 @@ public class Bee extends IndividualLiving implements IBee {
 		return genome.getActiveValue(BeeChromosomes.TOLERATES_RAIN) || beeModifier.isSealed();
 	}
 
-	private boolean isSuitableBiome(Biome biome) {
+	private boolean isSuitableBiome(Holder<Biome> biome) {
 		EnumTemperature temperature = EnumTemperature.getFromBiome(biome);
-		EnumHumidity humidity = EnumHumidity.getFromValue(biome.getDownfall());
+		EnumHumidity humidity = EnumHumidity.getFromValue(biome.value().getDownfall());
 		return isSuitableClimate(temperature, humidity);
 	}
 
@@ -329,9 +331,10 @@ public class Bee extends IndividualLiving implements IBee {
 	@Override
 	public List<ResourceLocation> getSuitableBiomes() {
 		List<ResourceLocation> suitableBiomes = new ArrayList<>();
-		for (Biome biome : ForgeRegistries.BIOMES) {
+		for (ResourceLocation biomeKey : ForgeRegistries.BIOMES.getKeys()) {
+			Holder<Biome> biome = ForgeRegistries.BIOMES.getHolder(biomeKey).get();
 			if (isSuitableBiome(biome)) {
-				suitableBiomes.add(biome.getRegistryName());
+				suitableBiomes.add(biomeKey);
 			}
 		}
 
@@ -378,7 +381,7 @@ public class Bee extends IndividualLiving implements IBee {
 
 		IAllele speedAllele = genome.getActiveAllele(BeeChromosomes.SPEED);
 
-		TranslatableComponent customSpeed = new TranslatableComponent("for.tooltip.worker." + speedAllele.getLocalisationKey().replaceAll("(.*)\\.", ""));
+		Component customSpeed = Component.translatable("for.tooltip.worker." + speedAllele.getLocalisationKey().replaceAll("(.*)\\.", ""));
 		if (Translator.canTranslate(customSpeed)) {
 			toolTip.singleLine()
 				.add(customSpeed)
@@ -629,7 +632,7 @@ public class Bee extends IndividualLiving implements IBee {
 		int chance = Math.round(genome.getActiveValue(BeeChromosomes.FLOWERING) * beeModifier.getFloweringModifier(getGenome(), 1f));
 
 		Level world = housing.getWorldObj();
-		Random random = world.random;
+		RandomSource random = world.random;
 
 		// Correct speed
 		if (random.nextInt(100) >= chance) {
@@ -670,7 +673,7 @@ public class Bee extends IndividualLiving implements IBee {
 		int chance = (int) (genome.getActiveValue(BeeChromosomes.FLOWERING) * beeModifier.getFloweringModifier(getGenome(), 1f));
 
 		Level world = housing.getWorldObj();
-		Random random = world.random;
+		RandomSource random = world.random;
 
 		// Correct speed
 		if (random.nextInt(100) >= chance) {
@@ -716,7 +719,7 @@ public class Bee extends IndividualLiving implements IBee {
 		int chance = Math.round(genome.getActiveValue(BeeChromosomes.FLOWERING) * beeModifier.getFloweringModifier(getGenome(), 1f));
 
 		Level world = housing.getWorldObj();
-		Random random = world.random;
+		RandomSource random = world.random;
 
 		// Correct speed
 		if (random.nextInt(100) >= chance) {

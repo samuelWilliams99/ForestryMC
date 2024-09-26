@@ -5,6 +5,7 @@ import forestry.api.recipes.ICarpenterRecipe;
 import forestry.api.recipes.RecipeManagers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraftforge.registries.ForgeRegistries;
 import vazkii.patchouli.api.IComponentProcessor;
 import vazkii.patchouli.api.IVariable;
 import vazkii.patchouli.api.IVariableProvider;
@@ -32,7 +33,7 @@ public class CarpenterProcessor implements IComponentProcessor {
 		if (key.equals("output")) {
 			return IVariable.from(this.recipe.getResult());
 		} else if (key.equals("fluid")) {
-			return IVariable.wrap(this.recipe.getFluidResource().getFluid().getRegistryName().toString());
+			return IVariable.wrap(ForgeRegistries.FLUIDS.getKey(this.recipe.getFluidResource().getFluid()).toString());
 		} else if (key.equals("fluidAmount")) {
 			return IVariable.wrap(this.recipe.getFluidResource().getAmount());
 		} else if (key.startsWith("ingredient")) {

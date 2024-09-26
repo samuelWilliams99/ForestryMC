@@ -14,6 +14,7 @@ import forestry.api.recipes.IForestryRecipe;
 import forestry.api.recipes.IHygroregulatorManager;
 import forestry.api.recipes.IHygroregulatorRecipe;
 import forestry.factory.recipes.AbstractCraftingProvider;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class HygroregulatorManager extends AbstractCraftingProvider<IHygroregulatorRecipe> implements IHygroregulatorManager {
 
@@ -43,7 +44,7 @@ public class HygroregulatorManager extends AbstractCraftingProvider<IHygroregula
 	@Override
 	public Set<ResourceLocation> getRecipeFluids(@Nullable RecipeManager recipeManager) {
 		return getRecipes(recipeManager)
-				.map(recipe -> recipe.getResource().getFluid().getRegistryName())
+				.map(recipe -> ForgeRegistries.FLUIDS.getKey(recipe.getResource().getFluid()))
 				.collect(Collectors.toSet());
 	}
 }

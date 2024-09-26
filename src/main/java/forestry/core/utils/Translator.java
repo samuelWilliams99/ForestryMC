@@ -4,7 +4,7 @@ import java.util.function.Supplier;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.locale.Language;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.contents.TranslatableContents;
 
 public class Translator {
 	private Translator() {}
@@ -18,15 +18,15 @@ public class Translator {
 	}
 
 	public static String translateToLocalFormatted(String key, Object... format) {
-		return new TranslatableComponent(key, format).getString();
+		return Component.translatable(key, format).getString();
 	}
 
 	public static Component tryTranslate(String optionalKey, String defaultKey) {
-		return tryTranslate(() -> new TranslatableComponent(optionalKey), () -> new TranslatableComponent(defaultKey));
+		return tryTranslate(() -> Component.translatable(optionalKey), () -> Component.translatable(defaultKey));
 	}
 
 	public static Component tryTranslate(String optionalKey, Supplier<Component> defaultKey) {
-		return tryTranslate(() -> new TranslatableComponent(optionalKey), defaultKey);
+		return tryTranslate(() -> Component.translatable(optionalKey), defaultKey);
 	}
 
 	/**
@@ -34,8 +34,8 @@ public class Translator {
 	 *
 	 * @return The optional component if it can be translated the other component otherwise.
 	 */
-	private static Component tryTranslate(Supplier<TranslatableComponent> optionalKey, Supplier<Component> defaultKey) {
-		TranslatableComponent component = optionalKey.get();
+	private static Component tryTranslate(Supplier<Component> optionalKey, Supplier<Component> defaultKey) {
+		Component component = optionalKey.get();
 		if (canTranslate(component)) {
 			return component;
 		} else {
@@ -43,8 +43,12 @@ public class Translator {
 		}
 	}
 
-	public static boolean canTranslate(TranslatableComponent component) {
+	public static boolean canTranslate(Component component) {
 		String translatedText = component.getString();
-		return !translatedText.startsWith(component.getKey());
+		if (component.getContents() instanceof TranslatableContents) {
+			TranslatableContents tContents = (TranslatableContents) component.getContents();
+			return !translatedText.startsWith(tContents.getKey());
+		}
+		return false;
 	}
 }

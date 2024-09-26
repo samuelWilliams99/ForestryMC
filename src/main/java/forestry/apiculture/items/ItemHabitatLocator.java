@@ -13,8 +13,19 @@ package forestry.apiculture.items;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import forestry.apiculture.features.ApicultureItems;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
+import net.minecraft.client.renderer.item.CompassItemPropertyFunction;
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -22,8 +33,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 
@@ -39,9 +48,40 @@ import forestry.api.genetics.alleles.AlleleManager;
 import forestry.apiculture.gui.ContainerHabitatLocator;
 import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
 import forestry.core.items.ItemWithGui;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 
-public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
-	private static final String iconName = "forestry:items/biomefinder";
+public class ItemHabitatLocator extends ItemWithGui {
+	private static final String iconName = "forestry:items/habitat_locator";
+
+	@Nullable
+	private static BlockPos targetPosition = null;
+	private static boolean foundBiome = false;
+
+	public static void setTargetPosition(@Nullable BlockPos pos) {
+		targetPosition = pos;
+		foundBiome = false;
+	}
+
+	public static void registerItemProperties() {
+		Item self = ApicultureItems.HABITAT_LOCATOR.item();
+		ItemProperties.register(self, new ResourceLocation("angle"),
+				new CompassItemPropertyFunction((level, item, player) ->
+						targetPosition == null ? null : GlobalPos.of(level.dimension(), targetPosition)
+				)
+		);
+		ItemProperties.register(self, new ResourceLocation("found"),
+				(ClampedItemPropertyFunction) (item, level, player, seed) -> {
+					if (targetPosition != null && !foundBiome) {
+						int dist = Math.abs(player.getBlockX() - targetPosition.getX()) +
+								   Math.abs(player.getBlockY() - targetPosition.getY());
+						if (dist < 10)
+							foundBiome = true;
+					}
+					return foundBiome ? 1f : 0f;
+				}
+		);
+	}
 
 	private final HabitatLocatorLogic locatorLogic;
 
@@ -61,16 +101,6 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 		}
 	}
 
-	/* SPRITES */
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void registerSprites(ISpriteRegistry registry) {
-		//TextureAtlasSprite texture = new TextureHabitatLocator(iconName);
-		//		Minecraft.getInstance().getTextureMap().setTextureEntry(texture);
-		//TODO textures
-	}
-
-
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void appendHoverText(ItemStack itemstack, @Nullable Level world, List<Component> list, TooltipFlag flag) {
@@ -79,21 +109,23 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 
 		if (world != null && minecraft.player != null) {
 			LocalPlayer player = minecraft.player;
-			Biome currentBiome = player.level.getBiome(player.blockPosition()).value();
+			Holder<Biome> currentBiome = player.level.getBiome(player.blockPosition());
 
 			EnumTemperature temperature = EnumTemperature.getFromBiome(currentBiome, player.blockPosition());
-			EnumHumidity humidity = EnumHumidity.getFromValue(currentBiome.getDownfall());
+			EnumHumidity humidity = EnumHumidity.getFromValue(currentBiome.value().getDownfall());
+			Registry<Biome> biomes = player.level.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY);
+			String biomeName = biomes.getKey(currentBiome.value()).toString();
 
-			list.add(new TranslatableComponent("for.gui.currentBiome")
-					.append(new TextComponent(": "))
-					.append(new TranslatableComponent("biome." + currentBiome.getRegistryName().toString().replace(":", "."))));
+			list.add(Component.translatable("for.gui.currentBiome")
+					.append(Component.literal(": "))
+					.append(Component.translatable("biome." + biomeName.replace(":", "."))));
 
-			list.add(new TranslatableComponent("for.gui.temperature")
-					.append(new TextComponent(": "))
+			list.add(Component.translatable("for.gui.temperature")
+					.append(Component.literal(": "))
 					.append(AlleleManager.climateHelper.toDisplay(temperature)));
 
-			list.add(new TranslatableComponent("for.gui.humidity")
-				.append(new TextComponent(": "))
+			list.add(Component.translatable("for.gui.humidity")
+				.append(Component.literal(": "))
 				.append(AlleleManager.climateHelper.toDisplay(humidity)));
 		}
 	}

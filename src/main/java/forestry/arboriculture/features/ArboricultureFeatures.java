@@ -1,8 +1,10 @@
 package forestry.arboriculture.features;
 
+import forestry.lepidopterology.worldgen.CocoonDecorator;
 import net.minecraft.core.Holder;
 import net.minecraft.data.worldgen.features.FeatureUtils;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
@@ -11,28 +13,34 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.event.world.BiomeLoadingEvent;
-import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.*;
 
 import forestry.arboriculture.worldgen.TreeDecorator;
 import forestry.core.config.Constants;
 
+import java.util.List;
+
 public class ArboricultureFeatures {
-	public static final ResourceLocation TREE_DECORATOR_ID = new ResourceLocation(Constants.MOD_ID, "tree_decorator");
-	public static final Feature<NoneFeatureConfiguration> TREE_DECORATOR = new TreeDecorator();
-	public static final Holder<ConfiguredFeature<NoneFeatureConfiguration, ?>> TREE_DECORATOR_CONF = FeatureUtils.register(TREE_DECORATOR_ID.toString(), TREE_DECORATOR);
 
-	public static void registerFeatures(RegistryEvent.Register<Feature<?>> event) {
-		IForgeRegistry<Feature<?>> registry = event.getRegistry();
+	public static final DeferredRegister<Feature<?>> FEATURES =
+			DeferredRegister.create(ForgeRegistries.FEATURES, Constants.MOD_ID);
+	public static final DeferredRegister<ConfiguredFeature<?, ?>> CONFIGURED_FEATURES =
+			DeferredRegister.create(Registry.CONFIGURED_FEATURE_REGISTRY, Constants.MOD_ID);
+	public static final DeferredRegister<PlacedFeature> PLACED_FEATURES =
+			DeferredRegister.create(Registry.PLACED_FEATURE_REGISTRY, Constants.MOD_ID);
 
-		registry.register(TREE_DECORATOR.setRegistryName(TREE_DECORATOR_ID));
+	private static final RegistryObject<Feature<NoneFeatureConfiguration>> TREE_DECORATOR =
+			FEATURES.register("tree_decorator", TreeDecorator::new);
 
-		Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, TREE_DECORATOR_ID, TREE_DECORATOR_CONF.value());
-	}
+	private static final RegistryObject<ConfiguredFeature<?, ?>> CONFIGURED_TREE_DECORATOR =
+			CONFIGURED_FEATURES.register(
+					"tree_decorator",
+					() -> new ConfiguredFeature<>(TREE_DECORATOR.getHolder().get().value(), NoneFeatureConfiguration.NONE)
+			);
 
-	public static void onBiomeLoad(BiomeLoadingEvent event) {
-		Holder<PlacedFeature> placed = PlacementUtils.register(TREE_DECORATOR_ID.toString(), TREE_DECORATOR_CONF);
-		event.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, placed);
-	}
+	private static final RegistryObject<PlacedFeature> PLACED_TREE_DECORATOR =
+			PLACED_FEATURES.register(
+					"tree_decorator",
+					() -> new PlacedFeature(CONFIGURED_TREE_DECORATOR.getHolder().get(), List.of())
+			);
 }

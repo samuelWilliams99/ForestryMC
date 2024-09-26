@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
@@ -38,7 +39,7 @@ import net.minecraft.world.level.BlockAndTintGetter;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.event.ModelEvent.BakingCompleted;
 
 import forestry.core.blocks.IColoredBlock;
 import forestry.core.items.definitions.IColoredItem;
@@ -47,6 +48,7 @@ import forestry.modules.features.FeatureBlock;
 import forestry.modules.features.FeatureGroup;
 import forestry.modules.features.FeatureItem;
 import forestry.modules.features.FeatureTable;
+import net.minecraftforge.registries.ForgeRegistries;
 
 @OnlyIn(Dist.CLIENT)
 public class ClientManager {
@@ -61,9 +63,7 @@ public class ClientManager {
 	private final Set<IColoredItem> itemColorList = new HashSet<>();
 	/* DEFAULT ITEM AND BLOCK MODEL STATES*/
 	@Nullable
-	private ModelState defaultBlockState;
-	@Nullable
-	private ModelState defaultItemState;
+	private ItemTransforms defaultBlockItemTransforms;
 
 	public static ClientManager getInstance() {
 		return instance;
@@ -102,18 +102,11 @@ public class ClientManager {
 		}
 	}
 
-	public ModelState getDefaultBlockState() {
-		if (defaultBlockState == null) {
-			defaultBlockState = ResourceUtil.loadTransform(new ResourceLocation("block/block"));
+	public ItemTransforms getDefaultBlockItemTransforms() {
+		if (defaultBlockItemTransforms == null) {
+			defaultBlockItemTransforms = ResourceUtil.loadTransformFromJson(new ResourceLocation("block/block"));
 		}
-		return defaultBlockState;
-	}
-
-	public ModelState getDefaultItemState() {
-		if (defaultItemState == null) {
-			defaultItemState = ResourceUtil.loadTransform(new ResourceLocation("item/generated"));
-		}
-		return defaultItemState;
+		return defaultBlockItemTransforms;
 	}
 
 	public void registerModel(BakedModel model, Object feature) {
@@ -139,18 +132,18 @@ public class ClientManager {
 	}
 
 	public void registerModel(BakedModel model, Item item) {
-		customModels.add(new ModelEntry(new ModelResourceLocation(item.getRegistryName(), "inventory"), model));
+		customModels.add(new ModelEntry(new ModelResourceLocation(ForgeRegistries.ITEMS.getKey(item), "inventory"), model));
 	}
 
-	public void onBakeModels(ModelBakeEvent event) {
+	public void onBakeModels(BakingCompleted event) {
 		//register custom models
-		Map<ResourceLocation, BakedModel> registry = event.getModelRegistry();
+		Map<ResourceLocation, BakedModel> registry = event.getModels();
 		for (final BlockModelEntry entry : customBlockModels) {
 			for (BlockState state : entry.states) {
 				registry.put(BlockModelShaper.stateToModelLocation(state), entry.model);
 			}
 			if (entry.item != null) {
-				ResourceLocation registryName = entry.item.getRegistryName();
+				ResourceLocation registryName = ForgeRegistries.ITEMS.getKey(entry.item);
 				if (registryName == null) {
 					continue;
 				}

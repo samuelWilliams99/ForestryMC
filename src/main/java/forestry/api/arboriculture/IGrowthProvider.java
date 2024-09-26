@@ -6,6 +6,7 @@
 package forestry.api.arboriculture;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 
@@ -15,6 +16,6 @@ public interface IGrowthProvider {
 
 	boolean canSpawn(ITree tree, Level world, BlockPos pos);
 
-	boolean isBiomeValid(ITree tree, Biome biome);
+	boolean isBiomeValid(ITree tree, Holder<Biome> biome);
 
 }

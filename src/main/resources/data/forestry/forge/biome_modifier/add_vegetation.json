@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#minecraft:is_overworld",
+  "features": ["forestry:tree_decorator", "forestry:hive_decorator"], // "forestry:cocoon_decorator" disabled
+  "step": "vegetal_decoration"
+}

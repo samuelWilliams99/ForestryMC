@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Random;
 
 import forestry.core.utils.Translator;
+import net.minecraft.util.RandomSource;
 
 public class EscritoireTextSource {
 
@@ -27,7 +28,7 @@ public class EscritoireTextSource {
 	}
 
 	private static final ListMultimap<Notes, String> researchNotes;
-	private static final Random random = new Random();
+	private static final RandomSource random = RandomSource.create();
 
 	static {
 		researchNotes = ArrayListMultimap.create();

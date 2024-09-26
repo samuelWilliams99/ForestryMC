@@ -48,6 +48,7 @@ import forestry.farming.proxy.ProxyFarmingClient;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ISidedModuleHandler;
+import net.minecraftforge.registries.RegisterEvent;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.FARMING, name = "Farming", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.farming.description")
 public class ModuleFarming extends BlankForestryModule {
@@ -146,7 +147,7 @@ public class ModuleFarming extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerObjects() {
+	public void registerObjects(RegisterEvent event) {
 
 	}
 

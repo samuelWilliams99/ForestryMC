@@ -67,7 +67,7 @@
 ////TODO - villages and worldgen
 //public class VillageApiaristHouse extends VillagePieces.House1 {
 //
-//	private static final Random random = new Random();
+//	private static final RandomSource random = ();
 //
 //	private final Materials materials;
 //	private int averageGroundLevel = -1;
@@ -77,14 +77,14 @@
 //		this.materials = new Materials(random);
 //	}
 //
-//	public VillageApiaristHouse(VillagePieces.Start startPiece, int componentType, Random random, MutableBoundingBox boundingBox, Direction facing) {
+//	public VillageApiaristHouse(VillagePieces.Start startPiece, int componentType, RandomSource random, MutableBoundingBox boundingBox, Direction facing) {
 //		super(startPiece, componentType, random, boundingBox, facing);
 //
 //		this.materials = new Materials(random);
 //	}
 //
 //	@Nullable
-//	public static VillageApiaristHouse buildComponent(VillagePieces.Start startPiece, List<StructurePiece> pieces, Random random, int structureMinX, int structureMinY, int structureMinZ, Direction facing, int componentType) {
+//	public static VillageApiaristHouse buildComponent(VillagePieces.Start startPiece, List<StructurePiece> pieces, RandomSource random, int structureMinX, int structureMinY, int structureMinZ, Direction facing, int componentType) {
 //		MutableBoundingBox bbox = MutableBoundingBox.getComponentToAddBoundingBox(structureMinX, structureMinY, structureMinZ, -4, 0, 0, 12, 9, 12, facing);
 //		if (!canVillageGoDeeper(bbox) || StructurePiece.findIntersecting(pieces, bbox) != null) {
 //			return null;
@@ -94,7 +94,7 @@
 //	}
 //
 //	@Override
-//	public boolean addComponentParts(World world, Random random, MutableBoundingBox structBoundingBox) {
+//	public boolean addComponentParts(World world, RandomSource random, MutableBoundingBox structBoundingBox) {
 //
 //		if (averageGroundLevel < 0) {
 //			averageGroundLevel = getAverageGroundLevel(world, structBoundingBox);
@@ -403,7 +403,7 @@
 //		public final BlockState door;
 //		public final BlockState fenceGate;
 //
-//		public Materials(Random random) {
+//		public Materials(RandomSource random) {
 //			IWoodType woodType;
 //			boolean fireproof;
 //

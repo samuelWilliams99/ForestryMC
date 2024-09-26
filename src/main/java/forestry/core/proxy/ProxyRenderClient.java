@@ -17,10 +17,9 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.model.ForgeModelBakery;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.client.event.ModelEvent;
+import net.minecraftforge.client.event.ModelEvent.BakingCompleted;
+import net.minecraftforge.client.event.ModelEvent.RegisterGeometryLoaders;
 
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
@@ -47,14 +46,14 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
 
 	@Override
 	public boolean fancyGraphicsEnabled() {
-		return Minecraft.getInstance().options.graphicsMode == GraphicsStatus.FANCY;
+		return Minecraft.getInstance().options.graphicsMode().get() == GraphicsStatus.FANCY;
 	}
 
 	@Override
-	public void setupClient(FMLClientSetupEvent event) {
+	public void registerModels(ModelEvent.RegisterAdditional event) {
 		for (EnumContainerType type : EnumContainerType.values()) {
-			ForgeModelBakery.addSpecialModel(new ModelResourceLocation("forestry:" + type.getSerializedName() + "_empty", "inventory"));
-			ForgeModelBakery.addSpecialModel(new ModelResourceLocation("forestry:" + type.getSerializedName() + "_filled", "inventory"));
+			event.register(new ModelResourceLocation("forestry:" + type.getSerializedName() + "_empty", "inventory"));
+			event.register(new ModelResourceLocation("forestry:" + type.getSerializedName() + "_filled", "inventory"));
 		}
 
 		CoreBlocks.BASE.getBlocks().forEach((block) -> ItemBlockRenderTypes.setRenderLayer(block, RenderType.cutoutMipped()));
@@ -66,12 +65,12 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
 	}
 
 	@Override
-	public void registerModels(ModelRegistryEvent event) {
-		ModelLoaderRegistry.registerLoader(new ResourceLocation(Constants.MOD_ID, "fluid_container"), new FluidContainerModel.Loader());
+	public void registerModelLoaders(RegisterGeometryLoaders event) {
+		event.register("fluid_container", new FluidContainerModel.Loader());
 	}
 
 	@Override
-	public void bakeModels(ModelBakeEvent event) {
+	public void bakeModels(BakingCompleted event) {
 		ClientManager.getInstance().onBakeModels(event);
 	}
 

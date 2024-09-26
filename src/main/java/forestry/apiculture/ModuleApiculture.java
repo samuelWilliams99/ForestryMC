@@ -16,9 +16,12 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
+import forestry.arboriculture.features.ArboricultureFeatures;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
@@ -136,8 +139,11 @@ public class ModuleApiculture extends BlankForestryModule {
 			MinecraftForge.EVENT_BUS.register(new RegisterVillager.Events());
 		}
 
-		modEventBus.addGenericListener(Feature.class, ApicultureFeatures::registerFeatures);
-		MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, ApicultureFeatures::onBiomeLoad);
+		ApicultureFeatures.FEATURES.register(modEventBus);
+		ApicultureFeatures.CONFIGURED_FEATURES.register(modEventBus);
+		ApicultureFeatures.PLACED_FEATURES.register(modEventBus);
+		CommandBee.registerDeferred(modEventBus);
+		// MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, ApicultureFeatures::onBiomeLoad);
 	}
 
 	@Override
@@ -502,8 +508,8 @@ public class ModuleApiculture extends BlankForestryModule {
 	private static class EndFlowerAcceptableRule implements IFlowerAcceptableRule {
 		@Override
 		public boolean isAcceptableFlower(BlockState blockState, Level world, BlockPos pos, String flowerType) {
-			Biome biomeGenForCoords = world.getBiome(pos).value();
-			return Biome.BiomeCategory.THEEND == biomeGenForCoords.getBiomeCategory();
+			Holder<Biome> biomeGenForCoords = world.getBiome(pos);
+			return biomeGenForCoords.is(BiomeTags.IS_END);
 		}
 	}
 }

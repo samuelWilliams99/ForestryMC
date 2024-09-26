@@ -7,6 +7,7 @@ package forestry.api.lepidopterology.genetics;
 
 import java.util.Set;
 
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 
@@ -37,7 +38,7 @@ public interface IAlleleButterflySpecies extends IAlleleForestrySpecies, ISprite
 	 *
 	 * @return EnumSet of biome tags this butterfly species can be spawned in.
 	 */
-	Set<Biome.BiomeCategory> getSpawnBiomes();
+	Set<ResourceKey<Biome>> getSpawnBiomes();
 
 	/**
 	 * @return true if a prospective spawn biome must not match a biome tag outside of getSpawnBiomes.

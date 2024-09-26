@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -24,6 +25,7 @@ import forestry.api.multiblock.IMultiblockComponent;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
+import net.minecraftforge.registries.ForgeRegistries;
 
 /**
  * This class contains the base logic for "multiblock controllers". Conceptually, they are
@@ -36,7 +38,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	protected final Level world;
 
 	// Ticks
-	private static final Random rand = new Random();
+	private static final RandomSource rand = RandomSource.create();
 	//TODO: Use TickHelper
 	private int tickCount = rand.nextInt(256);
 
@@ -490,7 +492,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	 */
 	protected void isBlockGoodForExteriorLevel(int level, Level world, BlockPos pos) throws MultiblockValidationException {
 		Block block = world.getBlockState(pos).getBlock();
-		throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.invalid.interior", block.getRegistryName()), pos);
+		throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.invalid.interior", ForgeRegistries.BLOCKS.getKey(block)), pos);
 	}
 
 	/**
@@ -502,7 +504,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	 */
 	protected void isBlockGoodForInterior(Level world, BlockPos pos) throws MultiblockValidationException {
 		Block block = world.getBlockState(pos).getBlock();
-		throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.invalid.interior", block.getRegistryName()), pos);
+		throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.invalid.interior", ForgeRegistries.BLOCKS.getKey(block)), pos);
 	}
 
 	@Override

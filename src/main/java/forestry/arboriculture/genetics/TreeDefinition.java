@@ -15,6 +15,7 @@ import java.awt.Color;
 import java.util.Locale;
 import java.util.Random;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
@@ -1047,7 +1048,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IBlockSub
 	}
 
 	@Override
-	public boolean setLeaves(IGenome genome, LevelAccessor world, @Nullable GameProfile owner, BlockPos pos, Random rand) {
+	public boolean setLeaves(IGenome genome, LevelAccessor world, @Nullable GameProfile owner, BlockPos pos, RandomSource rand) {
 		if (owner == null && new TemplateMatcher(genome).matches()) {
 			IFruitProvider fruitProvider = genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider();
 			BlockState defaultLeaves;

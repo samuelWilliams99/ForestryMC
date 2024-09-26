@@ -17,6 +17,7 @@ import genetics.api.root.IIndividualRoot;
 import genetics.api.root.ITemplateContainer;
 import genetics.api.root.components.ComponentKey;
 import genetics.api.root.components.ComponentKeys;
+import net.minecraft.util.RandomSource;
 
 public class TemplateContainer<I extends IIndividual> implements ITemplateContainer<I> {
 	private final IIndividualRoot<I> root;
@@ -60,7 +61,7 @@ public class TemplateContainer<I extends IIndividual> implements ITemplateContai
 	}
 
 	@Override
-	public IAllele[] getRandomTemplate(Random rand) {
+	public IAllele[] getRandomTemplate(RandomSource rand) {
 		Collection<IAllele[]> alleles = this.templates.values();
 		int size = alleles.size();
 		IAllele[][] templatesArray = alleles.toArray(new IAllele[size][]);

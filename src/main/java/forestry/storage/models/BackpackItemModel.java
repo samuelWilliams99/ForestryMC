@@ -22,9 +22,9 @@ import net.minecraft.resources.ResourceLocation;
 
 import com.mojang.datafixers.util.Pair;
 
-import net.minecraftforge.client.model.IModelConfiguration;
-import net.minecraftforge.client.model.IModelLoader;
-import net.minecraftforge.client.model.geometry.IModelGeometry;
+import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
+import net.minecraftforge.client.model.geometry.IGeometryLoader;
+import net.minecraftforge.client.model.geometry.IUnbakedGeometry;
 
 import forestry.api.storage.EnumBackpackType;
 import forestry.core.config.Constants;
@@ -45,10 +45,10 @@ public class BackpackItemModel extends AbstractItemModel {
 		return cachedBakedModels.getOrDefault(type, ImmutableMap.of()).getOrDefault(mode, model);
 	}
 
-	private static class Geometry implements IModelGeometry<BackpackItemModel.Geometry> {
+	private static class Geometry implements IUnbakedGeometry<BackpackItemModel.Geometry> {
 
 		@Override
-		public BakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides, ResourceLocation modelLocation) {
+		public BakedModel bake(IGeometryBakingContext owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides, ResourceLocation modelLocation) {
 			if (cachedBakedModels.isEmpty()) {
 				ImmutableMap.Builder<EnumBackpackType, ImmutableMap<BackpackMode, BakedModel>> modelBuilder = new ImmutableMap.Builder<>();
 				for (EnumBackpackType backpackType : EnumBackpackType.values()) {
@@ -67,22 +67,16 @@ public class BackpackItemModel extends AbstractItemModel {
 		}
 
 		@Override
-		public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
+		public Collection<Material> getMaterials(IGeometryBakingContext owner, Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
 			return ImmutableList.of();
 		}
 	}
 
-	public static class Loader implements IModelLoader<Geometry> {
+	public static class Loader implements IGeometryLoader<Geometry> {
 		public static final ResourceLocation LOCATION = new ResourceLocation(Constants.MOD_ID, "backpacks");
 
 		@Override
-		public void onResourceManagerReload(ResourceManager resourceManager) {
-			// TODO: Find a way to clear the cache before the models get reloaded an not after
-			//cachedBakedModels = ImmutableMap.of();
-		}
-
-		@Override
-		public BackpackItemModel.Geometry read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
+		public BackpackItemModel.Geometry read(JsonObject modelContents, JsonDeserializationContext deserializationContext) {
 			return new BackpackItemModel.Geometry();
 		}
 	}

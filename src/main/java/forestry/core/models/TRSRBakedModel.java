@@ -20,11 +20,14 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
@@ -37,17 +40,18 @@ import com.mojang.math.Vector3f;
 import com.mojang.math.Vector4f;
 
 import net.minecraftforge.client.model.BakedModelWrapper;
-import net.minecraftforge.client.model.data.EmptyModelData;
-import net.minecraftforge.client.model.data.IModelData;
-import net.minecraftforge.client.model.pipeline.BakedQuadBuilder;
-import net.minecraftforge.client.model.pipeline.VertexTransformer;
-import net.minecraftforge.common.model.TransformationHelper;
+import net.minecraftforge.client.model.IQuadTransformer;
+import net.minecraftforge.client.model.QuadTransformers;
+import net.minecraftforge.client.model.data.ModelData;
+import net.minecraftforge.client.model.pipeline.QuadBakingVertexConsumer;
+import net.minecraftforge.common.util.TransformationHelper;
 
 // for those wondering TRSR stands for Translation Rotation Scale Rotation
 public class TRSRBakedModel extends BakedModelWrapper<BakedModel> {
-
 	protected final Transformation transformation;
 	private final TRSROverride override;
+
+	private ItemTransforms itemTransforms;
 	private final int faceOffset;
 
 	public TRSRBakedModel(BakedModel original, float x, float y, float z, float scale) {
@@ -70,6 +74,7 @@ public class TRSRBakedModel extends BakedModelWrapper<BakedModel> {
 		this.transformation = transform.blockCenterToCorner();
 		this.override = new TRSROverride(this);
 		this.faceOffset = 0;
+		this.itemTransforms = ItemTransforms.NO_TRANSFORMS;
 	}
 
 	/**
@@ -83,34 +88,53 @@ public class TRSRBakedModel extends BakedModelWrapper<BakedModel> {
 
 		double r = Math.PI * (360 - facing.getOpposite().get2DDataValue() * 90) / 180d;
 		this.transformation = new Transformation(null, null, null, TransformationHelper.quatFromXYZ(new float[]{0, (float) r, 0}, false)).blockCenterToCorner();
+		this.itemTransforms = ItemTransforms.NO_TRANSFORMS;
+	}
+
+	public TRSRBakedModel withItemTransforms(ItemTransforms itemTransforms) {
+		this.itemTransforms = itemTransforms;
+		return this;
+	}
+
+	@Override
+	public ItemTransforms getTransforms() {
+		return this.itemTransforms;
 	}
 
 	@Nonnull
 	@Override
-	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand, IModelData data) {
-		// transform quads obtained from parent
-		ImmutableList.Builder<BakedQuad> builder = ImmutableList.builder();
-		if (!this.originalModel.isCustomRenderer()) {
-			try {
-				// adjust side to facing-rotation
-				if (side != null && side.get2DDataValue() > -1) {
-					side = Direction.from2DDataValue((side.get2DDataValue() + this.faceOffset) % 4);
-				}
-				for (BakedQuad quad : this.originalModel.getQuads(state, side, rand, data)) {
-					Transformer transformer = new Transformer(this.transformation, quad.getSprite());
-					quad.pipe(transformer);
-					builder.add(transformer.build());
-				}
-			} catch (Exception e) {
-			}
-		}
-
-		return builder.build();
+	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand, ModelData data, @Nullable RenderType renderType) {
+//		// transform quads obtained from parent
+//		ImmutableList.Builder<BakedQuad> builder = ImmutableList.builder();
+//		if (!this.originalModel.isCustomRenderer()) {
+//			try {
+//				// adjust side to facing-rotation
+//				if (side != null && side.get2DDataValue() > -1) {
+//					side = Direction.from2DDataValue((side.get2DDataValue() + this.faceOffset) % 4);
+//				}
+//				for (BakedQuad quad : this.originalModel.getQuads(state, side, rand, data, renderType)) {
+//
+//					Transformer transformer = new Transformer(this.transformation, quad.getSprite());
+//
+//					quad.pipe(transformer);
+//					builder.add(transformer.build());
+//				}
+//			} catch (Exception e) {
+//			}
+//		}
+//
+//		return builder.build();
+		// TODO[SW] This drops a bunch of logic about sides, Usage, and the difference between normals + positions
+		// I don't know if thats going to break everything...
+		// The usage was derived from the sprite
+		if (this.originalModel.isCustomRenderer()) return List.of();
+		IQuadTransformer qt = QuadTransformers.applying(this.transformation);
+		return qt.process(this.originalModel.getQuads(state, side, rand, data, renderType));
 	}
 
 	@Override
-	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
-		return this.getQuads(state, side, rand, EmptyModelData.INSTANCE);
+	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand) {
+		return this.getQuads(state, side, rand, ModelData.EMPTY, null);
 	}
 
 	@Nonnull
@@ -138,48 +162,48 @@ public class TRSRBakedModel extends BakedModelWrapper<BakedModel> {
 		}
 	}
 
-	private static class Transformer extends VertexTransformer {
-
-		protected Matrix4f transformation;
-		protected Matrix3f normalTransformation;
-
-		public Transformer(Transformation transformation, TextureAtlasSprite textureAtlasSprite) {
-			super(new BakedQuadBuilder(textureAtlasSprite));
-			// position transform
-			this.transformation = transformation.getMatrix();
-			// normal transform
-			this.normalTransformation = new Matrix3f(this.transformation);
-			this.normalTransformation.invert();
-			this.normalTransformation.transpose();
-		}
-
-		@Override
-		public void put(int element, float... data) {
-			VertexFormatElement.Usage usage = this.parent.getVertexFormat().getElements().get(element).getUsage();
-
-			// transform normals and position
-			if (usage == VertexFormatElement.Usage.POSITION && data.length >= 3) {
-				Vector4f vec = new Vector4f(data[0], data[1], data[2], 1f);
-				vec.transform(this.transformation);
-				data = new float[4];
-				data[0] = vec.x();
-				data[1] = vec.y();
-				data[2] = vec.z();
-				data[3] = vec.w();
-			} else if (usage == VertexFormatElement.Usage.NORMAL && data.length >= 3) {
-				Vector3f vec = new Vector3f(data);
-				vec.transform(this.normalTransformation);
-				vec.normalize();
-				data = new float[4];
-				data[0] = vec.x();
-				data[1] = vec.y();
-				data[2] = vec.z();
-			}
-			super.put(element, data);
-		}
-
-		public BakedQuad build() {
-			return ((BakedQuadBuilder) this.parent).build();
-		}
-	}
+//	private static class Transformer extends VertexTransformer {
+//
+//		protected Matrix4f transformation;
+//		protected Matrix3f normalTransformation;
+//
+//		public Transformer(Transformation transformation, TextureAtlasSprite textureAtlasSprite) {
+//			super(new QuadBakingVertexConsumer(textureAtlasSprite));
+//			// position transform
+//			this.transformation = transformation.getMatrix();
+//			// normal transform
+//			this.normalTransformation = new Matrix3f(this.transformation);
+//			this.normalTransformation.invert();
+//			this.normalTransformation.transpose();
+//		}
+//
+//		@Override
+//		public void put(int element, float... data) {
+//			VertexFormatElement.Usage usage = this.parent.getVertexFormat().getElements().get(element).getUsage();
+//
+//			// transform normals and position
+//			if (usage == VertexFormatElement.Usage.POSITION && data.length >= 3) {
+//				Vector4f vec = new Vector4f(data[0], data[1], data[2], 1f);
+//				vec.transform(this.transformation);
+//				data = new float[4];
+//				data[0] = vec.x();
+//				data[1] = vec.y();
+//				data[2] = vec.z();
+//				data[3] = vec.w();
+//			} else if (usage == VertexFormatElement.Usage.NORMAL && data.length >= 3) {
+//				Vector3f vec = new Vector3f(data);
+//				vec.transform(this.normalTransformation);
+//				vec.normalize();
+//				data = new float[4];
+//				data[0] = vec.x();
+//				data[1] = vec.y();
+//				data[2] = vec.z();
+//			}
+//			super.put(element, data);
+//		}
+//
+//		public BakedQuad build() {
+//			return ((QuadBakingVertexConsumer) this.parent).build();
+//		}
+//	}
 }

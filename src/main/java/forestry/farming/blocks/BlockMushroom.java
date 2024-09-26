@@ -95,7 +95,7 @@ package forestry.farming.blocks;
 	}
 
 	@Override
-	public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
+	public void tick(BlockState state, ServerWorld world, BlockPos pos, RandomSource rand) {
 		if (world.isRemote || rand.nextInt(2) != 0) {
 			return;
 		}
@@ -113,7 +113,7 @@ package forestry.farming.blocks;
 		}
 	}
 
-	public void generateGiantMushroom(IWorld world, ChunkGenerator<? extends GenerationSettings> gen, BlockPos pos, BlockState state, Random rand, IFeatureConfig config) {
+	public void generateGiantMushroom(IWorld world, ChunkGenerator<? extends GenerationSettings> gen, BlockPos pos, BlockState state, RandomSource rand, IFeatureConfig config) {
 		MushroomType type = state.get(VARIANT);
 
 		world.removeBlock(pos, false);
@@ -122,7 +122,7 @@ package forestry.farming.blocks;
 		}
 	}
 
-	public void grow(World worldIn, BlockPos pos, BlockState state, Random rand) {
+	public void grow(World worldIn, BlockPos pos, BlockState state, RandomSource rand) {
 		//		this.generateGiantMushroom(worldIn, pos, state, rand);
 		//TODO worldgen
 	}
@@ -137,12 +137,12 @@ package forestry.farming.blocks;
 	}
 
 	@Override
-	public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, BlockState state) {
+	public boolean canUseBonemeal(World worldIn, RandomSource rand, BlockPos pos, BlockState state) {
 		return worldIn.rand.nextFloat() < 0.45D;
 	}
 
 	@Override
-	public void grow(ServerWorld serverWorld, Random random, BlockPos blockPos, BlockState blockState) {
+	public void grow(ServerWorld serverWorld, RandomSource random, BlockPos blockPos, BlockState blockState) {
 	}
 
 	@Override

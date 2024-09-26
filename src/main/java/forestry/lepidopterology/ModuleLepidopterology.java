@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import forestry.arboriculture.features.ArboricultureFeatures;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.feature.Feature;
 
@@ -69,13 +70,14 @@ public class ModuleLepidopterology extends BlankForestryModule {
 		ForgeUtils.registerSubscriber(this);
 
 		MinecraftForge.EVENT_BUS.addListener(ForgeEvents::onEntityTravelToDimension);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(ForgeEvents::onAttributeCreate);
+		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+		modEventBus.addListener(ForgeEvents::onAttributeCreate);
 
 		if (generateCocoons) {
 			if (generateCocoonsAmount > 0.0) {
-				IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-				modEventBus.addGenericListener(Feature.class, LepidopterologyFeatures::registerFeatures);
-				MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, LepidopterologyFeatures::onBiomeLoad);
+				LepidopterologyFeatures.FEATURES.register(modEventBus);
+				LepidopterologyFeatures.CONFIGURED_FEATURES.register(modEventBus);
+				LepidopterologyFeatures.PLACED_FEATURES.register(modEventBus);
 			}
 		}
 	}

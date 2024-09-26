@@ -13,11 +13,12 @@ package forestry.core.commands;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
+import forestry.apiculture.commands.CommandBeeGive;
+import forestry.core.config.Constants;
 import net.minecraft.commands.CommandRuntimeException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -35,11 +36,24 @@ import forestry.core.utils.Translator;
 import forestry.modules.ModuleManager;
 
 import genetics.commands.CommandHelpers;
+import net.minecraft.commands.synchronization.ArgumentTypeInfo;
+import net.minecraft.commands.synchronization.ArgumentTypeInfos;
+import net.minecraft.commands.synchronization.SingletonArgumentInfo;
+import net.minecraft.core.Registry;
+import net.minecraft.network.chat.Component;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class CommandModules {
+	public static void registerDeferred(IEventBus bus) {
+		CommandPluginsInfo.COMMAND_ARGUMENT_TYPES.register(bus);
+	}
+
 	public static ArgumentBuilder<CommandSourceStack, ?> register() {
 		return LiteralArgumentBuilder.<CommandSourceStack>literal("module")
 				.then(CommandPluginsInfo.register())
@@ -76,6 +90,17 @@ public class CommandModules {
 	}
 
 	public static class CommandPluginsInfo {
+
+		public static final DeferredRegister<ArgumentTypeInfo<?, ?>> COMMAND_ARGUMENT_TYPES = DeferredRegister.create(
+				Registry.COMMAND_ARGUMENT_TYPE_REGISTRY, Constants.MOD_ID
+		);
+
+		public static final RegistryObject<SingletonArgumentInfo<ModuleArgument>> MODULE_ARGUMENT = COMMAND_ARGUMENT_TYPES.register(
+				"module", () -> ArgumentTypeInfos.registerByClass(
+						ModuleArgument.class, SingletonArgumentInfo.contextFree(ModuleArgument::new)
+				)
+		);
+
 		public static ArgumentBuilder<CommandSourceStack, ?> register() {
 			return Commands.literal("info")
 					.then(Commands.argument("module", ModuleArgument.modules())
@@ -83,6 +108,7 @@ public class CommandModules {
 		}
 
 		public static class ModuleArgument implements ArgumentType<IForestryModule> {
+
 			@Override
 			public IForestryModule parse(StringReader reader) throws CommandSyntaxException {
 				String pluginUid = reader.readUnquotedString();
@@ -105,7 +131,7 @@ public class CommandModules {
 				if (found != null) {
 					return found;
 				} else {
-					throw new SimpleCommandExceptionType(new TranslatableComponent("for.chat.modules.error", pluginUid)).createWithContext(reader);
+					throw new SimpleCommandExceptionType(Component.translatable("for.chat.modules.error", pluginUid)).createWithContext(reader);
 				}
 
 			}

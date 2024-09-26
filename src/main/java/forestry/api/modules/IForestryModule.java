@@ -17,6 +17,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.registries.RegisterEvent;
 
 /**
  * Defines a Forestry module.
@@ -66,7 +67,7 @@ public interface IForestryModule {
 	default void registerCapabilities(Consumer<Class<?>> consumer) {
 	}
 
-	default void registerObjects() {
+	default void registerObjects(RegisterEvent event) {
 
 	}
 

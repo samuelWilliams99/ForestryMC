@@ -20,7 +20,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.resources.ResourceLocation;
 
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import forestry.api.recipes.IMoistenerRecipe;
 
@@ -62,7 +61,7 @@ public class MoistenerRecipe implements IMoistenerRecipe {
 		return id;
 	}
 
-	public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<MoistenerRecipe> {
+	public static class Serializer implements RecipeSerializer<MoistenerRecipe> {
 
 		@Override
 		public MoistenerRecipe fromJson(ResourceLocation recipeId, JsonObject json) {

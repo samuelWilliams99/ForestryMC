@@ -23,6 +23,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import forestry.core.ItemGroupForestry;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class ItemWrench extends ItemForestry {
 
 	public ItemWrench() {

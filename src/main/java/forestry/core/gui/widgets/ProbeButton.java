@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
-import net.minecraft.network.chat.TranslatableComponent;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -20,6 +19,7 @@ import forestry.core.gui.GuiEscritoire;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.SoundUtil;
+import net.minecraft.network.chat.Component;
 
 public class ProbeButton extends Widget {
 
@@ -43,7 +43,7 @@ public class ProbeButton extends Widget {
 	@Override
 	public ToolTip getToolTip(int mouseX, int mouseY) {
 		ToolTip tooltip = new ToolTip();
-		tooltip.add(new TranslatableComponent("for.gui.escritoire.probe"));
+		tooltip.add(Component.translatable("for.gui.escritoire.probe"));
 		return tooltip;
 	}
 

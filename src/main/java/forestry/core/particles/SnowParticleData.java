@@ -24,6 +24,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.core.particles.ParticleOptions.Deserializer;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class SnowParticleData implements ParticleOptions {
 
@@ -70,6 +71,6 @@ public class SnowParticleData implements ParticleOptions {
 	@Nonnull
 	@Override
 	public String writeToString() {
-		return String.format(Locale.ROOT, "%s %2f %2f %2f", getType().getRegistryName(), particleStart.x(), particleStart.y(), particleStart.z());
+		return String.format(Locale.ROOT, "%s %2f %2f %2f", ForgeRegistries.PARTICLE_TYPES.getKey(getType()), particleStart.x(), particleStart.y(), particleStart.z());
 	}
 }

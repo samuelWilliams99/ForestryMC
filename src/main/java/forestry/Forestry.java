@@ -15,6 +15,9 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 
+import com.mojang.serialization.Codec;
+import forestry.apiculture.items.ItemHabitatLocator;
+import genetics.Genetics;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
@@ -29,19 +32,19 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
+import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
+import net.minecraftforge.data.event.GatherDataEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import net.minecraftforge.fml.DistExecutor;
@@ -123,6 +126,7 @@ import forestry.modules.features.ModFeatureRegistry;
 
 import genetics.api.alleles.IAllele;
 import genetics.utils.AlleleUtils;
+import net.minecraftforge.registries.RegisterEvent;
 
 /**
  * Forestry Minecraft Mod
@@ -133,6 +137,7 @@ import genetics.utils.AlleleUtils;
 public class Forestry {
 
 	public Forestry() {
+		new Genetics();
 		ForestryAPI.errorStateRegistry = new ErrorStateRegistry();
 		ClimateManager.climateRoot = ClimateRoot.getInstance();
 		ClimateManager.climateFactory = ClimateFactory.INSTANCE;
@@ -181,6 +186,8 @@ public class Forestry {
 	private void setup(FMLCommonSetupEvent event) {
 		// Forestry's villager houses
 		event.enqueueWork(VillagerJigsaw::init);
+		// Compass renderer properties
+		event.enqueueWork(ItemHabitatLocator::registerItemProperties);
 
 		packetHandler = new PacketHandlerServer();
 
@@ -218,21 +225,21 @@ public class Forestry {
 		if (event.includeServer()) {
 			ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 			ForestryBlockTagsProvider blockTagsProvider = new ForestryBlockTagsProvider(generator, existingFileHelper);
-			generator.addProvider(blockTagsProvider);
-			generator.addProvider(new ForestryAdvancementProvider(generator));
-			generator.addProvider(new ForestryItemTagsProvider(generator, blockTagsProvider, existingFileHelper));
-			generator.addProvider(new ForestryBackpackTagProvider(generator, blockTagsProvider, existingFileHelper));
-			generator.addProvider(new ForestryFluidTagsProvider(generator, existingFileHelper));
-			generator.addProvider(new ForestryLootTableProvider(generator));
-			generator.addProvider(new WoodBlockStateProvider(generator));
-			generator.addProvider(new WoodBlockModelProvider(generator));
-			generator.addProvider(new WoodItemModelProvider(generator));
-			generator.addProvider(new ForestryBlockStateProvider(generator));
-			generator.addProvider(new ForestryBlockModelProvider(generator));
-			generator.addProvider(new ForestryItemModelProvider(generator));
-			generator.addProvider(new ForestryRecipeProvider(generator));
-			generator.addProvider(new ForestryMachineRecipeProvider(generator));
-			generator.addProvider(new ForestryLootModifierProvider(generator));
+			generator.addProvider(true, blockTagsProvider);
+			generator.addProvider(true, new ForestryAdvancementProvider(generator));
+			generator.addProvider(true, new ForestryItemTagsProvider(generator, blockTagsProvider, existingFileHelper));
+			generator.addProvider(true, new ForestryBackpackTagProvider(generator, blockTagsProvider, existingFileHelper));
+			generator.addProvider(true, new ForestryFluidTagsProvider(generator, existingFileHelper));
+			generator.addProvider(true, new ForestryLootTableProvider(generator));
+			generator.addProvider(true, new WoodBlockStateProvider(generator));
+			generator.addProvider(true, new WoodBlockModelProvider(generator));
+			generator.addProvider(true, new WoodItemModelProvider(generator));
+			generator.addProvider(true, new ForestryBlockStateProvider(generator));
+			generator.addProvider(true, new ForestryBlockModelProvider(generator));
+			generator.addProvider(true, new ForestryItemModelProvider(generator));
+			generator.addProvider(true, new ForestryRecipeProvider(generator));
+			generator.addProvider(true, new ForestryMachineRecipeProvider(generator));
+			generator.addProvider(true, new ForestryLootModifierProvider(generator));
 		}
 	}
 
@@ -240,7 +247,7 @@ public class Forestry {
 	private record Client(IEventBus modEventBus, NetworkHandler networkHandler) implements Runnable {
 		@Override
 		public void run() {
-			modEventBus.addListener(EventPriority.NORMAL, false, ColorHandlerEvent.Block.class, x -> {
+			modEventBus.addListener(EventPriority.NORMAL, false, RegisterColorHandlersEvent.Block.class, x -> {
 				Minecraft minecraft = Minecraft.getInstance();
 				ForestrySpriteUploader spriteUploader = new ForestrySpriteUploader(minecraft.textureManager, TextureManagerForestry.LOCATION_FORESTRY_TEXTURE, "gui");
 				TextureManagerForestry.getInstance().init(spriteUploader);
@@ -265,25 +272,30 @@ public class Forestry {
 		}
 
 		@SubscribeEvent(priority = EventPriority.HIGH)
-		public static void createFeatures(RegistryEvent.Register<Block> event) {
-			ModuleManager.getModuleHandler().createFeatures();
+		public static void createFeatures(final RegisterEvent event) {
+			if (event.getRegistryKey().equals(ForgeRegistries.Keys.BLOCKS)) {
+				ModuleManager.getModuleHandler().createFeatures();
+			}
 		}
 
 		@SubscribeEvent(priority = EventPriority.LOW)
-		public static void createObjects(RegistryEvent.Register<Block> event) {
-			ModuleManager.getModuleHandler().createObjects((type, moduleID) -> !moduleID.equals(ForestryModuleUids.CRATE));
-			ModuleManager.getModuleHandler().runRegisterBackpacksAndCrates();
-			ModuleManager.getModuleHandler().createObjects((type, moduleID) -> moduleID.equals(ForestryModuleUids.CRATE));
+		public static void createObjects(final RegisterEvent event) {
+			if (event.getRegistryKey().equals(ForgeRegistries.Keys.BLOCKS)) {
+				ModuleManager.getModuleHandler().createObjects((type, moduleID) -> !moduleID.equals(ForestryModuleUids.CRATE));
+				ModuleManager.getModuleHandler().runRegisterBackpacksAndCrates();
+				ModuleManager.getModuleHandler().createObjects((type, moduleID) -> moduleID.equals(ForestryModuleUids.CRATE));
+			}
 		}
 
 		@SubscribeEvent(priority = EventPriority.LOWEST)
-		public static void registerObjects(RegistryEvent.Register<?> event) {
+		public static void registerObjects(RegisterEvent event) {
 			ModuleManager.getModuleHandler().registerObjects(event);
 		}
 
 		@SubscribeEvent
-		public static void registerRecipeSerialziers(RegistryEvent.Register<RecipeSerializer<?>> event) {
-			IForgeRegistry<RecipeSerializer<?>> registry = event.getRegistry();
+		public static void registerRecipeSerialziers(RegisterEvent event) {
+			if (!event.getRegistryKey().equals(ForgeRegistries.Keys.RECIPE_SERIALIZERS)) return;
+			IForgeRegistry<RecipeSerializer<?>> registry = event.getForgeRegistry();
 
 			register(registry, ICarpenterRecipe.TYPE, new CarpenterRecipe.Serializer());
 			register(registry, ICentrifugeRecipe.TYPE, new CentrifugeRecipe.Serializer());
@@ -299,15 +311,15 @@ public class Forestry {
 		}
 
 		private static void register(IForgeRegistry<RecipeSerializer<?>> registry, RecipeType<?> type, RecipeSerializer<?> serializer) {
-			Registry.register(Registry.RECIPE_TYPE, type.toString(), type);
-			registry.register(serializer.setRegistryName(new ResourceLocation(type.toString())));
+			registry.register(new ResourceLocation(type.toString()), serializer);
 		}
 
 		@SubscribeEvent
-		public static void registerLootModifiers(RegistryEvent.Register<GlobalLootModifierSerializer<?>> event) {
-			IForgeRegistry<GlobalLootModifierSerializer<?>> registry = event.getRegistry();
-			registry.register(ConditionLootModifier.SERIALIZER);
-			registry.register(GrafterLootModifier.SERIALIZER);
+		public static void registerLootModifiers(RegisterEvent event) {
+			if (!event.getRegistryKey().equals(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS)) return;
+			IForgeRegistry<Codec<? extends IGlobalLootModifier>> registry = event.getForgeRegistry();
+			registry.register(new ResourceLocation(Constants.MOD_ID, "condition_modifier"), ConditionLootModifier.CODEC);
+			registry.register(new ResourceLocation(Constants.MOD_ID, "grafter_modifier"), GrafterLootModifier.CODEC);
 
 			OrganismFunction.type = Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(Constants.MOD_ID, "set_species_nbt"), new LootItemFunctionType(new OrganismFunction.Serializer()));
 			CountBlockFunction.type = Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(Constants.MOD_ID, "count_from_block"), new LootItemFunctionType(new CountBlockFunction.Serializer()));

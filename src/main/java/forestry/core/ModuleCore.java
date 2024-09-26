@@ -23,6 +23,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -55,13 +56,16 @@ import forestry.core.utils.ForestryModEnvWarningCallable;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ISidedModuleHandler;
+import net.minecraftforge.registries.RegisterEvent;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.CORE, name = "Core", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.core.description", coreModule = true)
 public class ModuleCore extends BlankForestryModule {
 	public static final LiteralArgumentBuilder<CommandSourceStack> rootCommand = LiteralArgumentBuilder.literal("forestry");
 
 	public ModuleCore() {
-		CoreParticles.PARTICLE_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
+		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+		CoreParticles.PARTICLE_TYPES.register(modEventBus);
+		CommandModules.registerDeferred(modEventBus);
 	}
 
 	@Override
@@ -112,7 +116,11 @@ public class ModuleCore extends BlankForestryModule {
 		ForestryModEnvWarningCallable.register();
 
 		Proxies.render.initRendering();
-		CoreFeatures.registerOres();
+	}
+
+	@Override
+	public void registerObjects(RegisterEvent event) {
+		CoreFeatures.registerOres(event);
 	}
 
 	@Override

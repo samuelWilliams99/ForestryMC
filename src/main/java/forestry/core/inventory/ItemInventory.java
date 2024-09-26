@@ -15,6 +15,7 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
@@ -36,7 +37,7 @@ import forestry.core.tiles.IFilterSlotDelegate;
 public abstract class ItemInventory implements Container, IFilterSlotDelegate, ICapabilityProvider {
 	private static final String KEY_SLOTS = "Slots";
 	private static final String KEY_UID = "UID";
-	private static final Random rand = new Random();
+	private static final RandomSource rand = RandomSource.create();
 
 	private final IItemHandler itemHandler = new InvWrapper(this);
 

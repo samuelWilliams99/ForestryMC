@@ -53,6 +53,6 @@ public class FluidProperties {
 			return false;
 		}
 		ResourceManager resourceManager = minecraft.getResourceManager();
-		return resourceManager.hasResource(location);
+		return resourceManager.getResource(location).isPresent();
 	}
 }

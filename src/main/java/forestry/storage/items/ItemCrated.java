@@ -13,11 +13,11 @@ package forestry.storage.items;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -28,33 +28,35 @@ import forestry.core.items.ItemForestry;
 import forestry.core.items.definitions.IColoredItem;
 import forestry.core.utils.ItemStackUtil;
 
+import javax.annotation.Nullable;
+
 public class ItemCrated extends ItemForestry implements IColoredItem {
-	private final ItemStack contained;
+	@Nullable
+	private final Item contained;
 
 	/**
 	 * @param contained The item which should be dropped on use, or be uncrated into
 	 */
-	public ItemCrated(ItemStack contained) {
+	public ItemCrated(@Nullable Item contained) {
 		super(ItemGroups.tabStorage);
 		this.contained = contained;
 	}
 
 	public ItemStack getContained() {
-		return contained;
+		return new ItemStack(contained);
 	}
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
 		ItemStack heldItem = playerIn.getItemInHand(handIn);
 		if (!worldIn.isClientSide) {
-			if (contained.isEmpty() || heldItem.isEmpty()) {
+			if (contained == null || heldItem.isEmpty()) {
 				return InteractionResultHolder.pass(heldItem);
 			}
 
 			heldItem.shrink(1);
 
-			ItemStack dropStack = contained.copy();
-			dropStack.setCount(9);
+			ItemStack dropStack = new ItemStack(contained, 9);
 			ItemStackUtil.dropItemStackAsEntity(dropStack, worldIn, playerIn.getX(), playerIn.getY(), playerIn.getZ(), 40);
 		}
 		return InteractionResultHolder.success(heldItem);
@@ -62,11 +64,11 @@ public class ItemCrated extends ItemForestry implements IColoredItem {
 
 	@Override
 	public Component getName(ItemStack itemstack) {
-		if (contained.isEmpty()) {
-			return new TranslatableComponent("item.forestry.crate");
+		if (contained == null) {
+			return Component.translatable("item.forestry.crate");
 		} else {
-			Component containedName = contained.getHoverName();
-			return new TranslatableComponent("for.item.crated.grammar", containedName);
+			Component containedName = new ItemStack(contained).getHoverName();
+			return Component.translatable("for.item.crated.grammar", containedName);
 		}
 	}
 
@@ -91,10 +93,10 @@ public class ItemCrated extends ItemForestry implements IColoredItem {
 	public int getColorFromItemStack(ItemStack stack, int renderPass) {
 		ItemColors colors = Minecraft.getInstance().getItemColors();
 
-		if (contained.isEmpty() || renderPass == 100) {
+		if (contained == null || renderPass == 100) {
 			return -1;
 		}
 
-		return colors.getColor(contained, renderPass);
+		return colors.getColor(new ItemStack(contained), renderPass);
 	}
 }

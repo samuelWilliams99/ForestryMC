@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import net.minecraft.data.CachedOutput;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -47,24 +49,14 @@ public abstract class ModelProvider implements DataProvider {
 	}
 
 	@Override
-	public void run(HashCache cache) throws IOException {
+	public void run(CachedOutput cache) throws IOException {
 		this.pathToBuilder.clear();
 		this.registerModels();
 		pathToBuilder.forEach((key, builder) -> {
 			JsonObject jsonobject = builder.serialize();
 			Path path = this.makePath(key);
 			try {
-				String s = GSON.toJson(jsonobject);
-				String s1 = SHA1.hashUnencodedChars(s).toString();
-				if (!Objects.equals(cache.getHash(path), s1) || !Files.exists(path)) {
-					Files.createDirectories(path.getParent());
-
-					try (BufferedWriter bufferedwriter = Files.newBufferedWriter(path)) {
-						bufferedwriter.write(s);
-					}
-				}
-
-				cache.putNew(path, s1);
+				DataProvider.saveStable(cache, jsonobject, path);
 			} catch (IOException ioexception) {
 				LOGGER.error("Couldn't save models to {}", path, ioexception);
 			}
@@ -75,11 +67,11 @@ public abstract class ModelProvider implements DataProvider {
 	protected abstract void registerModels();
 
 	protected void registerModel(Item item, ModelBuilder builder) {
-		registerModel(item.getRegistryName().getPath(), builder);
+		registerModel(ForgeRegistries.ITEMS.getKey(item).getPath(), builder);
 	}
 
 	protected void registerModel(Block block, ModelBuilder builder) {
-		registerModel(block.getRegistryName().getPath(), builder);
+		registerModel(ForgeRegistries.BLOCKS.getKey(block).getPath(), builder);
 	}
 
 	protected void registerModel(FeatureItem feature, ModelBuilder builder) {

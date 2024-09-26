@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
@@ -28,7 +29,7 @@ import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.world.ChunkDataEvent;
+import net.minecraftforge.event.level.ChunkDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import net.minecraftforge.fml.common.Mod;
@@ -46,20 +47,20 @@ public class TickHandlerCoreServer {
 
 
 	@SubscribeEvent
-	public static void onWorldTick(TickEvent.WorldTickEvent event) {
+	public static void onWorldTick(TickEvent.LevelTickEvent event) {
 		if (event.phase != TickEvent.Phase.END) {
 			return;
 		}
 
 		if (Config.enableBackpackResupply) {
-			for (Player obj : event.world.players()) {
+			for (Player obj : event.level.players()) {
 				for (IResupplyHandler handler : ModuleManager.resupplyHandlers) {
 					handler.resupply(obj);
 				}
 			}
 		}
 
-		if (Config.doRetrogen && event.world instanceof ServerLevel world) {
+		if (Config.doRetrogen && event.level instanceof ServerLevel world) {
 			ResourceKey<Level> dimId = world.dimension();
 			if (checkForRetrogen.contains(dimId)) {
 				List<ChunkCoords> chunkList = chunkRegenList.get(dimId);
@@ -68,7 +69,7 @@ public class TickHandlerCoreServer {
 					ChunkCoords coords = iterator.next();
 					if (canDecorate(world, coords)) {
 						iterator.remove();
-						Random random = getRetrogenRandom(world, coords);
+						RandomSource random = getRetrogenRandom(world, coords);
 						//						worldGenerator.retroGen(random, coords.x, coords.z, world);
 					}
 				}
@@ -77,9 +78,9 @@ public class TickHandlerCoreServer {
 		}
 	}
 
-	private static Random getRetrogenRandom(Level world, ChunkCoords coords) {
+	private static RandomSource getRetrogenRandom(Level world, ChunkCoords coords) {
 		long worldSeed = WorldUtils.asServer(world).getSeed();
-		Random random = new Random(worldSeed);
+		RandomSource random = RandomSource.create(worldSeed);
 		long xSeed = random.nextLong() >> 2 + 1L;
 		long zSeed = random.nextLong() >> 2 + 1L;
 		random.setSeed(xSeed * coords.x + zSeed * coords.z ^ worldSeed);

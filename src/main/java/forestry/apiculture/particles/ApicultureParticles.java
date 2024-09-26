@@ -6,7 +6,7 @@ import net.minecraft.core.particles.ParticleType;
 import com.mojang.serialization.Codec;
 
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import net.minecraftforge.fml.common.Mod;
@@ -34,7 +34,7 @@ public class ApicultureParticles {
 
 	@SuppressWarnings("resource")
 	@SubscribeEvent
-	public static void registerParticleFactory(ParticleFactoryRegisterEvent event) {
+	public static void registerParticleFactory(RegisterParticleProvidersEvent event) {
 		Minecraft.getInstance().particleEngine.register(ApicultureParticles.BEE_EXPLORER_PARTICLE.getParticleType(), BeeExploreParticle.Factory::new);
 
 		Minecraft.getInstance().particleEngine.register(ApicultureParticles.BEE_ROUND_TRIP_PARTICLE.getParticleType(), BeeRoundTripParticle.Factory::new);

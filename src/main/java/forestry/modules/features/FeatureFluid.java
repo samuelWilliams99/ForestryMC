@@ -2,15 +2,18 @@ package forestry.modules.features;
 
 import javax.annotation.Nullable;
 import java.awt.Color;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import net.minecraft.Util;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.resources.ResourceLocation;
 
-import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 
 import forestry.core.config.Constants;
@@ -28,17 +31,14 @@ public class FeatureFluid implements IFluidFeature {
 	@Nullable
 	private FlowingFluid flowing;
 
+	@Nullable FluidType fluidType;
+
 	public FeatureFluid(Builder builder) {
 		this.moduleID = builder.moduleID;
 		this.identifier = builder.identifier;
 		this.block = builder.registry.block(() -> new BlockForestryFluid(this), "fluid_" + builder.identifier);
 		this.properties = new FluidProperties(builder);
-		ResourceLocation[] resources = properties().resources;
-		FluidAttributes.Builder attributes = FluidAttributes.builder(resources[0], resources[1])
-				.density(properties().density)
-				.viscosity(properties().viscosity)
-				.temperature(properties().temperature);
-		this.internal = new ForgeFlowingFluid.Properties(this::getFluid, this::getFlowing, attributes).block(block::getBlock).bucket(properties().bucket);
+		this.internal = new ForgeFlowingFluid.Properties(this::getFluidType, this::getFluid, this::getFlowing).block(block::getBlock).bucket(properties().bucket);
 	}
 
 	@Override
@@ -57,8 +57,38 @@ public class FeatureFluid implements IFluidFeature {
 	}
 
 	@Override
+	public void setFluidType(@Nullable FluidType fluidType) {
+		this.fluidType = fluidType;
+	}
+
+	@Override
 	public Supplier<FlowingFluid> getFluidConstructor(boolean flowing) {
 		return () -> flowing ? new ForgeFlowingFluid.Flowing(internal) : new ForgeFlowingFluid.Source(internal);
+	}
+
+	@Override
+	public FluidType createFluidType() {
+		FluidType.Properties fluidProps = FluidType.Properties.create()
+				.density(properties().density)
+				.viscosity(properties().viscosity)
+				.temperature(properties().temperature)
+				.descriptionId(Util.makeDescriptionId("fluid", new ResourceLocation(getModId(), getIdentifier())));
+		return new FluidType(fluidProps) {
+			@Override
+			public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
+				consumer.accept(new IClientFluidTypeExtensions() {
+					@Override
+					public ResourceLocation getStillTexture() {
+						return new ResourceLocation(getModId(), "block/liquid/" + getIdentifier() + "_still");
+					}
+
+					@Override
+					public ResourceLocation getFlowingTexture() {
+						return new ResourceLocation(getModId(), "block/liquid/" + getIdentifier() + "_still");
+					}
+				});
+			}
+		};
 	}
 
 	@Nullable
@@ -80,6 +110,12 @@ public class FeatureFluid implements IFluidFeature {
 	@Override
 	public FlowingFluid getFlowing() {
 		return flowing;
+	}
+
+	@Override
+	@Nullable
+	public FluidType getFluidType() {
+		return fluidType;
 	}
 
 	@Override

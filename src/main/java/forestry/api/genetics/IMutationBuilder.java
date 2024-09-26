@@ -5,6 +5,7 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.biome.Biome;
 
@@ -42,9 +43,9 @@ public interface IMutationBuilder {
 	/**
 	 * Restrict this mutation to certain types of biomes.
 	 *
-	 * @param types The types of biomes this mutation can occur.
+	 * @param type The types of biomes this mutation can occur.
 	 */
-	IMutationBuilder restrictBiomeType(Biome.BiomeCategory... types);
+	IMutationBuilder restrictBiomeType(TagKey<Biome> type);
 
 	/**
 	 * Restrict the days of the year that this mutation can occur

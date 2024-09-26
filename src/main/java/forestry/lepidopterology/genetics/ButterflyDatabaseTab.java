@@ -61,7 +61,7 @@ public class ButterflyDatabaseTab implements IDatabaseTab<IButterfly> {
 
 		Function<Boolean, String> toleranceText = a -> {
 			IAlleleForestrySpecies species = a ? primarySpecies : secondarySpecies;
-			return AlleleManager.climateHelper.toDisplay(species.getTemperature()).getContents();    //TODO ITextComponent
+			return AlleleManager.climateHelper.toDisplay(species.getTemperature()).getContents().toString();    //TODO ITextComponent
 		};
 		database.addLine(Translator.translateToLocal("for.gui.climate"), toleranceText, ButterflyChromosomes.TEMPERATURE_TOLERANCE);
 		database.addToleranceLine(ButterflyChromosomes.TEMPERATURE_TOLERANCE);

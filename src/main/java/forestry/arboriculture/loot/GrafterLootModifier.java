@@ -6,6 +6,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -24,7 +27,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.Level;
 
-import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
 import net.minecraftforge.event.ForgeEventFactory;
 
@@ -43,7 +45,13 @@ import forestry.core.config.Constants;
 import genetics.api.individual.IGenome;
 
 public class GrafterLootModifier extends LootModifier {
-	public static final Serializer SERIALIZER = new Serializer();
+
+	public final static Codec<GrafterLootModifier> CODEC =
+			RecordCodecBuilder.create(inst -> codecStart(inst).apply(inst, GrafterLootModifier::new));
+	@Override
+	public final Codec<GrafterLootModifier> codec() {
+		return CODEC;
+	}
 
 	public GrafterLootModifier(LootItemCondition[] conditionsIn) {
 		super(conditionsIn);
@@ -52,7 +60,7 @@ public class GrafterLootModifier extends LootModifier {
 	//TODO: Clean this up and move into interface?
 	@Nonnull
 	@Override
-	protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
+	protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
 		BlockState state = context.getParamOrNull(LootContextParams.BLOCK_STATE);
 		if (state == null || !state.is(BlockTags.LEAVES)) {
 			return generatedLoot;
@@ -118,22 +126,5 @@ public class GrafterLootModifier extends LootModifier {
 			return tree;
 		}
 		return TreeHelper.getRoot().getTree(entity);
-	}
-
-	private static class Serializer extends GlobalLootModifierSerializer<GrafterLootModifier> {
-
-		public Serializer() {
-			setRegistryName(Constants.MOD_ID, "grafter_modifier");
-		}
-
-		@Override
-		public GrafterLootModifier read(ResourceLocation location, JsonObject object, LootItemCondition[] conditions) {
-			return new GrafterLootModifier(conditions);
-		}
-
-		@Override
-		public JsonObject write(GrafterLootModifier instance) {
-			return makeConditions(instance.conditions);
-		}
 	}
 }

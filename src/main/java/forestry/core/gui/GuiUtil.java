@@ -42,19 +42,18 @@ public class GuiUtil {
 	}
 
 	//TODO hopefully this is client side...
-	public static void drawToolTips(PoseStack transform, IGuiSizable gui, @Nullable IToolTipProvider provider, ToolTip toolTips, int mouseX, int mouseY) {
+	public static void drawToolTips(PoseStack transform, GuiForestry<?> gui, @Nullable IToolTipProvider provider, ToolTip toolTips, int mouseX, int mouseY) {
 		if (!toolTips.isEmpty()) {
 			transform.pushPose();
 			if (provider == null || provider.isRelativeToGui()) {
 				transform.translate(-gui.getGuiLeft(), -gui.getGuiTop(), 0);
 			}
-			Window window = Minecraft.getInstance().getWindow();    //TODO - more resolution stuff to check
-			//GuiUtils.drawHoveringText(transform, toolTips.getLines(), mouseX, mouseY, window.getGuiScaledWidth(), window.getGuiScaledHeight(), -1, gui.getGameInstance().font);
+			gui.renderComponentTooltip(transform, toolTips.getLines(), mouseX, mouseY);
 			transform.popPose();
 		}
 	}
 
-	public static void drawToolTips(PoseStack transform, IGuiSizable gui, Collection<?> objects, int mouseX, int mouseY) {
+	public static void drawToolTips(PoseStack transform, GuiForestry<?> gui, Collection<?> objects, int mouseX, int mouseY) {
 		for (Object obj : objects) {
 			if (!(obj instanceof IToolTipProvider provider)) {
 				continue;

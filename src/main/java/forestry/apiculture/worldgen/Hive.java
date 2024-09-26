@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
@@ -50,11 +52,11 @@ public final class Hive {
 		return hiveDescription.getGenChance();
 	}
 
-	public void postGen(WorldGenLevel world, Random rand, BlockPos pos) {
+	public void postGen(WorldGenLevel world, RandomSource rand, BlockPos pos) {
 		hiveDescription.postGen(world, rand, pos);
 	}
 
-	public boolean isGoodBiome(Biome biome) {
+	public boolean isGoodBiome(Holder<Biome> biome) {
 		return hiveDescription.isGoodBiome(biome);
 	}
 

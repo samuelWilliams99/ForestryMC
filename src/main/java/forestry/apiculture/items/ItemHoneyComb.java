@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
@@ -35,7 +36,7 @@ public class ItemHoneyComb extends ItemForestry implements IColoredItem {
 	}
 
 	@Nullable
-	public static EnumHoneyComb getRandomCombType(Random random, boolean includeSecret) {
+	public static EnumHoneyComb getRandomCombType(RandomSource random, boolean includeSecret) {
 		List<EnumHoneyComb> validCombs = new ArrayList<>(EnumHoneyComb.VALUES.length);
 		for (int i = 0; i < EnumHoneyComb.VALUES.length; i++) {
 			EnumHoneyComb honeyComb = EnumHoneyComb.get(i);
@@ -51,7 +52,7 @@ public class ItemHoneyComb extends ItemForestry implements IColoredItem {
 		}
 	}
 
-	public static ItemStack getRandomComb(int amount, Random random, boolean includeSecret) {
+	public static ItemStack getRandomComb(int amount, RandomSource random, boolean includeSecret) {
 		EnumHoneyComb comb = getRandomCombType(random, includeSecret);
 		return comb != null ? ApicultureItems.BEE_COMBS.stack(comb, amount) : ItemStack.EMPTY;
 	}

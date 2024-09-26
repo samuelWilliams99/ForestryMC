@@ -18,6 +18,7 @@ import java.util.Locale;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.tags.BiomeTags;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.genetics.BeeChromosomes;
@@ -300,7 +301,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		@Override
 		protected void registerMutations() {
 			registerMutation(STEADFAST, VALIANT, 6)
-					.restrictBiomeType(Biome.BiomeCategory.FOREST);
+					.restrictBiomeType(BiomeTags.IS_FOREST);
 		}
 	},
 
@@ -324,7 +325,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		protected void registerMutations() {
 			for (BeeDefinition parent2 : EnumSet.of(MODEST, TROPICAL)) {
 				registerMutation(CULTIVATED, parent2, 60)
-						.restrictBiomeType(Biome.BiomeCategory.NETHER);
+						.restrictBiomeType(BiomeTags.IS_NETHER);
 			}
 		}
 	},
@@ -348,7 +349,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		protected void registerMutations() {
 			for (BeeDefinition parent2 : EnumSet.of(CULTIVATED, MODEST, TROPICAL)) {
 				registerMutation(SINISTER, parent2, 40)
-						.restrictBiomeType(Biome.BiomeCategory.NETHER);
+						.restrictBiomeType(BiomeTags.IS_NETHER);
 			}
 		}
 	},
@@ -372,7 +373,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		@Override
 		protected void registerMutations() {
 			registerMutation(SINISTER, FIENDISH, 25)
-					.restrictBiomeType(Biome.BiomeCategory.NETHER);
+					.restrictBiomeType(BiomeTags.IS_NETHER);
 		}
 	},
 
@@ -822,7 +823,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		@Override
 		protected void registerMutations() {
 			registerMutation(MEADOWS, DILIGENT, 12)
-					.restrictBiomeType(Biome.BiomeCategory.PLAINS);
+					.restrictBiomeType(BiomeTags.HAS_VILLAGE_PLAINS);
 		}
 	},
 	FARMERLY(BeeBranchDefinition.AGRARIAN, "arator", true, new Color(0xD39728), new Color(0xffdc16)) {
@@ -840,7 +841,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		@Override
 		protected void registerMutations() {
 			registerMutation(RURAL, UNWEARY, 10)
-					.restrictBiomeType(Biome.BiomeCategory.PLAINS);
+					.restrictBiomeType(BiomeTags.HAS_VILLAGE_PLAINS);
 		}
 	},
 	AGRARIAN(BeeBranchDefinition.AGRARIAN, "arator", true, new Color(0xFFCA75), new Color(0xFFE047)) {
@@ -861,7 +862,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		@Override
 		protected void registerMutations() {
 			registerMutation(FARMERLY, INDUSTRIOUS, 6)
-					.restrictBiomeType(Biome.BiomeCategory.PLAINS);
+					.restrictBiomeType(BiomeTags.HAS_VILLAGE_PLAINS);
 		}
 	},
 

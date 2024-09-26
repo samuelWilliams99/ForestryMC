@@ -55,7 +55,7 @@
 //			this.priceMultiplier = p_i50532_6_;
 //		}
 //
-//		public MerchantOffer getOffer(Entity p_221182_1_, Random p_221182_2_) {
+//		public MerchantOffer getOffer(Entity p_221182_1_, RandomSource p_221182_2_) {
 //			return new MerchantOffer(new ItemStack(Items.EMERALD, this.emeraldCost), new ItemStack(this.itemStack.getItem(), this.numberOfItems), this.maxUses, this.villagerXp, this.priceMultiplier);
 //		}
 //	}
@@ -80,7 +80,7 @@
 //			this.priceMultiplier = 0.05F;
 //		}
 //
-//		public MerchantOffer getOffer(Entity p_221182_1_, Random p_221182_2_) {
+//		public MerchantOffer getOffer(Entity p_221182_1_, RandomSource p_221182_2_) {
 //			ItemStack itemstack = new ItemStack(this.item, this.cost);
 //			return new MerchantOffer(itemstack, new ItemStack(Items.EMERALD), this.maxUses, this.villagerXp, this.priceMultiplier);
 //		}
@@ -105,7 +105,7 @@
 //	//		}
 //	//
 //	//		@Override
-//	//		public void addMerchantRecipe(IMerchant merchant, MerchantRecipeList recipeList, Random random) {
+//	//		public void addMerchantRecipe(IMerchant merchant, MerchantRecipeList recipeList, RandomSource random) {
 //	//			int i = 1;
 //	//			if (this.sellInfo != null) {
 //	//				i = this.sellInfo.getPrice(random);
@@ -143,7 +143,7 @@
 //	//		}
 //	//
 //	//		@Override
-//	//		public void addMerchantRecipe(IMerchant merchant, MerchantRecipeList recipeList, Random random) {
+//	//		public void addMerchantRecipe(IMerchant merchant, MerchantRecipeList recipeList, RandomSource random) {
 //	//			int itemAmount = this.itemInfo.getPrice(random);
 //	//			int emeraldsAmount = this.emeraldsInfo.getPrice(random);
 //	//			int logsAmount = this.logsInfo.getPrice(random);
@@ -195,7 +195,7 @@
 //	//		}
 //	//
 //	//		@Override
-//	//		public void addMerchantRecipe(IMerchant merchant, MerchantRecipeList recipeList, Random random) {
+//	//		public void addMerchantRecipe(IMerchant merchant, MerchantRecipeList recipeList, RandomSource random) {
 //	//			int buyAmount = 1;
 //	//			if (this.buyingPriceInfo != null) {
 //	//				buyAmount = this.buyingPriceInfo.getPrice(random);

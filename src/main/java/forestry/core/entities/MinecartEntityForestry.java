@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.entities;
 
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.EntityType;
@@ -22,7 +24,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 
@@ -92,15 +93,14 @@ public abstract class MinecartEntityForestry extends AbstractMinecart implements
 		}
 	}
 
-	// fix cart contents rendering as black in the End dimension
 	@Override
-	public float getBrightness() {
-		return 1.0f;
+	public Item getDropItem() {
+		return Items.MINECART;
 	}
 
 	@Override
 	public Component getName() {
-		return new TranslatableComponent(getUnlocalizedTitle());
+		return Component.translatable(getUnlocalizedTitle());
 	}
 
 	/* ITitled */

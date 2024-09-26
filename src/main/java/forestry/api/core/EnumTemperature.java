@@ -7,6 +7,8 @@ package forestry.api.core;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.level.biome.Biome;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -64,19 +66,19 @@ public enum EnumTemperature {
 		}
 	}
 
-	public static EnumTemperature getFromBiome(Biome biome) {
-		if (biome.getBiomeCategory() == Biome.BiomeCategory.NETHER) {
+	public static EnumTemperature getFromBiome(Holder<Biome> biome) {
+		if (biome.is(BiomeTags.IS_NETHER)) {
 			return HELLISH;
 		}
 
-		return getFromValue(biome.getBaseTemperature());
+		return getFromValue(biome.value().getBaseTemperature());
 	}
 
-	public static EnumTemperature getFromBiome(Biome biome, BlockPos pos) {
-		if (biome.getBiomeCategory() == Biome.BiomeCategory.NETHER) {
+	public static EnumTemperature getFromBiome(Holder<Biome> biome, BlockPos pos) {
+		if (biome.is(BiomeTags.IS_NETHER)) {
 			return HELLISH;
 		}
 
-		return getFromValue(biome.getBaseTemperature());
+		return getFromValue(biome.value().getBaseTemperature());
 	}
 }

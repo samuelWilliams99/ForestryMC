@@ -15,10 +15,12 @@ import java.util.Objects;
 import java.util.Random;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -27,8 +29,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.data.IModelData;
-import net.minecraftforge.client.model.data.ModelDataMap;
+import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.common.PlantType;
 
@@ -143,7 +144,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	@Override
-	public void onBlockTick(Level worldIn, BlockPos pos, BlockState state, Random rand) {
+	public void onBlockTick(Level worldIn, BlockPos pos, BlockState state, RandomSource rand) {
 		ITree tree = getTree();
 		if (tree == null) {
 			return;
@@ -284,15 +285,15 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public static ResourceLocation getLeaveSprite(IModelData data, boolean fancy) {
+	public static ResourceLocation getLeaveSprite(ModelData data, boolean fancy) {
 		final ILeafSpriteProvider leafSpriteProvider = getLeafSpriteProvider(data);
-		final Boolean pollinated = data.getData(POLLINATED);
+		final Boolean pollinated = data.get(POLLINATED);
 		return leafSpriteProvider.getSprite(pollinated != null && pollinated, fancy);
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	private static ILeafSpriteProvider getLeafSpriteProvider(IModelData data) {
-		final ILeafSpriteProvider leafSpriteProvider = data.getData(SPRITE_PROVIDER);
+	private static ILeafSpriteProvider getLeafSpriteProvider(ModelData data) {
+		final ILeafSpriteProvider leafSpriteProvider = data.get(SPRITE_PROVIDER);
 		if (leafSpriteProvider != null) {
 			return leafSpriteProvider;
 		} else {
@@ -302,16 +303,16 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	@Nullable
-	public static ResourceLocation getFruitSprite(IModelData data) {
-		return data.getData(FRUIT_TEXTURE);
+	public static ResourceLocation getFruitSprite(ModelData data) {
+		return data.get(FRUIT_TEXTURE);
 	}
 
 	@Override
-	public IModelData getModelData() {
-		ModelDataMap.Builder builder = new ModelDataMap.Builder();
-		builder.withInitial(SPRITE_PROVIDER, getLeafSpriteProvider());
-		builder.withInitial(POLLINATED, isPollinatedState);
-		builder.withInitial(FRUIT_TEXTURE, fruitSprite);
+	public ModelData getModelData() {
+		ModelData.Builder builder = ModelData.builder();
+		builder.with(SPRITE_PROVIDER, getLeafSpriteProvider());
+		builder.with(POLLINATED, isPollinatedState);
+		builder.with(FRUIT_TEXTURE, fruitSprite);
 		return builder.build();
 	}
 
@@ -560,9 +561,9 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	@Override
-	public Biome getBiome() {
+	public Holder<Biome> getBiome() {
 		Level level = Objects.requireNonNull(this.level);
-		return level.getBiome(worldPosition).value();
+		return level.getBiome(worldPosition);
 	}
 
 	@Override
@@ -572,7 +573,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	@Override
 	public EnumHumidity getHumidity() {
-		return EnumHumidity.getFromValue(getBiome().getDownfall());
+		return EnumHumidity.getFromValue(getBiome().value().getDownfall());
 	}
 
 	@Override

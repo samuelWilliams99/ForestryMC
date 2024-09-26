@@ -13,6 +13,7 @@ package forestry.apiculture.entities;
 import java.util.Optional;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -106,7 +107,7 @@ public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContain
 
 	@Override
 	public EnumHumidity getHumidity() {
-		return EnumHumidity.getFromValue(getBiome().getDownfall());
+		return EnumHumidity.getFromValue(getBiome().value().getDownfall());
 	}
 
 	@Override
@@ -116,7 +117,7 @@ public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContain
 
 	@Override
 	public float getExactHumidity() {
-		return getBiome().getDownfall();
+		return getBiome().value().getDownfall();
 	}
 
 	@Override
@@ -140,8 +141,8 @@ public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContain
 	}
 
 	@Override
-	public Biome getBiome() {
-		return level.getBiome(blockPosition()).value();
+	public Holder<Biome> getBiome() {
+		return level.getBiome(blockPosition());
 	}
 
 	@Override

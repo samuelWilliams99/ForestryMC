@@ -1,5 +1,6 @@
 package forestry.core.data;
 
+import com.google.common.cache.Cache;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
@@ -14,6 +15,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import net.minecraft.data.CachedOutput;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -47,7 +49,7 @@ public class ForestryLootTableProvider implements DataProvider {
 	 * Performs this provider's action.
 	 */
 	@Override
-	public void run(HashCache cache) {
+	public void run(CachedOutput cache) {
 		Path path = this.dataGenerator.getOutputFolder();
 		Map<ResourceLocation, LootTable> map = Maps.newHashMap();
 		tables.forEach((entry) -> entry.getFirst().get().accept((location, builder) -> {
@@ -68,7 +70,7 @@ public class ForestryLootTableProvider implements DataProvider {
 				Path path1 = getPath(path, location);
 
 				try {
-					DataProvider.save(GSON, cache, LootTables.serialize(table), path1);
+					DataProvider.saveStable(cache, LootTables.serialize(table), path1);
 				} catch (IOException ioexception) {
 					LOGGER.error("Couldn't save loot table {}", path1, ioexception);
 				}

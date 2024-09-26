@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
@@ -28,6 +29,7 @@ import net.minecraft.world.level.biome.Biome;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
+import net.minecraft.world.level.biome.Biomes;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
@@ -37,21 +39,70 @@ import forestry.core.render.ColourProperties;
 import forestry.core.utils.Translator;
 
 public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator> {
-	private static final LinkedListMultimap<String, Biome.BiomeCategory> habitats = LinkedListMultimap.create();
+	private static final LinkedListMultimap<String, ResourceKey<Biome>> habitats = LinkedListMultimap.create();
 
 	static {
-		habitats.putAll("Ocean", Arrays.asList(Biome.BiomeCategory.OCEAN, Biome.BiomeCategory.BEACH));
-		habitats.put("Plains", Biome.BiomeCategory.PLAINS);
-		habitats.put("Desert", Biome.BiomeCategory.DESERT);
-		habitats.putAll("Forest", Arrays.asList(Biome.BiomeCategory.FOREST, Biome.BiomeCategory.RIVER));
-		habitats.put("Jungle", Biome.BiomeCategory.JUNGLE);
-		habitats.put("Taiga", Biome.BiomeCategory.TAIGA);
-		habitats.put("Hills", Biome.BiomeCategory.EXTREME_HILLS);
-		habitats.put("Swamp", Biome.BiomeCategory.SWAMP);
-		habitats.put("Snow", Biome.BiomeCategory.ICY);
-		habitats.put("Mushroom", Biome.BiomeCategory.MUSHROOM);
-		habitats.put("Nether", Biome.BiomeCategory.NETHER);
-		habitats.put("End", Biome.BiomeCategory.THEEND);
+		habitats.putAll("Ocean", Arrays.asList(
+				Biomes.OCEAN,
+				Biomes.COLD_OCEAN,
+				Biomes.DEEP_COLD_OCEAN,
+				Biomes.DEEP_OCEAN,
+				Biomes.DEEP_COLD_OCEAN,
+				Biomes.FROZEN_OCEAN,
+				Biomes.DEEP_FROZEN_OCEAN,
+				Biomes.DEEP_LUKEWARM_OCEAN,
+				Biomes.LUKEWARM_OCEAN,
+				Biomes.WARM_OCEAN
+		));
+		habitats.putAll("Plains", Arrays.asList(Biomes.PLAINS, Biomes.SNOWY_PLAINS, Biomes.SNOWY_PLAINS));
+		habitats.put("Desert", Biomes.DESERT);
+		habitats.putAll("Forest", Arrays.asList(
+				Biomes.BIRCH_FOREST,
+				Biomes.CRIMSON_FOREST,
+				Biomes.DARK_FOREST,
+				Biomes.FLOWER_FOREST,
+				Biomes.FOREST,
+				Biomes.OLD_GROWTH_BIRCH_FOREST,
+				Biomes.WARPED_FOREST,
+				Biomes.WINDSWEPT_FOREST
+		));
+
+		habitats.putAll("Jungle", Arrays.asList(Biomes.JUNGLE, Biomes.SPARSE_JUNGLE, Biomes.BAMBOO_JUNGLE));
+		habitats.putAll("Taiga", Arrays.asList(
+				Biomes.OLD_GROWTH_PINE_TAIGA,
+				Biomes.OLD_GROWTH_SPRUCE_TAIGA,
+				Biomes.SNOWY_TAIGA,
+				Biomes.TAIGA
+		));
+		habitats.putAll("Hills", Arrays.asList(
+				Biomes.WINDSWEPT_FOREST,
+				Biomes.WINDSWEPT_GRAVELLY_HILLS,
+				Biomes.WINDSWEPT_HILLS,
+				Biomes.WINDSWEPT_SAVANNA
+		));
+		habitats.putAll("Swamp", Arrays.asList(Biomes.SWAMP, Biomes.MANGROVE_SWAMP));
+		habitats.putAll("Snow", Arrays.asList(
+				Biomes.ICE_SPIKES,
+				Biomes.SNOWY_BEACH,
+				Biomes.SNOWY_PLAINS,
+				Biomes.SNOWY_SLOPES,
+				Biomes.SNOWY_TAIGA
+		));
+		habitats.put("Mushroom", Biomes.MUSHROOM_FIELDS);
+		habitats.putAll("Nether", Arrays.asList(
+				Biomes.BASALT_DELTAS,
+				Biomes.CRIMSON_FOREST,
+				Biomes.NETHER_WASTES,
+				Biomes.SOUL_SAND_VALLEY,
+				Biomes.WARPED_FOREST
+		));
+		habitats.putAll("End", Arrays.asList(
+				Biomes.END_BARRENS,
+				Biomes.END_HIGHLANDS,
+				Biomes.END_MIDLANDS,
+				Biomes.SMALL_END_ISLANDS,
+				Biomes.THE_END
+		));
 	}
 
 	private final ItemInventoryHabitatLocator itemInventory;
@@ -61,7 +112,7 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator> {
 	private int startY;
 
 	public GuiHabitatLocator(ContainerHabitatLocator container, Inventory playerInv, Component title) {
-		super(Constants.TEXTURE_PATH_GUI + "/biomefinder.png", container, playerInv, title);
+		super(Constants.TEXTURE_PATH_GUI + "/habitat_locator.png", container, playerInv, title);
 
 		this.itemInventory = container.getItemInventory();
 		imageWidth = 176;
@@ -78,7 +129,7 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator> {
 				x = 18 + slot * 20;
 				y = 32;
 			}
-			Collection<Biome.BiomeCategory> biomes = habitats.get(habitatName);
+			Collection<ResourceKey<Biome>> biomes = habitats.get(habitatName);
 			HabitatSlot habitatSlot = new HabitatSlot(widgetManager, x, y, habitatName, biomes);
 			habitatSlots.add(habitatSlot);
 			widgetManager.add(habitatSlot);
@@ -89,20 +140,20 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator> {
 
 	@Override
 	protected void renderBg(PoseStack transform, float partialTicks, int mouseY, int mouseX) {
-		//super.renderBg(transform, partialTicks, mouseY, mouseX);
+		super.renderBg(transform, partialTicks, mouseY, mouseX);
 
 		String str = Translator.translateToLocal("item.forestry.habitat_locator").toUpperCase(Locale.ENGLISH);
 		getFontRenderer().draw(transform, str, startX + 8 + textLayout.getCenteredOffset(str, 138), startY + 16, ColourProperties.INSTANCE.get("gui.screen"));
 
 		// Set active according to valid biomes.
-		Set<Biome.BiomeCategory> activeBiomeTypes = new HashSet<>();
+		Set<ResourceKey<Biome>> activeBiomeTypes = new HashSet<>();
 		for (ResourceLocation biomeLocation : itemInventory.getBiomesToSearch()) {
 			Biome biome = ForgeRegistries.BIOMES.getValue(biomeLocation);
 			if (biome == null) {
 				continue;
 			}
-			Biome.BiomeCategory biomeTypes = biome.getBiomeCategory();
-			activeBiomeTypes.add(biomeTypes);
+			ResourceKey<Biome> biomeKey = ForgeRegistries.BIOMES.getResourceKey(biome).get();
+			activeBiomeTypes.add(biomeKey);
 		}
 
 		for (HabitatSlot habitatSlot : habitatSlots) {

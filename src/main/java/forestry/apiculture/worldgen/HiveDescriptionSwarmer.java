@@ -14,6 +14,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.core.Holder;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.item.ItemStack;
@@ -49,7 +51,7 @@ public class HiveDescriptionSwarmer implements IHiveDescription {
 	}
 
 	@Override
-	public boolean isGoodBiome(Biome biome) {
+	public boolean isGoodBiome(Holder<Biome> biome) {
 		return true;
 	}
 
@@ -69,7 +71,7 @@ public class HiveDescriptionSwarmer implements IHiveDescription {
 	}
 
 	@Override
-	public void postGen(WorldGenLevel world, Random rand, BlockPos pos) {
+	public void postGen(WorldGenLevel world, RandomSource rand, BlockPos pos) {
 		TileUtil.actOnTile(world, pos, TileHive.class, tile -> tile.setContained(bees));
 	}
 }

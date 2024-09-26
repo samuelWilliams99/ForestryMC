@@ -23,6 +23,13 @@ archivesBaseName = "forestry-$minecraft_version"
 
 repositories {
 	maven {
+		name "CurseMaven"
+		url "https://cursemaven.com"
+		content {
+			includeGroup "curse.maven"
+		}
+	}
+	maven {
 		name "JEI"
 		url "https://dvs1.progwml6.com/files/maven"
 	}
@@ -36,11 +43,16 @@ repositories {
 dependencies {
 	minecraft "net.minecraftforge:forge:$minecraft_version-$forge_version"
 
-	compileOnly fg.deobf("mezz.jei:jei-$minecraft_version:$jei_version:api")
-	runtimeOnly fg.deobf("mezz.jei:jei-$minecraft_version:$jei_version")
+	//compileOnly fg.deobf("mezz.jei:jei-$minecraft_version:$jei_version:api")
+	//runtimeOnly fg.deobf("mezz.jei:jei-$minecraft_version:$jei_version")
+	// Grabbing from curse-forge for 1.19.2 versions
+	compileOnly fg.deobf("curse.maven:jei-238222:4712866")
+	runtimeOnly fg.deobf("curse.maven:jei-238222:4712866")
 
-	compileOnly fg.deobf("vazkii.patchouli:Patchouli:$patchouli_version:api")
-	runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:$patchouli_version")
+	// compileOnly fg.deobf("vazkii.patchouli:Patchouli:$patchouli_version:api")
+	// runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:$patchouli_version")
+	compileOnly fg.deobf("curse.maven:patchouli-306770:4031402")
+	runtimeOnly fg.deobf("curse.maven:patchouli-306770:4031402")
 }
 
 java {
@@ -51,6 +63,8 @@ java {
 
 tasks.withType(JavaCompile) {
 	options.encoding = "UTF-8"
+	options.compilerArgs << "-Xmaxerrs" << "1000"
+	options.compilerArgs << "-Xlint:none"
 }
 
 sourceSets {

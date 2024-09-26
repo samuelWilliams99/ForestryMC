@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Random;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.npc.VillagerProfession;
@@ -41,7 +42,7 @@ public class RegisterVillager {
 	@Mod.EventBusSubscriber(modid = Constants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 	public static class Registers {
 		public static final DeferredRegister<PoiType> POINTS_OF_INTEREST = DeferredRegister.create(ForgeRegistries.POI_TYPES, Constants.MOD_ID);
-		public static final DeferredRegister<VillagerProfession> PROFESSIONS = DeferredRegister.create(ForgeRegistries.PROFESSIONS, Constants.MOD_ID);
+		public static final DeferredRegister<VillagerProfession> PROFESSIONS = DeferredRegister.create(ForgeRegistries.VILLAGER_PROFESSIONS, Constants.MOD_ID);
 
 		// public static final RegistryObject<PointOfInterestType> POI_APIARY = POINTS_OF_INTEREST.register("apiary", () -> RegisterVillagerPointOfInterest.create("apiary", RegisterVillagerPointOfInterest.assembleStates(ApicultureBlocks.BASE.get(BlockTypeApiculture.APIARY).getBlock())));
 		// public static final RegistryObject<VillagerProfession> PROF_BEEKEEPER = PROFESSIONS.register(BEEKEEPER.getPath(), () -> RegisterVillagerProfession.create(BEEKEEPER, POI_APIARY.get(), SoundEvents.VILLAGER_WORK_FISHERMAN));
@@ -51,7 +52,8 @@ public class RegisterVillager {
 	public static class Events {
 		@SubscribeEvent
 		public void villagerTrades(VillagerTradesEvent event) {
-			if (BEEKEEPER.equals(event.getType().getRegistryName())) {
+
+			if (event.getType() == ForgeRegistries.VILLAGER_PROFESSIONS.getValue(BEEKEEPER)) {
 				event.getTrades().get(1).add(new GiveHoneyCombForItem(ApicultureItems.BEE_COMBS.getItems(), Items.WHEAT, new VillagerTrade.PriceInterval(2, 4), new VillagerTrade.PriceInterval(8, 12), 8, 2, 0F));
 				event.getTrades().get(1).add(new GiveHoneyCombForItem(ApicultureItems.BEE_COMBS.getItems(), Items.CARROT, new VillagerTrade.PriceInterval(2, 4), new VillagerTrade.PriceInterval(8, 12), 8, 2, 0F));
 				event.getTrades().get(1).add(new GiveHoneyCombForItem(ApicultureItems.BEE_COMBS.getItems(), Items.POTATO, new VillagerTrade.PriceInterval(2, 4), new VillagerTrade.PriceInterval(8, 12), 8, 2, 0F));
@@ -89,7 +91,7 @@ public class RegisterVillager {
 
 			@Nullable
 			@Override
-			public MerchantOffer getOffer(Entity trader, Random rand) {
+			public MerchantOffer getOffer(Entity trader, RandomSource rand) {
 				return new MerchantOffer(new ItemStack(buying, buyingPriceInfo.getPrice(rand)), new ItemStack(itemHoneyCombs.stream().skip((int) (itemHoneyCombs.size() * Math.random())).findFirst().get(), sellingPriceInfo.getPrice(rand)), maxUses, xp, priceMult);
 			}
 		}
@@ -113,7 +115,7 @@ public class RegisterVillager {
 
 			@Nullable
 			@Override
-			public MerchantOffer getOffer(Entity trader, Random rand) {
+			public MerchantOffer getOffer(Entity trader, RandomSource rand) {
 				BeeDefinition[] forestryMundane = new BeeDefinition[]{BeeDefinition.FOREST, BeeDefinition.MEADOWS, BeeDefinition.MODEST, BeeDefinition.WINTRY, BeeDefinition.TROPICAL, BeeDefinition.MARSHY};
 				ItemStack randomHiveDrone = forestryMundane[rand.nextInt(forestryMundane.length)].getMemberStack(EnumBeeType.DRONE);
 				randomHiveDrone.setCount(sellingPriceInfo.getPrice(rand));

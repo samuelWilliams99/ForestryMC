@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -318,7 +319,7 @@ public class TileHive extends BlockEntity implements IHiveTile, IActivatable, IB
 
 	@Override
 	public EnumHumidity getHumidity() {
-		float humidity = getBiome().getDownfall();
+		float humidity = getBiome().value().getDownfall();
 		return EnumHumidity.getFromValue(humidity);
 	}
 
@@ -344,8 +345,8 @@ public class TileHive extends BlockEntity implements IHiveTile, IActivatable, IB
 	}
 
 	@Override
-	public Biome getBiome() {
-		return getLevel().getBiome(getBlockPos()).value();
+	public Holder<Biome> getBiome() {
+		return getLevel().getBiome(getBlockPos());
 	}
 
 	@Override

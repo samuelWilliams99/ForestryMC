@@ -1,5 +1,6 @@
 package forestry.core.climate;
 
+import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -16,6 +17,7 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class FakeClimateListener implements IClimateListener {
 
@@ -41,9 +43,9 @@ public class FakeClimateListener implements IClimateListener {
 	}
 
 	@Override
-	public Biome getBiome() {
-		Biome value = ForgeRegistries.BIOMES.getValue(Biomes.PLAINS.getRegistryName());
-		return Objects.requireNonNull(value);
+	public Holder<Biome> getBiome() {
+		Optional<Holder<Biome>> value = ForgeRegistries.BIOMES.getHolder(Biomes.PLAINS);
+		return value.get();
 	}
 
 	@Override

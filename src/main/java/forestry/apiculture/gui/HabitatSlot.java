@@ -16,7 +16,8 @@ import java.util.Locale;
 
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
 
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -31,12 +32,12 @@ import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.render.TextureManagerForestry;
 
 public class HabitatSlot extends Widget {
-	private final Collection<Biome.BiomeCategory> biomes;
+	private final Collection<ResourceKey<Biome>> biomes;
 	private final String name;
 	private final String iconIndex;
 	public boolean isActive = false;
 
-	public HabitatSlot(WidgetManager widgetManager, int xPos, int yPos, String name, Collection<Biome.BiomeCategory> biomes) {
+	public HabitatSlot(WidgetManager widgetManager, int xPos, int yPos, String name, Collection<ResourceKey<Biome>> biomes) {
 		super(widgetManager, xPos, yPos);
 		this.biomes = biomes;
 		this.name = name;
@@ -46,7 +47,7 @@ public class HabitatSlot extends Widget {
 	@Override
 	public ToolTip getToolTip(int mouseX, int mouseY) {
 		ToolTip tooltip = new ToolTip();
-		tooltip.add(new TextComponent(name));
+		tooltip.add(Component.literal(name));
 		return tooltip;
 	}
 
@@ -55,7 +56,7 @@ public class HabitatSlot extends Widget {
 		return TextureManagerForestry.getInstance().getDefault(iconIndex);
 	}
 
-	public void setActive(Collection<Biome.BiomeCategory> biomes) {
+	public void setActive(Collection<ResourceKey<Biome>> biomes) {
 		isActive = !Collections.disjoint(this.biomes, biomes);
 	}
 

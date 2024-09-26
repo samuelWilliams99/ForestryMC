@@ -14,12 +14,13 @@ import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Random;
 
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.BaseComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.Level;
@@ -92,7 +93,7 @@ public class FruitProviderNone implements IFruitProvider {
 	}
 
 	@Override
-	public boolean trySpawnFruitBlock(IGenome genome, LevelAccessor world, Random rand, BlockPos pos) {
+	public boolean trySpawnFruitBlock(IGenome genome, LevelAccessor world, RandomSource rand, BlockPos pos) {
 		return false;
 	}
 
@@ -127,8 +128,8 @@ public class FruitProviderNone implements IFruitProvider {
 	}
 
 	@Override
-	public BaseComponent getDescription() {
-		return new TranslatableComponent(unlocalizedDescription);
+	public MutableComponent getDescription() {
+		return Component.translatable(unlocalizedDescription);
 	}
 
 	@Override

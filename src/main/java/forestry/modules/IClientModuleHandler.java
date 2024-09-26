@@ -1,8 +1,9 @@
 package forestry.modules;
 
 import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.event.ModelEvent;
+import net.minecraftforge.client.event.ModelEvent.BakingCompleted;
+import net.minecraftforge.client.event.ModelEvent.RegisterGeometryLoaders;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -15,10 +16,13 @@ public interface IClientModuleHandler extends ISidedModuleHandler {
 	default void handleSprites(TextureStitchEvent.Post event) {
 	}
 
-	default void bakeModels(ModelBakeEvent event) {
+	default void bakeModels(BakingCompleted event) {
 	}
 
-	default void registerModels(ModelRegistryEvent event) {
+	default void registerModelLoaders(RegisterGeometryLoaders event) {
+	}
+
+	default void registerModels(ModelEvent.RegisterAdditional event) {
 	}
 
 	default void setupClient(FMLClientSetupEvent event) {

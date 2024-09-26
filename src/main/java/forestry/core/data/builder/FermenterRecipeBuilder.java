@@ -15,6 +15,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.IFermenterRecipe;
 import forestry.factory.recipes.RecipeSerializers;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class FermenterRecipeBuilder {
 
@@ -75,7 +76,7 @@ public class FermenterRecipeBuilder {
 			json.add("resource", resource.toJson());
 			json.addProperty("fermentationValue", fermentationValue);
 			json.addProperty("modifier", modifier);
-			json.addProperty("output", output.getRegistryName().toString());
+			json.addProperty("output", ForgeRegistries.FLUIDS.getKey(output).toString());
 			json.add("fluidResource", RecipeSerializers.serializeFluid(fluidResource));
 		}
 

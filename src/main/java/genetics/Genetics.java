@@ -1,5 +1,8 @@
 package genetics;
 
+import com.mojang.datafixers.kinds.Const;
+import forestry.core.config.Constants;
+import io.netty.util.Constant;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -13,7 +16,6 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -30,10 +32,12 @@ import genetics.api.root.IRootDefinition;
 import genetics.api.root.components.DefaultStage;
 import genetics.commands.CommandListAlleles;
 import genetics.plugins.PluginManager;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegisterEvent;
 
-@Mod(Genetics.MOD_ID)
+@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = Genetics.MOD_ID)
 public class Genetics {
-	public static final String MOD_ID = "geneticsapi";
+	public static final String MOD_ID = "forestry";
 
 	/**
 	 * Capability for {@link IOrganism}.
@@ -59,13 +63,16 @@ public class Genetics {
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
-	public void registerBlocks(RegistryEvent.Register<Block> event) {
-		PluginManager.create();
-		PluginManager.initPlugins();
+	public void registerBlocks(RegisterEvent event) {
+		if (event.getRegistryKey().equals(ForgeRegistries.Keys.BLOCKS)) {
+			PluginManager.create();
+			PluginManager.initPlugins();
+		}
 	}
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public void registerFinished(RegistryEvent.Register<Item> event) {
+	@SubscribeEvent(priority = EventPriority.HIGH)
+	public void registerFinished(RegisterEvent event) {
+		if (!event.getRegistryKey().equals(ForgeRegistries.Keys.ITEMS)) return;
 		for (IRootDefinition definition : GeneticsAPI.apiInstance.getRoots().values()) {
 			if (!definition.isPresent()) {
 				continue;

@@ -11,6 +11,6 @@ import net.minecraft.world.entity.ai.village.poi.PoiType;
 
 public class RegisterVillagerProfession {
 	public static VillagerProfession create(ResourceLocation name, PoiType poi, SoundEvent sound) {
-		return new VillagerProfession(name.toString(), poi, ImmutableSet.<Item>builder().build(), ImmutableSet.<Block>builder().build(), sound);
+		return new VillagerProfession(name.toString(), h -> h.value() == poi, h -> h.value() == poi, ImmutableSet.<Item>builder().build(), ImmutableSet.<Block>builder().build(), sound);
 	}
 }

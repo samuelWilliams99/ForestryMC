@@ -12,6 +12,7 @@ package forestry.core.gui;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
 
 public class ContainerDummy extends AbstractContainerMenu {
 	public static final ContainerDummy instance = new ContainerDummy();
@@ -23,6 +24,11 @@ public class ContainerDummy extends AbstractContainerMenu {
 	@Override
 	public boolean stillValid(Player PlayerEntity) {
 		return true;
+	}
+
+	@Override
+	public ItemStack quickMoveStack(Player pPlayer, int pIndex) {
+		return this.slots.get(pIndex).getItem();
 	}
 
 }

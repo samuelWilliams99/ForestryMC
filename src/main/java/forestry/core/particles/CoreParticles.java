@@ -2,7 +2,7 @@ package forestry.core.particles;
 
 import net.minecraft.client.Minecraft;
 
-import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import net.minecraftforge.fml.common.Mod;
@@ -19,7 +19,7 @@ public class CoreParticles {
 	public static final ParticleTypeRegistryObject<SnowParticleData> SNOW_PARTICLE = PARTICLE_TYPES.register("snow_particle", SnowParticleType::new);
 
 	@SubscribeEvent
-	public static void registerParticleFactory(ParticleFactoryRegisterEvent event) {
+	public static void registerParticleFactory(RegisterParticleProvidersEvent event) {
 		Minecraft.getInstance().particleEngine.register(CoreParticles.SNOW_PARTICLE.getParticleType(), SnowParticle.Factory::new);
 	}
 }

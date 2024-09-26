@@ -19,6 +19,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -46,6 +47,8 @@ import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.features.ApicultureTiles;
 import forestry.apiculture.tiles.TileHive;
 import forestry.core.tiles.TileUtil;
+
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class BlockBeeHive extends BaseEntityBlock {
 
@@ -104,7 +107,7 @@ public class BlockBeeHive extends BaseEntityBlock {
 
 	private NonNullList<ItemStack> getDrops(BlockGetter world, BlockPos pos, int fortune) {
 		NonNullList<ItemStack> drops = NonNullList.create();
-		Random random = world instanceof Level ? ((Level) world).getRandom() : RANDOM;
+		RandomSource random = world instanceof Level ? ((Level) world).getRandom() : RandomSource.create();
 
 		List<IHiveDrop> hiveDrops = getDropsForHive();
 		Collections.shuffle(hiveDrops);

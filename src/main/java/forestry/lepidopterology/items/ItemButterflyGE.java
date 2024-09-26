@@ -13,6 +13,7 @@ package forestry.lepidopterology.items;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -60,7 +61,7 @@ import net.minecraft.world.item.Item.Properties;
 
 public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColoredItem {
 
-	private static final Random rand = new Random();
+	private static final RandomSource rand = RandomSource.create();
 	public static final String NBT_AGE = "Age";
 	public static final int MAX_AGE = 3;
 	//private final Multimap<Attribute, AttributeModifier> attributeModifiers;
@@ -97,7 +98,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 
 	@Override
 	public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> subItems) {
-		if (this.allowdedIn(tab)) {
+		if (this.allowedIn(tab)) {
 			addCreativeItems(subItems, true);
 		}
 	}
@@ -154,6 +155,8 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 		if (false) {//TODO entityItem.world.countEntities(EntityButterfly.class) > ModuleLepidopterology.entityConstraint) {
 			return false;
 		}
+
+		System.out.println("FINDME take flight!");
 
 		EntityUtil.spawnEntity(entityItem.level,
 				EntityButterfly.create(LepidopterologyEntities.BUTTERFLY.entityType(), entityItem.level, butterfly, entityItem.blockPosition()), entityItem.getX(), entityItem.getY(), entityItem.getZ());

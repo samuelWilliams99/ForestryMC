@@ -16,6 +16,7 @@ import java.util.Objects;
 
 import forestry.api.recipes.IHygroregulatorManager;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
@@ -224,9 +225,9 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 	}
 
 	@Override
-	public Biome getBiome() {
+	public Holder<Biome> getBiome() {
 		Level level = Objects.requireNonNull(this.level);
-		return level.getBiome(getBlockPos()).value();
+		return level.getBiome(getBlockPos());
 	}
 
 	@Override

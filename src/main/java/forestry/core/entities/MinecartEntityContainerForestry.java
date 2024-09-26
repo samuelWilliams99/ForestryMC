@@ -15,7 +15,6 @@ import javax.annotation.Nullable;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
@@ -34,6 +33,8 @@ import forestry.core.tiles.IFilterSlotDelegate;
 import forestry.core.utils.InventoryUtil;
 
 //TODO: large type hierarchy here. If no other modules use other than apiculture then compress this.
+import net.minecraft.world.entity.Entity.RemovalReason;
+
 public abstract class MinecartEntityContainerForestry extends MinecartEntityForestry implements WorldlyContainer, IFilterSlotDelegate, MenuProvider {
 	/**
 	 * When set to true, the minecart will drop all items when setDead() is called. When false (such as when travelling
@@ -141,7 +142,7 @@ public abstract class MinecartEntityContainerForestry extends MinecartEntityFore
 
 	@Override
 	public Component getDisplayName() {
-		return new TextComponent("MINECART_TITLE_GOES_HERE");
+		return Component.literal("MINECART_TITLE_GOES_HERE");
 		//TODO inventory names return getInternalInventory().getDisplayName();
 	}
 
